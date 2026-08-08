@@ -1275,7 +1275,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
   // ---- Team Intake form ----
   // Replace this with your deployed Google Apps Script Web App URL
   // (see the "Team Intake — Setup" instructions provided alongside this file).
-  const INTAKE_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+  const INTAKE_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec';
 
   const intakeOverlay = document.getElementById('teamIntakeModalOverlay');
   const intakeForm = document.getElementById('teamIntakeForm');
@@ -1321,7 +1321,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     drawSubmitted = false;
     resetDrawStage();
 
-    if (INTAKE_ENDPOINT === 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    if (INTAKE_ENDPOINT === 'https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec') {
       clearInterval(drawSpinTimer);
       drawNumberWrap.classList.remove('spinning');
       drawNumberDisplay.textContent = '?';
@@ -1388,7 +1388,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     intakeOverlay.classList.remove('show');
     clearInterval(drawSpinTimer);
     // Release the reserved number if it was claimed but never submitted, so the slot isn't wasted
-    if (claimedDrawNumber && !drawSubmitted && INTAKE_ENDPOINT !== 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    if (claimedDrawNumber && !drawSubmitted && INTAKE_ENDPOINT !== 'https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec') {
       fetch(INTAKE_ENDPOINT + '?action=release&drawNumber=' + claimedDrawNumber).catch(() => {});
     }
     claimedDrawNumber = null;
@@ -1402,7 +1402,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     e.preventDefault();
     intakeStatus.classList.remove('show', 'ok', 'err');
 
-    if (INTAKE_ENDPOINT === 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    if (INTAKE_ENDPOINT === 'https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec') {
       intakeStatus.textContent = 'Team intake isn\'t connected yet — please contact the coordinators below to register your team.';
       intakeStatus.classList.add('show', 'err');
       return;
