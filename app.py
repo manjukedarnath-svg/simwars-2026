@@ -991,6 +991,10 @@ def get_case(case_id):
 def scoring():
     return send_file(os.path.join(os.path.dirname(__file__), 'scoring.html'))
 
+@app.route('/flow')
+def flow():
+    return send_file(os.path.join(os.path.dirname(__file__), 'flow-of-program.html'))
+
 @app.route('/register')
 def register():
     return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-landing-page.html'))
