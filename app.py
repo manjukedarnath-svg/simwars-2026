@@ -1850,6 +1850,10 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
 @app.route('/home')
 def portal():
     return PORTAL_TEMPLATE
+@app.route('/simwars-2026-participant-info.html')
+def participant_info():
+        return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-participant-info.html'))
+
 
 if __name__ == '__main__':
     import os as _os
