@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, render_template_string, jsonify
+from flask import Flask, request, send_file, render_template_string, jsonify, redirect
 import io
 import os
 import sqlite3
@@ -905,6 +905,10 @@ CASE_TEMPLATE = """
 # ============================================
 
 @app.route('/')
+def root_redirect():
+    return redirect('/register')
+
+@app.route('/library')
 def index():
     rounds = {}
     for c in CASES:
