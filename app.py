@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, render_template_string, jsonify, redirect, session
+from flask import Flask, request, send_file, render_template_string, jsonify, redirect
 import io
 import os
 import sqlite3
@@ -27,53 +27,6 @@ def _get_weasyprint():
         return None
 
 app = Flask(__name__)
-
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'simwars-2026-change-me')
-
-ORGANISER_PASSWORD = '@MSPtrio2023sim'
-JUDGE_PASSWORD = '@SIMblore2014'
-
-UNLOCK_TEMPLATE = '''
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>SimWars — Enter Password</title>
-<style>
-body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
-.card{background:#1e293b;padding:32px 36px;border-radius:14px;max-width:360px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.4);}
-h1{font-size:1.1rem;margin:0 0 6px;}
-p{color:#94a3b8;font-size:0.85rem;margin:0 0 18px;}
-input{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:0.95rem;margin-bottom:12px;}
-button{width:100%;padding:10px;border:none;border-radius:8px;background:#7C3AED;color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem;}
-.err{color:#f87171;font-size:0.82rem;margin-bottom:10px;}
-</style></head>
-<body>
-<form class="card" method="post">
-<h1>🔒 Organisers & Judges Only</h1>
-<p>Enter your Organiser or Judge password to continue.</p>
-{% if error %}<div class="err">Incorrect password. Try again.</div>{% endif %}
-<input type="password" name="password" placeholder="Password" autofocus autocomplete="off">
-<button type="submit">Unlock</button>
-</form>
-</body></html>
-'''
-
-def require_role():
-    if session.get('role') not in ('organiser', 'judge'):
-        return redirect('/unlock?next=' + request.path)
-    return None
-
-@app.route('/unlock', methods=['GET', 'POST'])
-def unlock():
-    next_url = request.args.get('next') or request.form.get('next') or '/library'
-    if request.method == 'POST':
-        pw = request.form.get('password', '')
-        if pw == ORGANISER_PASSWORD:
-            session['role'] = 'organiser'
-            return redirect(next_url)
-        elif pw == JUDGE_PASSWORD:
-            session['role'] = 'judge'
-            return redirect(next_url)
-        return render_template_string(UNLOCK_TEMPLATE, error=True)
-    return render_template_string(UNLOCK_TEMPLATE, error=False)
 
 # ============================================
 # CASE DATA (All 8 Cases)
@@ -959,8 +912,6 @@ def root_redirect():
 
 @app.route('/library')
 def index():
-    locked = require_role()
-    if locked: return locked
     rounds = {}
     for c in CASES:
         rounds.setdefault(c['round'], []).append(c)
@@ -1044,8 +995,6 @@ def get_case(case_id):
 
 @app.route('/scoring')
 def scoring():
-    locked = require_role()
-    if locked: return locked
     return send_file(os.path.join(os.path.dirname(__file__), 'scoring.html'))
 
 @app.route('/flow')
