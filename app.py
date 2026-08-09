@@ -609,12 +609,14 @@ CASE_TEMPLATE = """
       .topbar { padding: 0 16px; }
     }
 
-    @media print {
-      .topbar, .topbar-actions, .download-bar, .case-nav { display: none !important; }
-      .page-body { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
-      .stage-body { display: block !important; }
-    }
+   @media print {
+         .topbar, .topbar-actions, .download-bar, .case-nav, .inv-console { display: none !important; }
+         .page-body { display: block !important; }
+         .sidebar { position: static !important; margin-top: 24px; }
+         .stage-body { display: block !important; }
+         .stage-grid { display: block !important; }
+         .stage-cell { margin-bottom: 10px; }
+       }
   </style>
 </head>
 <body>
