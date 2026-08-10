@@ -914,6 +914,39 @@
                 </div>
             </div>
             </div>
+
+            <!-- Investigations Console — organiser-only, projector control -->
+            <div class="card" style="border-left-color:#1e40af; background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);">
+                <h2><span class="emoji">📋</span> Investigations Console <span style="font-size:0.7rem;font-weight:700;color:#1d4ed8;background:white;border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;">ORGANISER ONLY</span></h2>
+                <p style="color:#1e40af; font-size:0.85rem; margin-bottom:14px;">
+                    Pull up labs, imaging and rhythm results for any case and push them to the projector display. This is not visible on any judge sheet — judges only see a scenario summary.
+                </p>
+                <select id="invConsoleCaseSelect" onchange="renderInvConsole(this.value)" style="width:100%; max-width:420px; padding:9px 14px; border-radius:8px; border:2px solid #1e40af; font-size:0.9rem; font-weight:700; color:#1e3a5f; background:white; cursor:pointer; margin-bottom:14px;">
+                    <option value="">— Select a case —</option>
+                    <optgroup label="PALS Cases">
+                        <option value="P1">P1 · Cardiogenic Shock</option>
+                        <option value="P2">P2 · Scorpion Sting Envenomation</option>
+                        <option value="P3">P3 · Asthma + Pneumothorax</option>
+                        <option value="P4">P4 · Refractory Septic Shock</option>
+                    </optgroup>
+                    <optgroup label="BLS Cases">
+                        <option value="B1">B1 · Near Drowning / VT Arrest</option>
+                        <option value="B2">B2 · Torsades / Long QT Arrest</option>
+                        <option value="B3">B3 · Electrocution with VT Arrest</option>
+                        <option value="B4">B4 · Refractory Status Epilepticus</option>
+                    </optgroup>
+                    <optgroup label="Semi-Finals">
+                        <option value="R1">SF Round 1 · "The Quiet Head"</option>
+                        <option value="R2">SF Round 2 · "The Loud Wound"</option>
+                    </optgroup>
+                    <optgroup label="Finals">
+                        <option value="F1">F1 · Crashing on the Vent</option>
+                        <option value="F2">F2 · The Tense Abdomen</option>
+                    </optgroup>
+                </select>
+                <div id="invConsoleContainer"></div>
+            </div>
+
             <!-- Share Judge Links -->
             <div class="card" style="border-left-color:#7C3AED; background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);">
                 <h2><span class="emoji">🔗</span> Share Judge Links</h2>
@@ -1316,10 +1349,10 @@
             <div class="card" style="border-left-color:#d97706; background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);">
                 <h2><span class="emoji">🏆</span> Finals Scoring Pack</h2>
                 <p style="color:#92400e; margin-bottom:12px; font-size:0.88rem;">
-                    Domain A: Clinical Management (45 pts) · Domain B: Teamwork &amp; Followership (40 pts) · Domain C: Shared Reasoning (15 pts) = <strong>100 pts total</strong>
+                    Single case (F2 &mdash; &ldquo;The Tense Abdomen&rdquo;), scored directly out of 200: Domain A: Clinical Management (90 pts) · Domain B: Teamwork &amp; Followership (80 pts) · Domain C: Shared Reasoning (30 pts) = <strong>200 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#92400e;">
-                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain A independently (45 pts). Teamwork Judge scores Domain B independently (40 pts). Both judges agree Domain C collectively (15 pts) after private notes — before domain totals are calculated.
+                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain A independently (90 pts). Teamwork Judge scores Domain B independently (80 pts). Both judges agree Domain C collectively (30 pts) after private notes — before domain totals are calculated.
                 </div>
                 <!-- Judge names -->
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px;">
@@ -1406,6 +1439,7 @@
             'P1': {
                 title: 'Cardiogenic Shock (Fulminant Myocarditis)',
                 round: 'PALS Round', patient: 'Sita · 1 yr · Female · 10 kg',
+                summary: '1-year-old with rapidly progressive breathing difficulty and shock after a minor viral illness — the team must recognise cardiogenic (not hypovolaemic) shock and manage it accordingly.',
                 keyDrugs: 'Adrenaline, Frusemide, Ketamine + Rocuronium (RSI)',
                 criticalDecision: 'Synchronized cardioversion 0.5J/kg (NOT unsynchronized)',
                 keyChallenge: 'Fluid overload trap — giving fluids worsens cardiogenic shock. Must recognise VT and perform synchronized cardioversion, not unsynchronized shock.',
@@ -1417,6 +1451,7 @@
             'P2': {
                 title: 'Scorpion Sting Envenomation — Acute RV Strain and Diastolic Failure',
                 round: 'PALS Round', patient: 'Arjun · 10 yr · Male · 30 kg',
+                summary: '10-year-old with a scorpion sting develops a catecholamine storm with cold shock — the team must distinguish this from septic/hypovolaemic shock and manage cardiovascular support accordingly.',
                 keyDrugs: 'Prazosin 30mcg/kg (~1mg for 30kg) oral/NG, Dobutamine 5–10mcg/kg/min or Milrinone (NOT Noradrenaline)',
                 criticalDecision: 'Recognise catecholamine-storm RV strain — cold shock with clear lungs and a raised JVP, NOT septic or hypovolaemic shock. Avoid a large fluid bolus and noradrenaline; give Prazosin plus an inodilator to unload the RV.',
                 keyChallenge: 'Envenomation gestalt (sting history + diaphoresis + priapism + hypersalivation + pinpoint pupils) mistaken for sepsis. A large fluid bolus or noradrenaline both worsen RV strain.',
@@ -1428,6 +1463,7 @@
             'P3': {
                 title: 'Acute Severe Asthma with Pneumothorax',
                 round: 'PALS Round', patient: 'Arun · 3 yr · Male · 10 kg',
+                summary: 'A known asthmatic child in acute severe asthma requires intubation, then deteriorates further — the team must reassess and identify the post-intubation complication.',
                 keyDrugs: 'Salbutamol nebulised, Ipratropium, Methylprednisolone, Magnesium 50mg/kg IV, Ketamine + Rocuronium',
                 criticalDecision: 'Recognise right pneumothorax post-intubation → Needle decompression 2nd ICS MCL → Chest tube.',
                 keyChallenge: 'Steroid-phobic parents refusing steroids. Post-intubation right pneumothorax not immediately recognised — team must detect and decompress.',
@@ -1439,6 +1475,7 @@
             'P4': {
                 title: 'Refractory Septic Shock (Physiologically Difficult Airway)',
                 round: 'PALS Round', patient: 'Maya · 3 yr · Female · 15 kg',
+                summary: 'A child with refractory septic shock and minimal physiologic reserve needs intubation — the team must sequence resuscitation and airway management safely.',
                 keyDrugs: 'Ketamine 1–2 mg/kg + Rocuronium (NOT Propofol/Midazolam/Fentanyl), Push-dose Epinephrine',
                 criticalDecision: 'Resuscitate BEFORE intubating. Post-intubation crash → Push-dose Epi + Reduce PEEP + Fluid bolus.',
                 keyChallenge: 'Zero physiologic reserve — intubating before resuscitation causes arrest. Propofol / Midazolam are lethal in this context.',
@@ -1450,6 +1487,7 @@
             'B1': {
                 title: 'Near Drowning / Submersion with VT Arrest',
                 round: 'BLS Round', patient: 'Vaibhavi · 12 yr · Female · 30 kg',
+                summary: 'A submersion victim arrives unresponsive and hypothermic in a shockable rhythm — the team must run high-quality CPR with correct rhythm management and address hypothermia.',
                 keyDrugs: 'Defibrillate 2J/kg (first), Adrenaline 0.01 mg/kg, Fluid bolus 20 ml/kg, Warming measures',
                 criticalDecision: 'Defibrillate FIRST — not Adrenaline first. Then resume CPR immediately.',
                 keyChallenge: 'Pulseless VT — team may give Adrenaline first instead of immediate defibrillation. Hypothermia management often missed.',
@@ -1461,6 +1499,7 @@
             'B2': {
                 title: 'Torsades Arrest in Child with Congenital Long QT Syndrome',
                 round: 'BLS Round', patient: 'Varsha · 11 yr · Female · 30 kg',
+                summary: 'A child with a known cardiac history develops a polymorphic arrest rhythm — the team must recognise the rhythm correctly and treat with the full, correct therapy bundle.',
                 keyDrugs: 'Magnesium sulphate 50 mg/kg IV, Unsynchronized defibrillation 2 J/kg, Calcium gluconate, Potassium correction',
                 criticalDecision: 'Give Magnesium sulphate 50 mg/kg IV AND defibrillate — both are required. Magnesium is the critical and often-missed therapy; defibrillation alone will not terminate Torsades.',
                 keyChallenge: 'Torsades de Pointes misdiagnosed as regular VT. Both Magnesium AND defibrillation are required — neither alone is sufficient. The critical error is omitting Magnesium.',
@@ -1472,6 +1511,7 @@
             'B3': {
                 title: 'Electrocution with VT Arrest',
                 round: 'BLS Round', patient: 'Arush · 13 yr · Male · 30 kg',
+                summary: 'An electrical-injury victim is found unconscious in a shockable rhythm with visible burns — the team must run CPR, correct the underlying metabolic derangement, and manage the burn injury.',
                 keyDrugs: 'Defibrillate 2J/kg, Calcium gluconate, Insulin + Dextrose, Bicarbonate',
                 criticalDecision: 'Defibrillate + Calcium gluconate for hyperkalemia — Calcium is the critical and often-missed step. Adrenaline follows per PALS algorithm after the first shock.',
                 keyChallenge: 'Hyperkalemia (K 7.5) from rhabdomyolysis — Calcium gluconate is critical before/alongside defibrillation. Burns and fluid management often overlooked.',
@@ -1483,6 +1523,7 @@
             'B4': {
                 title: 'Refractory Status Epilepticus with Respiratory Arrest',
                 round: 'BLS Round', patient: 'Sita · 12 yr · Female · 30 kg',
+                summary: 'A febrile child with ongoing seizures despite first-line anticonvulsants progresses to respiratory arrest — the team must escalate seizure management and watch for a neurological complication.',
                 keyDrugs: '3% NaCl / Mannitol, Phenobarbitone / Valproate, Ketamine + Rocuronium (RSI)',
                 criticalDecision: 'Recognise raised ICP (unequal pupils) → 3% NaCl / Mannitol + Head elevation 30°.',
                 keyChallenge: 'Unequal pupils indicating raised ICP missed or misinterpreted. Propofol used for RSI instead of Ketamine. ICP treatment delayed.',
@@ -1839,6 +1880,19 @@
                 </summary>
                 <div style="padding:10px;background:var(--bg);">${items}</div>
             </details>`;
+        }
+
+        // Organiser-only Investigations Console on the Master Scoreboard tab.
+        // This is the single place results get pushed to the projector — judge
+        // sheets never render buildResultsConsole() themselves.
+        function renderInvConsole(caseName) {
+            const container = document.getElementById('invConsoleContainer');
+            if (!container) return;
+            if (!caseName) { container.innerHTML = ''; return; }
+            container.innerHTML = buildResultsConsole(caseName);
+            const details = container.querySelector('details');
+            if (details) details.open = true;
+            try { localStorage.setItem('simwars_inv_console_case', caseName); } catch (e) {}
         }
 
         const specialCategories = [
@@ -2367,42 +2421,15 @@
                 </div>
                 ${cd.patient ? `<div style="font-size:0.82rem; background:var(--surface-1); padding:8px 12px; border-radius:8px; margin-bottom:8px; display:flex; flex-wrap:wrap; gap:6px 20px;">
                     <span>👤 <strong>Patient:</strong> ${cd.patient}</span>
-                    ${cd.keyDrugs ? `<span>💊 <strong>Key Drugs:</strong> ${cd.keyDrugs}</span>` : ''}
                 </div>` : ''}
-                ${cd.criticalDecision ? `<div style="font-size:0.8rem; background:#fffbeb; border:1px solid #fcd34d; border-radius:8px; padding:6px 12px; margin-bottom:8px;">
-                    ⚠️ <strong>Critical Decision:</strong> ${cd.criticalDecision}
+                ${cd.summary ? `<div style="font-size:0.85rem; color:var(--text-secondary); background:var(--surface-1); border-radius:8px; padding:8px 12px; margin-bottom:10px; line-height:1.5;">
+                    📋 <strong>Scenario Summary:</strong> ${cd.summary}
                 </div>` : ''}
-                ${cd.keyChallenge ? `<div style="overflow-x:auto; margin-bottom:12px;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.8rem; border:1px solid var(--border); border-radius:8px; overflow:hidden;">
-                    <tbody>
-                        <tr style="border-bottom:1px solid var(--border);">
-                            <td style="font-weight:700; padding:6px 10px; width:170px; background:var(--surface-2); color:var(--text-primary); white-space:nowrap;">⚠️ Key Challenge / Trap</td>
-                            <td style="padding:6px 10px; color:var(--text-primary);">${cd.keyChallenge}</td>
-                        </tr>
-                        <tr style="border-bottom:1px solid var(--border);">
-                            <td style="font-weight:700; padding:6px 10px; background:var(--surface-2); white-space:nowrap;">🎯 Critical Skills</td>
-                            <td style="padding:6px 10px;">${cd.criticalSkills}</td>
-                        </tr>
-                        <tr style="border-bottom:1px solid var(--border);">
-                            <td style="font-weight:700; padding:6px 10px; background:var(--surface-2); white-space:nowrap;">🔀 Branching Logic</td>
-                            <td style="padding:6px 10px;">${cd.branchingLogic}</td>
-                        </tr>
-                        <tr style="border-bottom:1px solid var(--border);">
-                            <td style="font-weight:700; padding:6px 10px; background:var(--surface-2); white-space:nowrap;">📋 Salient Features</td>
-                            <td style="padding:6px 10px;">${cd.salientFeatures}</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:700; padding:6px 10px; background:var(--surface-2); white-space:nowrap;">🔬 Key Labs</td>
-                            <td style="padding:6px 10px; font-family:monospace; font-size:0.75rem; color:var(--text-secondary);">${cd.keyLabs}</td>
-                        </tr>
-                    </tbody>
-                </table></div>` : ''}
                 <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;"><strong>Judges:</strong> ${judgeString}</div>
                 <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:10px;">
                     <strong>Scoring for:</strong> ${visibleTeams.map(t => `<strong>${getDisplayName(t)}</strong>`).join(' · ')} ${performingLabel}
                 </div>
             `;
-            html += buildResultsConsole(caseName);
             for (const team of visibleTeams) {
                 const displayName = getDisplayName(team);
                 const leader = document.getElementById(`team_leader_${team}`)?.value || '';
@@ -2882,10 +2909,9 @@
                     </div>
                     ${cd.patient ? `<div style="font-size:0.82rem; background:#f7fafc; padding:7px 12px; border-radius:6px; margin-bottom:6px; border:1px solid #e2e8f0;">
                         👤 <strong>Patient:</strong> ${cd.patient}
-                        ${cd.keyDrugs ? ` &nbsp;|&nbsp; 💊 <strong>Key Drugs:</strong> ${cd.keyDrugs}` : ''}
                     </div>` : ''}
-                    ${cd.criticalDecision ? `<div style="font-size:0.8rem; background:#fffbeb; border:1px solid #f59e0b; border-radius:6px; padding:5px 12px; margin-bottom:8px;">
-                        ⚠️ <strong>Critical Decision:</strong> ${cd.criticalDecision}
+                    ${cd.summary ? `<div style="font-size:0.8rem; background:#f7fafc; border:1px solid #e2e8f0; border-radius:6px; padding:5px 12px; margin-bottom:8px;">
+                        📋 <strong>Scenario Summary:</strong> ${cd.summary}
                     </div>` : ''}
                     <div style="font-size:0.9rem; margin-bottom:4px;">
                         <strong>Judges:</strong> ${judgeString}
@@ -3661,6 +3687,7 @@
             R1: {
                 label: 'Round 1 — "The Quiet Head"',
                 patients: 'Ananya Rao (7y, 24 kg) · Vihaan Rao (18m, 10 kg)',
+                summary: 'Two siblings arrive after a road traffic accident — one initially appears calm, the other is visibly distressed but stable. The team must manage both simultaneously and correctly prioritise as the picture evolves.',
                 tiebreaker: 'You have one CT scanner and one theatre. Justify the order in which you would use them for these two children, and state what would change that order.',
                 clinical: {
                     A: { title: 'A. Initial dual-patient assessment and prioritisation', max: 8,
@@ -3707,6 +3734,7 @@
             R2: {
                 label: 'Round 2 — "The Loud Wound"',
                 patients: 'Meera Iyer (8y, 26 kg) · Diya Iyer (3y, 14 kg)',
+                summary: 'Two siblings arrive after trauma — one has a dramatic but low-acuity visible injury, the other appears quiet but is deteriorating. The team must avoid being drawn to the more visually striking presentation.',
                 tiebreaker: 'You had a positive FAST in a child with a falling pulse pressure. Defend going to theatre rather than CT — and state what finding would have made CT the right call.',
                 clinical: {
                     A: { title: 'A. Initial dual-patient assessment and prioritisation', max: 8,
@@ -4036,6 +4064,7 @@
             let h = '<div class="card" style="border-left-color:#0d9488;">';
             h += '<h2><span class="emoji">🏟️</span> ' + rd.label + '</h2>';
             h += '<div style="font-size:0.85rem;color:#0f766e;background:#f0fdfa;border-radius:8px;padding:8px 14px;margin-bottom:12px;">👥 ' + rd.patients + ' &nbsp;·&nbsp; ⏱ 15:00 hard stop</div>';
+            if (rd.summary) h += '<div style="font-size:0.85rem;color:var(--text-secondary);background:var(--surface-1);border-radius:8px;padding:8px 12px;margin-bottom:12px;line-height:1.5;">📋 <strong>Scenario Summary:</strong> ' + rd.summary + '</div>';
             // Live team control
             h += '<div style="background:#fff;border:1.5px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
             h += '<span style="font-size:0.75rem;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.4px;">🔴 Live Team</span>';
@@ -4045,7 +4074,6 @@
             h += '</select>';
             if (activeTeam) h += '<span style="font-size:0.82rem;color:#0f766e;font-weight:600;">On stage: ' + sfGetName(activeTeam) + '</span>';
             h += '</div>';
-            h += buildResultsConsole(r);
             teams.forEach(t => { h += sfBuildTeamCard(r, t); });
             h += '<div style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (if required):</strong> ' + rd.tiebreaker + '</div>';
             h += '</div>';
@@ -4087,6 +4115,7 @@
             F1: {
                 label: '"Crashing on the Vent" — Severe PARDS with Acute Cor Pulmonale',
                 patient: 'Leo · 6 y · 20 kg · Day 3 PICU, influenza A pneumonia · 15:00 hard stop',
+                summary: 'A ventilated child with severe lung disease deteriorates further, and the team must reassess the ventilator strategy and identify a secondary cardiovascular complication — with a mid-scenario leadership handover.',
                 tiebreaker: 'Defend your ECMO mode. Why V-V rather than V-A, or the reverse — and what would change your mind?',
                 stages: [
                     { label:'Stage 1 (0:00–4:00)', max:12, items:[
@@ -4137,52 +4166,53 @@
             F2: {
                 label: '"The Tense Abdomen" — Severe Dengue, Capillary Leak, Abdominal Compartment Syndrome',
                 patient: 'Rehan · 10 y · 30 kg · Dengue day 5, critical phase after defervescence · 15:00 hard stop',
+                summary: 'A child with severe dengue and a tense, distended abdomen has had significant prior fluid resuscitation — the team must recognise a misleading haemodynamic picture and correctly identify the abdominal complication.',
                 tiebreaker: 'Defend your airway decision. Why intubate before transfer, or why not — and what would change your mind?',
                 stages: [
-                    { label:'Stage 1 (0:00–4:00)', max:12, items:[
-                        { k:'s1i0', label:'Recognises decompensated dengue shock in critical phase — narrow pulse pressure, defervescence, day 5', max:3 },
-                        { k:'s1i1', label:'Takes the fluid history and registers ~70 mL/kg already given', max:3 },
-                        { k:'s1i2', label:'Measures intra-abdominal pressure via the urinary catheter (→ 26 mmHg, Grade IV ACS)', max:4 },
-                        { k:'s1i3', label:'Sends Hct / coagulation / renal bundle; recognises AKI with hyperkalaemia', max:2 }
+                    { label:'Stage 1 (0:00–4:00)', max:24, items:[
+                        { k:'s1i0', label:'Recognises decompensated dengue shock in critical phase — narrow pulse pressure, defervescence, day 5', max:6 },
+                        { k:'s1i1', label:'Takes the fluid history and registers ~70 mL/kg already given', max:6 },
+                        { k:'s1i2', label:'Measures intra-abdominal pressure via the urinary catheter (→ 26 mmHg, Grade IV ACS)', max:8 },
+                        { k:'s1i3', label:'Sends Hct / coagulation / renal bundle; recognises AKI with hyperkalaemia', max:4 }
                     ]},
-                    { label:'Stage 2 (4:00–7:00)', max:15, items:[
-                        { k:'s2i0', label:'Crystalloid halted with closed-loop confirmation, while blood is accepted', max:6 },
-                        { k:'s2i1', label:'Problem named as mechanical — tense abdomen obstructing venous return, not simple hypovolaemia', max:5 },
-                        { k:'s2i2', label:'POCUS requested; ascites, effusions and small hyperdynamic LV interpreted', max:4 }
+                    { label:'Stage 2 (4:00–7:00)', max:30, items:[
+                        { k:'s2i0', label:'Crystalloid halted with closed-loop confirmation, while blood is accepted', max:12 },
+                        { k:'s2i1', label:'Problem named as mechanical — tense abdomen obstructing venous return, not simple hypovolaemia', max:10 },
+                        { k:'s2i2', label:'POCUS requested; ascites, effusions and small hyperdynamic LV interpreted', max:8 }
                     ]},
-                    { label:'Stage 3 (7:00–11:00)', max:12, items:[
-                        { k:'s3i0', label:'Packed cells 10 mL/kg for active bleeding and falling Hct, dose stated aloud', max:4 },
-                        { k:'s3i1', label:'Large-volume FFP refused; platelets given appropriately for bleeding with count of 12', max:3 },
-                        { k:'s3i2', label:'Decompression bundle — NG tube, analgesia/sedation, head of bed ≤30°', max:2 },
-                        { k:'s3i3', label:'Therapeutic paracentesis performed or formally requested (only action that restores urine output)', max:3 }
+                    { label:'Stage 3 (7:00–11:00)', max:24, items:[
+                        { k:'s3i0', label:'Packed cells 10 mL/kg for active bleeding and falling Hct, dose stated aloud', max:8 },
+                        { k:'s3i1', label:'Large-volume FFP refused; platelets given appropriately for bleeding with count of 12', max:6 },
+                        { k:'s3i2', label:'Decompression bundle — NG tube, analgesia/sedation, head of bed ≤30°', max:4 },
+                        { k:'s3i3', label:'Therapeutic paracentesis performed or formally requested (only action that restores urine output)', max:6 }
                     ]},
-                    { label:'Stage 4 (11:00–15:00)', max:6, items:[
-                        { k:'s4i0', label:'Disposition with defensible airway rationale and surgical/PICU escalation (intubate OR awake transfer — both earn full credit if justified; unjustified = 2/6)', max:6 }
+                    { label:'Stage 4 (11:00–15:00)', max:12, items:[
+                        { k:'s4i0', label:'Disposition with defensible airway rationale and surgical/PICU escalation (intubate OR awake transfer — both earn full credit if justified; unjustified = 4/12)', max:12 }
                     ]}
                 ],
                 penalties:[
-                    { k:'p0', label:'Crystalloid ≥20 mL/kg after 4:00', pts:-8 },
-                    { k:'p1', label:'FFP ≥15 mL/kg', pts:-5 },
-                    { k:'p2', label:'Intubation as first move or PEEP ≥8', pts:-5 },
-                    { k:'p3', label:'Nephrotoxic given', pts:-4 },
-                    { k:'p4', label:'Furosemide for anuria', pts:-3 },
-                    { k:'p5', label:'Cardiac arrest', pts:-10 }
+                    { k:'p0', label:'Crystalloid ≥20 mL/kg after 4:00', pts:-16 },
+                    { k:'p1', label:'FFP ≥15 mL/kg', pts:-10 },
+                    { k:'p2', label:'Intubation as first move or PEEP ≥8', pts:-10 },
+                    { k:'p3', label:'Nephrotoxic given', pts:-8 },
+                    { k:'p4', label:'Furosemide for anuria', pts:-6 },
+                    { k:'p5', label:'Cardiac arrest', pts:-20 }
                 ],
                 twItems:[
-                    { k:'tw0', label:'Upward handover to the newcomer — structured, prioritised, states the problem not just numbers', max:6 },
-                    { k:'tw1', label:'Speaking up under authority (see ladder below) — Note: anchor is half-right; score accepting blood while refusing crystalloid', max:8 },
-                    { k:'tw2', label:'Re-entry handover — corrects the false version, transmits the mechanical diagnosis, discloses crystalloid and FFP given', max:8 },
-                    { k:'tw3', label:'Delegation and resource use — including whether the confederate nurse is tasked', max:6 },
-                    { k:'tw4', label:'Closed-loop communication throughout', max:5 },
-                    { k:'tw5', label:'Family communication with the father, present throughout — honesty, pacing, no jargon, does not abandon the patient to talk', max:7 }
+                    { k:'tw0', label:'Upward handover to the newcomer — structured, prioritised, states the problem not just numbers', max:12 },
+                    { k:'tw1', label:'Speaking up under authority (see ladder below) — Note: anchor is half-right; score accepting blood while refusing crystalloid', max:16 },
+                    { k:'tw2', label:'Re-entry handover — corrects the false version, transmits the mechanical diagnosis, discloses crystalloid and FFP given', max:16 },
+                    { k:'tw3', label:'Delegation and resource use — including whether the confederate nurse is tasked', max:12 },
+                    { k:'tw4', label:'Closed-loop communication throughout', max:10 },
+                    { k:'tw5', label:'Family communication with the father, present throughout — honesty, pacing, no jargon, does not abandon the patient to talk', max:14 }
                 ],
                 twNote:'The returning leader is scored on the re-entry handover and Stage 4: did they ask rather than assume, request the urine output and fluid totals, restate the model back, and avoid restarting the differential from scratch.',
                 sharedPrompt:'Was the physiologic model audible to the room? Naming the leak → ascites → raised IAP → obstructed venous return chain aloud, stating why more crystalloid worsens it, declaring the target as perfusion and urine output rather than blood pressure alone.',
                 sharedAnchors:[
-                    { range:'0–3',   label:'Model never stated; team appeared to act on instinct or luck' },
-                    { range:'4–7',   label:'Fragments of the model stated, not connected into a chain' },
-                    { range:'8–11',  label:'The leak → ascites → raised IAP chain named, but targets not stated' },
-                    { range:'12–15', label:'Full model audible — chain named, crystalloid harm explained, explicit perfusion/urine-output target declared' }
+                    { range:'0–6',   label:'Model never stated; team appeared to act on instinct or luck' },
+                    { range:'8–14',   label:'Fragments of the model stated, not connected into a chain' },
+                    { range:'16–22',  label:'The leak → ascites → raised IAP chain named, but targets not stated' },
+                    { range:'24–30', label:'Full model audible — chain named, crystalloid harm explained, explicit perfusion/urine-output target declared' }
                 ]
             }
         };
@@ -4237,7 +4267,7 @@
             const gtEl   = document.getElementById('fn_' + caseId + '_' + t + '_grandTotal');
             if (gtEl) {
                 gtEl.textContent = total.toFixed(0);
-                gtEl.style.color = total >= 80 ? '#065f46' : total >= 60 ? '#d97706' : '#374151';
+                gtEl.style.color = total >= 160 ? '#065f46' : total >= 120 ? '#d97706' : '#374151';
             }
         }
 
@@ -4258,7 +4288,7 @@
             const cd = FN_CASES[caseId];
             const amber = '#d97706';
             let h = '<div style="background:white;border:1.5px solid ' + amber + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN A — CLINICAL MANAGEMENT &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 45</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN A — CLINICAL MANAGEMENT &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 90</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#92400e;margin-bottom:8px;" class="fnJName_phys">' + fnGetJudge('phys') + '</div>';
             h += '<div style="font-size:0.72rem;color:#6b7280;background:#fffbeb;border-radius:5px;padding:5px 8px;margin-bottom:10px;">Score each item 0 up to its maximum. Partial/delayed performance earns a proportional mark.</div>';
             cd.stages.forEach(stage => {
@@ -4288,7 +4318,7 @@
             const cd = FN_CASES[caseId];
             const blue = '#1d4ed8';
             let h = '<div style="background:white;border:1.5px solid ' + blue + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN B — TEAMWORK &amp; FOLLOWERSHIP &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 40</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN B — TEAMWORK &amp; FOLLOWERSHIP &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 80</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#1e40af;margin-bottom:8px;" class="fnJName_tw">' + fnGetJudge('tw') + '</div>';
             h += '<table style="width:100%;border-collapse:collapse;">';
             cd.twItems.forEach(item => {
@@ -4301,7 +4331,7 @@
             h += '</table>';
             // Speaking-up ladder
             h += '<div style="background:#eff6ff;border-radius:7px;padding:9px 11px;margin-top:8px;font-size:0.73rem;color:#1e40af;">';
-            h += '<strong>Speaking-up ladder (8 pts):</strong> 0–1 = silent compliance · 2–3 = hints only (Level 1) · 4–5 = one challenger with reason, persists · 6–7 = two challenge with reasons, bolus halted · <strong>8 = two+ at Level 2+, one restates after override, bolus/crystalloid physically halted, alternative named aloud</strong>. Content over tone. Do not double-count with the 6-point clinical halting item.';
+            h += '<strong>Speaking-up ladder (16 pts):</strong> 0–2 = silent compliance · 4–6 = hints only (Level 1) · 8–10 = one challenger with reason, persists · 12–14 = two challenge with reasons, bolus halted · <strong>16 = two+ at Level 2+, one restates after override, bolus/crystalloid physically halted, alternative named aloud</strong>. Content over tone. Do not double-count with the 12-point clinical halting item.';
             h += '</div>';
             h += '<div style="font-size:0.72rem;color:#6b7280;margin-top:6px;font-style:italic;">' + cd.twNote + '</div>';
             h += '</div>';
@@ -4312,7 +4342,7 @@
             const cd = FN_CASES[caseId];
             const purple = '#7c3aed';
             let h = '<div style="background:white;border:1.5px solid ' + purple + '40;border-radius:10px;padding:14px;margin-bottom:12px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🧩 DOMAIN C — SHARED REASONING &nbsp;·&nbsp; Collective / 15</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🧩 DOMAIN C — SHARED REASONING &nbsp;·&nbsp; Collective / 30</div>';
             h += '<p style="font-size:0.8rem;color:#374151;margin-bottom:8px;font-style:italic;">' + cd.sharedPrompt + '</p>';
             h += '<div style="margin-bottom:10px;">';
             cd.sharedAnchors.forEach(a => {
@@ -4323,8 +4353,8 @@
             const id = 'fn_' + caseId + '_' + t + '_shared';
             h += '<div style="display:flex;align-items:center;gap:10px;">';
             h += '<label style="font-size:0.85rem;font-weight:700;color:#374151;">Agreed mark:</label>';
-            h += '<input type="number" id="' + id + '" min="0" max="15" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(15,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
-            h += '<span style="font-size:0.82rem;color:#6b7280;">/ 15</span>';
+            h += '<input type="number" id="' + id + '" min="0" max="30" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(30,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
+            h += '<span style="font-size:0.82rem;color:#6b7280;">/ 30</span>';
             h += '</div></div>';
             return h;
         }
@@ -4344,10 +4374,10 @@
             h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="fnLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain A — Clinical Management (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 45</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain B — Teamwork &amp; Followership (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 40</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain C — Shared Reasoning (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 15</td></tr>';
-            h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0</span> / 100</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain A — Clinical Management (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 90</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain B — Teamwork &amp; Followership (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 80</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain C — Shared Reasoning (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 30</td></tr>';
+            h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0</span> / 200</td></tr>';
             h += '</table></div>';
             h += '</div>';
             return h;
@@ -4361,7 +4391,7 @@
             let h = '<div class="card" style="border-left-color:' + amber + ';">';
             h += '<h2><span class="emoji">🏆</span> ' + cd.label + '</h2>';
             h += '<div style="font-size:0.85rem;color:#92400e;background:#fffbeb;border-radius:8px;padding:8px 14px;margin-bottom:16px;">👤 ' + cd.patient + '</div>';
-            h += buildResultsConsole(caseId);
+            if (cd.summary) h += '<div style="font-size:0.85rem;color:var(--text-secondary);background:var(--surface-1);border-radius:8px;padding:8px 12px;margin-bottom:16px;line-height:1.5;">📋 <strong>Scenario Summary:</strong> ' + cd.summary + '</div>';
             ['fin1','fin2'].forEach(t => { h += fnBuildTeamCard(caseId, t); });
             h += '<div style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (returning team leader only — 60 s, no conferring):</strong> ' + cd.tiebreaker + '</div>';
             h += '</div>';
@@ -4369,7 +4399,8 @@
         }
 
         function buildFNScoreCards() {
-            buildFNCaseCard('F1');
+            // Finals now plays a single case (F2), scored directly out of 200 — F1 is retained
+            // in FN_CASES as unused/legacy data but is not rendered or scored.
             buildFNCaseCard('F2');
             fnUpdateAllLabels();
             fnSyncJudgeNames();
@@ -4378,7 +4409,7 @@
         function fnRecalcAll() {
             fnUpdateAllLabels();
             fnSyncJudgeNames();
-            ['F1','F2'].forEach(caseId => {
+            ['F2'].forEach(caseId => {
                 ['fin1','fin2'].forEach(t => {
                     fnUpdateClinTotal(caseId, t);
                     fnUpdateTWTotal(caseId, t);
@@ -4495,6 +4526,13 @@
                 calculateChampions();
                 calculateSpecialPrizes();
             }, 100);
+            try {
+                const savedInvCase = localStorage.getItem('simwars_inv_console_case');
+                if (savedInvCase) {
+                    const sel = document.getElementById('invConsoleCaseSelect');
+                    if (sel) { sel.value = savedInvCase; renderInvConsole(savedInvCase); }
+                }
+            } catch (e) {}
 
             // Apply view lock if ?view= param present
             const viewParam = new URLSearchParams(window.location.search).get('view');
