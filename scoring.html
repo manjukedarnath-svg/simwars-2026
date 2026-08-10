@@ -1719,14 +1719,18 @@
             const r = cr.results.find(x => x.id === resultId);
             if (!r) return '';
             const cd = caseData[caseName] || {};
+            // SF round-level results (keys 'R1'/'R2') aren't in caseData — fall back to SF_ROUNDS for a real title/patients.
+            const sfr = (typeof SF_ROUNDS !== 'undefined') ? SF_ROUNDS[caseName] : undefined;
+            const displayTitle = cd.title || (sfr ? sfr.label.replace(/^Round \d+ — /, '') : caseName);
+            const displayPatient = cd.patient || (sfr ? sfr.patients : '');
             const ts = new Date().toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
             const FC = { crit:'#f87171', high:'#fb923c', low:'#60a5fa', norm:'#4ade80' };
             const FB = { crit:'rgba(239,68,68,0.15)', high:'rgba(249,115,22,0.12)', low:'rgba(96,165,250,0.12)', norm:'rgba(74,222,128,0.07)' };
             const header = `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #1e3a5f;">
                 <div>
                     <div style="font-size:0.7rem;color:#4ade80;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">CHOP Emergency · SimWars 2026</div>
-                    <div style="font-size:1.6rem;font-weight:900;color:#ffffff;line-height:1.2;">${caseName} — ${cd.title || caseName}</div>
-                    <div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;">${cd.patient || ''}</div>
+                    <div style="font-size:1.6rem;font-weight:900;color:#ffffff;line-height:1.2;">${caseName} — ${displayTitle}</div>
+                    <div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;">${displayPatient}</div>
                 </div>
                 <div style="text-align:right;flex-shrink:0;padding-left:20px;">
                     <div style="font-size:2.5rem;">${r.icon}</div>
@@ -1761,15 +1765,52 @@
             return `<div style="font-family:'Courier New',monospace;color:#e2e8f0;">${header}${body}</div>`;
         }
 
-        function projectResult(caseName, resultId) {
+        function displayBase() {
+            return window.location.protocol === 'file:'
+                ? 'https://merry-intuition-production-1788.up.railway.app'
+                : window.location.origin;
+        }
+
+        function openDisplayWindow(btnEl) {
+            const w = window.open(displayBase() + '/display', 'simwars_display', 'width=1280,height=800,menubar=no,toolbar=no');
+            if (w) {
+                window._dispWin = w;
+                try { w.focus(); } catch (e) {}
+                if (btnEl) { const orig = btnEl.textContent; btnEl.textContent = '✓ Opened'; setTimeout(() => { btnEl.textContent = orig; }, 1500); }
+            } else {
+                alert('Your browser blocked the popup.\n\nAllow popups for this site (click the blocked-popup icon in the address bar), or open this link manually on the projector screen:\n\n' + displayBase() + '/display');
+            }
+            return w;
+        }
+
+        function projectResult(caseName, resultId, btnEl) {
             const frag = buildProjFragment(caseName, resultId);
             if (!frag) return;
             saveToServer('proj_html', frag);
-            const base = window.location.protocol === 'file:'
-                ? 'https://merry-intuition-production-1788.up.railway.app'
-                : window.location.origin;
+            // Immediate feedback on the button itself, regardless of popup outcome —
+            // the push to the display screen has happened either way.
+            if (btnEl) {
+                const orig = btnEl.textContent;
+                btnEl.textContent = '✓ Sent';
+                btnEl.style.background = '#02C39A';
+                btnEl.style.borderColor = '#02C39A';
+                btnEl.style.color = 'white';
+                setTimeout(() => {
+                    btnEl.textContent = orig;
+                    btnEl.style.background = '#eff6ff';
+                    btnEl.style.borderColor = '#3b82f6';
+                    btnEl.style.color = '#1d4ed8';
+                }, 1200);
+            }
             if (!window._dispWin || window._dispWin.closed) {
-                window._dispWin = window.open(base + '/display', 'simwars_display', 'width=1280,height=800,menubar=no,toolbar=no');
+                const w = window.open(displayBase() + '/display', 'simwars_display', 'width=1280,height=800,menubar=no,toolbar=no');
+                if (w) {
+                    window._dispWin = w;
+                } else {
+                    // Popup blocked — the data was still saved to the server (confirmed above),
+                    // it just isn't visible until a display window is opened manually.
+                    alert('Sent to the display feed, but your browser blocked the popup window.\n\nClick "🖥️ Open Display Screen" at the top of this Investigations Console once, then Project buttons will update it automatically — or open this link on the projector:\n\n' + displayBase() + '/display');
+                }
             }
         }
 
@@ -1781,7 +1822,7 @@
                 return `<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--surface-2);gap:8px;">
                         <span style="font-size:0.82rem;font-weight:700;color:var(--text-primary);">${r.icon} ${r.label}</span>
-                        <button onclick="projectResult('${caseName}','${r.id}')" style="font-size:0.72rem;padding:4px 12px;border:1px solid #3b82f6;border-radius:6px;cursor:pointer;background:#eff6ff;color:#1d4ed8;white-space:nowrap;font-weight:600;">
+                        <button onclick="projectResult('${caseName}','${r.id}', this)" style="font-size:0.72rem;padding:4px 12px;border:1px solid #3b82f6;border-radius:6px;cursor:pointer;background:#eff6ff;color:#1d4ed8;white-space:nowrap;font-weight:600;">
                             📡 Project
                         </button>
                     </div>
@@ -1789,9 +1830,12 @@
                 </div>`;
             }).join('');
             return `<details style="margin-bottom:12px;border:1px solid #2563eb;border-radius:10px;overflow:hidden;">
-                <summary style="padding:8px 14px;background:linear-gradient(135deg,#1e3a5f,#1e40af);color:#e0f0ff;font-size:0.82rem;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">
+                <summary style="padding:8px 14px;background:linear-gradient(135deg,#1e3a5f,#1e40af);color:#e0f0ff;font-size:0.82rem;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                     <span>📋 INVESTIGATIONS CONSOLE</span>
-                    <span style="font-size:0.7rem;font-weight:400;opacity:0.8;">▼ Expand to reveal &amp; project results</span>
+                    <span style="display:flex;align-items:center;gap:10px;">
+                        <button onclick="event.preventDefault();event.stopPropagation();openDisplayWindow(this);" style="font-size:0.72rem;padding:4px 10px;border:1px solid rgba(255,255,255,0.5);border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.12);color:#e0f0ff;white-space:nowrap;font-weight:600;">🖥️ Open Display Screen</button>
+                        <span style="font-size:0.7rem;font-weight:400;opacity:0.8;">▼ Expand to reveal &amp; project results</span>
+                    </span>
                 </summary>
                 <div style="padding:10px;background:var(--bg);">${items}</div>
             </details>`;
