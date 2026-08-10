@@ -141,6 +141,16 @@
   .team-chip{background:#f1f3f7; border-radius:7px; padding:5px 10px; font-size:13px; font-weight:600; color:var(--ink);}
   .team-chip.pending{color:var(--muted); font-style:italic; font-weight:500;}
   @media (max-width:640px){ .schedule-rooms{grid-template-columns:1fr;} }
+
+  .round-overview{padding-bottom:14px;}
+  .room-row{display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-top:1px solid var(--line);}
+  .room-row:first-of-type{border-top:none; margin-top:2px;}
+  .room-tag{font-size:12.5px; font-weight:700; color:var(--muted);}
+  .group-chip{font-size:11px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:3px 11px; border-radius:20px;}
+  .group-red{background:#fee2e2; color:#b91c1c;}
+  .group-green{background:#dcfce7; color:#15803d;}
+  .group-blue{background:#dbeafe; color:#1d4ed8;}
+  .group-yellow{background:#fef9c3; color:#a16207;}
 </style>
 </head>
 <body>
@@ -158,23 +168,35 @@
         <div class="stage-desc">teams &middot; Preliminary Rounds</div>
       </div>
 
-      <div class="card blue">
-        <h3>Round One — BLS</h3>
-        <div class="meta">4 cases &middot; 4 teams per case &middot; Sequential</div>
-        <div class="chip-row">
-          <span class="chip">B1</span><span class="chip">B4</span><span class="chip">B3</span><span class="chip">B2</span>
-        </div>
-        <div class="foot-note">Each team plays one case &middot; BLS scoring weight applied</div>
+      <div class="card blue round-overview">
+        <h3>Round 1</h3>
+        <div class="meta">Room A &middot; PALS &nbsp;vs&nbsp; Room B &middot; BLS &middot; run in parallel</div>
+        <div class="room-row"><span class="room-tag">Room A</span><span class="group-chip group-red">RED</span></div>
+        <div class="room-row"><span class="room-tag">Room B</span><span class="group-chip group-yellow">YELLOW</span></div>
       </div>
 
-      <div class="card purple">
-        <h3>Round Two — PALS</h3>
-        <div class="meta">4 cases &middot; 4 teams per case &middot; Sequential</div>
-        <div class="chip-row">
-          <span class="chip">P1</span><span class="chip">P3</span><span class="chip">P2</span><span class="chip">P4</span>
-        </div>
-        <div class="foot-note">Each team plays one case &middot; PALS scoring weight applied</div>
+      <div class="card purple round-overview">
+        <h3>Round 2</h3>
+        <div class="meta">Room A &middot; PALS &nbsp;vs&nbsp; Room B &middot; BLS &middot; run in parallel</div>
+        <div class="room-row"><span class="room-tag">Room A</span><span class="group-chip group-green">GREEN</span></div>
+        <div class="room-row"><span class="room-tag">Room B</span><span class="group-chip group-red">RED</span></div>
       </div>
+
+      <div class="card blue round-overview">
+        <h3>Round 3</h3>
+        <div class="meta">Room A &middot; PALS &nbsp;vs&nbsp; Room B &middot; BLS &middot; run in parallel</div>
+        <div class="room-row"><span class="room-tag">Room A</span><span class="group-chip group-blue">BLUE</span></div>
+        <div class="room-row"><span class="room-tag">Room B</span><span class="group-chip group-green">GREEN</span></div>
+      </div>
+
+      <div class="card purple round-overview">
+        <h3>Round 4</h3>
+        <div class="meta">Room A &middot; PALS &nbsp;vs&nbsp; Room B &middot; BLS &middot; run in parallel</div>
+        <div class="room-row"><span class="room-tag">Room A</span><span class="group-chip group-yellow">YELLOW</span></div>
+        <div class="room-row"><span class="room-tag">Room B</span><span class="group-chip group-blue">BLUE</span></div>
+      </div>
+
+      <div class="foot-note" style="text-align:center;">Each team plays one PALS case + one BLS case &middot; case content sealed until round start</div>
 
       <div class="below-note">Cross-case ranking &middot; PALS + BLS combined<br>Top 4 teams advance</div>
     </div>
