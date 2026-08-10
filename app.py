@@ -1984,6 +1984,11 @@ def portal():
 def participant_info():
         return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-participant-info.html'))
 
+@app.route('/SimWars2026_Team_Guide.docx')
+def team_guide_docx():
+    return send_file(os.path.join(os.path.dirname(__file__), 'SimWars2026_Team_Guide.docx'))
+
+
 
 if __name__ == '__main__':
     import os as _os
