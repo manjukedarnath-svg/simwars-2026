@@ -707,15 +707,59 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     <h2 class="section-title" style="color:#fff;">Meet the Warriors in the Battlefield</h2>
     <div class="warriors-card reveal">
       <div class="big">16 Teams<span>64 participants &middot; confirmed &amp; ready</span></div>
-      <p class="note">You're confirmed &mdash; now lock in your team's details. Submit your team name, member names &amp; designations, team leader contact, and your intro video. Your submission order sets your randomly drawn team number for the prelim scoring sheet.</p>
+      <p class="note">You're confirmed &mdash; click below to draw your team number and lock in your team name, member names &amp; designations, and team leader contact. Your intro video is optional at this step &mdash; you can submit it afterwards, any time up to <strong>18 August 2026</strong>.</p>
       <a href="javascript:void(0)" onclick="startDrawSequence()" class="btn"><i class="fas fa-flag-checkered"></i> Enter SIM WARS</a>
-      <div style="margin-top:.9rem;">
-        <a href="SimWars2026_Team_Guide.docx" target="_blank" class="btn btn-sm btn-outline"><i class="fas fa-video"></i> Team Guide &mdash; Intro Video &amp; Registration Steps</a>
+      <div style="margin-top:.9rem;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;">
+        <a href="SimWars2026_Registration_Guide.docx" target="_blank" class="btn btn-sm btn-outline"><i class="fas fa-clipboard-list"></i> Registration Guide (doc)</a>
+        <a href="javascript:void(0)" onclick="openVideoLaterForm()" class="btn btn-sm btn-outline"><i class="fas fa-video"></i> Submit Your Video</a>
       </div>
       <p class="note" style="margin-top:1rem;font-size:.8rem;"><a href="#tools" style="color:var(--gold);"><i class="fas fa-lock"></i> View Prelim Standings (password required)</a></p>
+
+      <div style="margin-top:1.6rem;text-align:left;max-width:640px;margin-left:auto;margin-right:auto;">
+        <details style="margin-bottom:.6rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.7rem 1rem;">
+          <summary style="cursor:pointer;font-weight:700;color:#fff;">🎲 How the Team Draw Works</summary>
+          <div style="margin-top:.7rem;font-size:.85rem;line-height:1.6;color:rgba(255,255,255,.85);">
+            <p>There are 16 team slots for the prelim round. When you click "Enter SIM WARS," the system randomly draws one of the remaining numbers (1&ndash;16) for you &mdash; it's a genuine draw, not a choice.</p>
+            <p>Your number is reserved the moment it lands, while you fill in the rest of the form. If you complete and submit the form, that number is locked in as your team's. If you close the popup without submitting, your reserved number is released back into the pool for another team.</p>
+            <p style="margin-bottom:0;">Once all 16 numbers are claimed and submitted, the popup will show registration is full &mdash; contact the coordinators below if that happens and you haven't registered yet.</p>
+          </div>
+        </details>
+        <details style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.7rem 1rem;">
+          <summary style="cursor:pointer;font-weight:700;color:#fff;">🎬 Team Intro Video Guidelines</summary>
+          <div style="margin-top:.7rem;font-size:.85rem;line-height:1.6;color:rgba(255,255,255,.85);">
+            <p>A short video introducing your team to the judges &mdash; energy and personality, not a formal CV. Include your team name &amp; draw number, each of your 4 members (name, role, hospital), and one line each on your team's motto or what you're bringing to the table.</p>
+            <p><strong>Length:</strong> 60&ndash;90 seconds (hard cap 2 minutes) &middot; <strong>Orientation:</strong> Landscape / 16:9 &middot; <strong>File:</strong> standard phone video (MP4/MOV).</p>
+            <p style="margin-bottom:0;"><strong>Share it via</strong> YouTube (set to "Unlisted") or Google Drive (share &rarr; "Anyone with the link"), then paste the link using the "Submit Your Video" button above. <strong>Due by 18 August 2026.</strong></p>
+          </div>
+        </details>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- SUBMIT VIDEO LATER MODAL -->
+<div class="judge-modal-overlay" id="videoLaterOverlay">
+  <div class="intake-modal-box" style="max-width:420px;">
+    <button type="button" class="intake-close-x" onclick="closeVideoLaterForm()"><i class="fas fa-times"></i></button>
+    <h4 style="margin-top:0;">🎬 Submit Your Intro Video</h4>
+    <p class="intake-sub">Already registered? Paste your team name and video link below &mdash; due by <strong>18 August 2026</strong>.</p>
+    <form id="videoLaterForm">
+      <div class="intake-field">
+        <label for="videoLaterTeamName">Team Name</label>
+        <input type="text" id="videoLaterTeamName" required>
+      </div>
+      <div class="intake-field" style="margin-bottom:.2rem;">
+        <label for="videoLaterLink">Video Link</label>
+        <input type="url" id="videoLaterLink" placeholder="https://..." required>
+      </div>
+      <div class="intake-actions">
+        <button type="button" class="btn-cancel" onclick="closeVideoLaterForm()">Cancel</button>
+        <button type="submit" class="btn-submit" id="videoLaterSubmitBtn">Submit Video</button>
+      </div>
+      <div class="intake-status" id="videoLaterStatus"></div>
+    </form>
+  </div>
+</div>
 
 <!-- EVENT PREBRIEF / TOPICS TO KNOW -->
 <section id="prebrief" class="container">
@@ -1143,12 +1187,12 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
         </div>
       </div>
 
-      <div class="intake-section-label">Intro Video</div>
+      <div class="intake-section-label">Intro Video <span style="font-weight:400;opacity:.75;">(optional right now)</span></div>
       <div class="intake-field" style="margin-bottom:.2rem;">
         <label for="intakeVideoLink">Video Link</label>
-        <input type="url" id="intakeVideoLink" placeholder="https://..." required>
+        <input type="url" id="intakeVideoLink" placeholder="https://...">
       </div>
-      <p class="intake-hint">Upload to YouTube (unlisted) or Google Drive (shareable link) and paste the link here.</p>
+      <p class="intake-hint">Upload to YouTube (unlisted) or Google Drive (shareable link) and paste the link here. Don't have it yet? Register now and submit it later using the "Submit Your Video" link below — due by <strong>18 August 2026</strong>.</p>
 
       <div class="intake-actions">
         <button type="button" class="btn-cancel" onclick="closeIntakeModal()">Cancel</button>
@@ -1435,7 +1479,8 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
         body: new URLSearchParams(payload).toString(),
       });
       drawSubmitted = true;
-      intakeStatus.textContent = 'Thanks! Your team is registered as Team ' + payload.drawNumber + '.';
+      intakeStatus.textContent = 'Thanks! Your team is registered as Team ' + payload.drawNumber + '.'
+        + (payload.introVideo ? '' : ' Don\'t forget to submit your intro video by 18 August 2026 — use the "Submit Your Video" link on the site.');
       intakeStatus.classList.add('show', 'ok');
       intakeSubmitBtn.textContent = 'Submitted';
       intakeForm.querySelectorAll('input, select').forEach(el => el.disabled = true);
@@ -1445,6 +1490,68 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
       intakeStatus.classList.add('show', 'err');
       intakeSubmitBtn.disabled = false;
       intakeSubmitBtn.textContent = 'Submit Team';
+    }
+  });
+
+  // --- Submit Your Video (later) ---
+  const videoLaterOverlay = document.getElementById('videoLaterOverlay');
+  const videoLaterForm = document.getElementById('videoLaterForm');
+  const videoLaterStatus = document.getElementById('videoLaterStatus');
+  const videoLaterSubmitBtn = document.getElementById('videoLaterSubmitBtn');
+
+  function openVideoLaterForm() {
+    videoLaterStatus.classList.remove('show', 'ok', 'err');
+    videoLaterForm.reset();
+    videoLaterForm.querySelectorAll('input').forEach(el => el.disabled = false);
+    videoLaterSubmitBtn.disabled = false;
+    videoLaterSubmitBtn.textContent = 'Submit Video';
+    videoLaterOverlay.classList.add('show');
+  }
+
+  function closeVideoLaterForm() {
+    videoLaterOverlay.classList.remove('show');
+  }
+
+  videoLaterOverlay.addEventListener('click', (e) => {
+    if (e.target === videoLaterOverlay) closeVideoLaterForm();
+  });
+
+  videoLaterForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    videoLaterStatus.classList.remove('show', 'ok', 'err');
+
+    if (INTAKE_ENDPOINT === 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+      videoLaterStatus.textContent = 'Team intake isn\'t connected yet — please email the coordinators your video link instead.';
+      videoLaterStatus.classList.add('show', 'err');
+      return;
+    }
+
+    const payload = {
+      teamName: document.getElementById('videoLaterTeamName').value.trim(),
+      introVideo: document.getElementById('videoLaterLink').value.trim(),
+      lateVideoSubmission: 'yes',
+    };
+
+    videoLaterSubmitBtn.disabled = true;
+    videoLaterSubmitBtn.textContent = 'Submitting…';
+
+    try {
+      await fetch(INTAKE_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(payload).toString(),
+      });
+      videoLaterStatus.textContent = 'Thanks! Your video link has been sent to the coordinators.';
+      videoLaterStatus.classList.add('show', 'ok');
+      videoLaterSubmitBtn.textContent = 'Submitted';
+      videoLaterForm.querySelectorAll('input').forEach(el => el.disabled = true);
+      setTimeout(closeVideoLaterForm, 3000);
+    } catch (err) {
+      videoLaterStatus.textContent = 'Something went wrong sending your video link. Please contact the coordinators below.';
+      videoLaterStatus.classList.add('show', 'err');
+      videoLaterSubmitBtn.disabled = false;
+      videoLaterSubmitBtn.textContent = 'Submit Video';
     }
   });
 </script>
