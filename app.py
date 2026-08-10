@@ -1,6 +1,7 @@
 from flask import Flask, request, send_file, render_template_string, jsonify, redirect, session
 import io
 import os
+import re
 import sqlite3
 from urllib.parse import quote
 from docx import Document
@@ -393,6 +394,7 @@ INDEX_TEMPLATE = """
 <body>
   <div class="header">
     <div class="header-inner">
+      <a href="/register" style="display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;color:#94a3b8;text-decoration:none;margin-bottom:14px;">&larr; Back to SimWars Home</a>
       <h1>SimWars Case Library</h1>
       <p>Pediatric Emergency Simulation Scenarios</p>
       <div class="stats">
@@ -646,6 +648,12 @@ CASE_TEMPLATE = """
     .inv-card-label { display: block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 2px; }
     .inv-card-text { display: block; font-size: 0.78rem; color: #cbd5e1; font-family: 'Courier New', monospace; }
 
+    /* Image cards (CXR / Echo / CT) */
+    .inv-image-btn { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 6px; margin-bottom: 6px; cursor: pointer; transition: 0.15s; }
+    .inv-image-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+    .inv-image-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #1e293b; }
+    .inv-image-label { font-size: 0.78rem; color: #cbd5e1; font-weight: 600; }
+
     /* Case nav */
     .case-nav { display: flex; gap: 8px; }
     .nav-btn { flex: 1; padding: 9px 12px; background: white; border: 1.5px solid #e2e8f0; border-radius: 8px; text-align: center; text-decoration: none; font-size: 0.78rem; font-weight: 600; color: #64748b; }
@@ -824,6 +832,23 @@ CASE_TEMPLATE = """
 
       <!-- Investigations Console -->
       <div class="inv-console">
+        <div class="inv-title">🖼️ CXR / Echo / CT Images</div>
+        {% if images %}
+        <div id="inv-images">
+          {% for img in images %}
+          <button class="inv-image-btn" onclick="pushImage('{{ img.url }}', '{{ img.label|e }}', this)">
+            <img class="inv-image-thumb" src="{{ img.url }}" alt="{{ img.label|e }}">
+            <span class="inv-image-label">{{ img.label }}</span>
+          </button>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div style="font-size:0.72rem;color:#475569;line-height:1.6;">No images uploaded for this case yet. Drop CXR / Echo / CT files into <code style="color:#64748b;">static/investigations/{{ case.id }}/</code> (name them like <code style="color:#64748b;">01_cxr-admission.jpg</code>) and they'll appear here automatically — no code changes needed. ECG rhythm stays on the physical monitor, not pushed here.</div>
+        {% endif %}
+      </div>
+
+      <!-- Investigations Console -->
+      <div class="inv-console">
         <div class="inv-title">📺 Push to Display</div>
         <div id="inv-cards"></div>
         <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.07);padding-top:10px;">
@@ -948,6 +973,24 @@ CASE_TEMPLATE = """
       pushHtml('Investigation Result', result, document.getElementById('inv-push'));
     }
 
+    function pushImage(url, label, btnEl) {
+      var t = ts();
+      var html = '<div style="padding:24px 40px;display:flex;flex-direction:column;align-items:center;">'
+        + '<div style="width:100%;display:flex;align-items:baseline;gap:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:14px;">'
+        + '<div style="font-size:2rem;font-weight:800;color:#f1f5f9;letter-spacing:-0.02em;">' + label + '</div>'
+        + '<div style="font-size:0.9rem;color:#334155;font-family:\'Courier New\',monospace;margin-left:auto;">' + t + '</div>'
+        + '</div>'
+        + '<img src="' + url + '" style="max-width:100%;max-height:78vh;border-radius:6px;box-shadow:0 4px 30px rgba(0,0,0,0.5);" />'
+        + '<div style="margin-top:20px;font-size:0.68rem;color:#1e3a5f;letter-spacing:0.14em;text-transform:uppercase;align-self:flex-start;">SimWars 2026 · Case ' + CASE_ID + '</div>'
+        + '</div>';
+      fetch('/api/score', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({key:'proj_html', value: html})})
+        .then(function() {
+          if (btnEl) { btnEl.style.borderColor = '#16a34a'; setTimeout(function(){ btnEl.style.borderColor = ''; }, 3500); }
+          document.getElementById('inv-status').textContent = '✓ ' + label + ' pushed at ' + t;
+        })
+        .catch(function() { document.getElementById('inv-status').textContent = 'Error — check connection.'; });
+    }
+
     buildCards();
   </script>
 </body>
@@ -971,6 +1014,26 @@ def index():
         rounds.setdefault(c['round'], []).append(c)
     return render_template_string(INDEX_TEMPLATE, cases=CASES, rounds=rounds)
 
+IMG_EXTS = ('.jpg', '.jpeg', '.png', '.webp', '.gif')
+
+def get_case_images(case_id):
+    """Auto-discover real investigation images (CXR / Echo-POCUS / CT) dropped into
+    static/investigations/<CASE_ID>/. Name files like '01_cxr-admission.jpg' —
+    the leading number controls display order, the rest becomes the label.
+    Nothing to configure in code: drop a file in the folder and it appears here."""
+    folder = os.path.join(os.path.dirname(__file__), 'static', 'investigations', case_id)
+    if not os.path.isdir(folder):
+        return []
+    images = []
+    for f in sorted(os.listdir(folder)):
+        if not f.lower().endswith(IMG_EXTS):
+            continue
+        stem = os.path.splitext(f)[0]
+        label = re.sub(r'^\d+[_-]\s*', '', stem).replace('_', ' ').replace('-', ' ').strip()
+        label = label.title() if label else f
+        images.append({'file': f, 'label': label, 'url': f'/static/investigations/{case_id}/{f}'})
+    return images
+
 @app.route('/case/<case_id>')
 def get_case(case_id):
     case = next((c for c in CASES if c['id'] == case_id), None)
@@ -987,7 +1050,8 @@ def get_case(case_id):
     next_case = CASES[idx + 1] if idx < len(CASES) - 1 else None
 
     if fmt == 'html':
-        html = render_template_string(CASE_TEMPLATE, case=case, colors=colors, prev_case=prev_case, next_case=next_case)
+        images = get_case_images(case_id)
+        html = render_template_string(CASE_TEMPLATE, case=case, colors=colors, prev_case=prev_case, next_case=next_case, images=images)
         return html, 200, {'Content-Type': 'text/html'}
 
     elif fmt == 'pdf':
