@@ -4331,6 +4331,23 @@
             if (target) target.click();
         }
 
+        function applyJudgeRoleLock() {
+            // Judge Mode password gate: hide Master Scoreboard — it holds Settings,
+            // Judge Assignment, Team Roster, Schedule and the live aggregate
+            // standings, which judges shouldn't see or edit.
+            const masterBtn = document.querySelector('[data-tab="tabMaster"]');
+            if (masterBtn) masterBtn.style.display = 'none';
+            const masterPane = document.getElementById('tabMaster');
+            if (masterPane && masterPane.classList.contains('active')) {
+                const target = document.querySelector('[data-tab="tabJudgePals"]');
+                if (target) target.click();
+            }
+            const banner = document.createElement('div');
+            banner.style.cssText = 'background:#FEF3C7;border-bottom:2px solid #D97706;padding:8px 20px;font-weight:700;font-size:0.85rem;color:#92400E;';
+            banner.textContent = '⚖️ Judge View — scoring tabs only';
+            document.body.insertBefore(banner, document.body.firstChild);
+        }
+
         // ================================================================
         // 18. INIT
         // ================================================================
@@ -4354,6 +4371,10 @@
             // Apply view lock if ?view= param present
             const viewParam = new URLSearchParams(window.location.search).get('view');
             if (viewParam) applyViewLock(viewParam);
+
+            // Apply Judge Mode role lock if ?role=judge param present
+            const roleParam = new URLSearchParams(window.location.search).get('role');
+            if (roleParam === 'judge') applyJudgeRoleLock();
 
             // Load saved scores from server on first load
             pollScores();

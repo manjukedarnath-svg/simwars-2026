@@ -1,36 +1,36 @@
-<<!DOCTYPE html>
-  <html lang="en">
-  <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SimWars 2026 — Competition Flow</title>
-  <style>
-    :root{
-      --blue:#2b5fd9; --blue-bg:#eef3ff;
-      --teal:#0d8a72; --teal-bg:#eafaf6;
-      --orange:#d9760b; --orange-bg:#fff3e6;
-      --purple:#7a3fc0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimWars 2026 — Competition Flow</title>
+<style>
+  :root{
+    --blue:#2b5fd9; --blue-bg:#eef3ff;
+    --teal:#0d8a72; --teal-bg:#eafaf6;
+    --orange:#d9760b; --orange-bg:#fff3e6;
+    --purple:#7a3fc0;
     --ink:#1b2430; --muted:#6b7686; --line:#e3e7ee;
-      }
+  }
   *{box-sizing:border-box;}
   body{
-        margin:0; padding:32px 20px 60px; background:#f7f8fb;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    margin:0; padding:32px 20px 60px; background:#f7f8fb;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     color:var(--ink);
-}
+  }
   .wrap{max-width:1180px; margin:0 auto;}
   .eyebrow{
-        text-align:center; letter-spacing:2px; font-size:12px; font-weight:700;
+    text-align:center; letter-spacing:2px; font-size:12px; font-weight:700;
     color:var(--muted); text-transform:uppercase; margin-bottom:6px;
-}
+  }
   h1{
-        text-align:center; font-size:44px; margin:0 0 8px; font-weight:800;
-}
+    text-align:center; font-size:44px; margin:0 0 8px; font-weight:800;
+  }
   h1 span{color:var(--orange);}
   .sub{text-align:center; color:var(--muted); font-size:16px; margin-bottom:36px;}
 
   .stages{
-        display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:18px; align-items:start;
+    display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:18px; align-items:start;
   }
   .stage-col{display:flex; flex-direction:column; gap:16px;}
   .stage-head{text-align:center; margin-bottom:4px;}
@@ -43,14 +43,14 @@
 
   .arrow-col{display:flex; align-items:center; justify-content:center; padding-top:80px;}
   .arrow-track{
-        writing-mode:vertical-rl; color:var(--muted); font-size:11px; font-weight:700;
+    writing-mode:vertical-rl; color:var(--muted); font-size:11px; font-weight:700;
     letter-spacing:2px; display:flex; flex-direction:column; align-items:center; gap:6px;
-}
+  }
 
   .card{
-        background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:18px 20px;
-    }
-      .card.blue{border-color:var(--blue);}
+    background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:18px 20px;
+  }
+  .card.blue{border-color:var(--blue);}
   .card.purple{border-color:var(--purple);}
   .card.teal{border-color:var(--teal);}
   .card.orange{border-color:var(--orange);}
@@ -64,7 +64,7 @@
 
   .chip-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;}
   .chip{
-        border:1.5px solid currentColor; border-radius:8px; padding:5px 12px;
+    border:1.5px solid currentColor; border-radius:8px; padding:5px 12px;
     font-weight:700; font-size:14px;
   }
   .card.blue .chip{color:var(--blue);}
@@ -73,45 +73,45 @@
   .card.orange .chip{color:var(--orange);}
 
   .case-pill{
-        background:#f1f3f7; border-radius:8px; padding:8px 12px; font-size:14px;
+    background:#f1f3f7; border-radius:8px; padding:8px 12px; font-size:14px;
     color:var(--ink); font-weight:600; margin-bottom:14px; display:inline-block;
-}
+  }
   .case-pill .lock{margin-right:6px; opacity:.6;}
 
   .foot-note{font-size:13.5px; color:var(--muted); line-height:1.5;}
 
   .domain-row{
-        display:flex; justify-content:space-between; align-items:baseline;
+    display:flex; justify-content:space-between; align-items:baseline;
     padding:8px 0; border-bottom:1px solid var(--line); font-size:14px;
-}
+  }
   .domain-row:last-of-type{border-bottom:none;}
   .domain-row b{font-weight:800;}
   .card.teal .domain-row b{color:var(--teal);}
   .card.orange .domain-row b{color:var(--orange);}
   .total-row{
-        display:flex; justify-content:space-between; align-items:baseline;
+    display:flex; justify-content:space-between; align-items:baseline;
     padding-top:10px; margin-top:6px; border-top:2px solid var(--ink); font-weight:800; font-size:16px;
-}
+  }
 
   .below-note{
-        text-align:center; font-size:13.5px; font-weight:700; line-height:1.6; margin-top:2px;
-}
+    text-align:center; font-size:13.5px; font-weight:700; line-height:1.6; margin-top:2px;
+  }
   .col-blue .below-note{color:var(--blue);}
-      .col-teal .below-note{color:var(--teal);}
+  .col-teal .below-note{color:var(--teal);}
 
   .trophy-card{
-        text-align:center; padding:26px 20px;
+    text-align:center; padding:26px 20px;
     background:linear-gradient(180deg,#fff8ec,#fff);
-}
-        .trophy-card .emoji{font-size:40px;}
+  }
+  .trophy-card .emoji{font-size:40px;}
   .trophy-card h3{color:var(--orange); font-size:20px; margin:8px 0 10px;}
   .trophy-card p{margin:4px 0; color:var(--ink); font-size:14px;}
   .trophy-card p.muted{color:var(--muted);}
 
   .legend{
-        margin-top:36px; background:#fff; border:1px solid var(--line); border-radius:14px;
-      padding:20px 24px;
-}
+    margin-top:36px; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:20px 24px;
+  }
   .legend-item{display:flex; gap:10px; margin-bottom:12px; font-size:14.5px; line-height:1.55;}
   .legend-item:last-child{margin-bottom:0;}
   .dot{width:10px; height:10px; border-radius:3px; margin-top:6px; flex:none;}
@@ -120,117 +120,209 @@
   @media (max-width:900px){
     .stages{grid-template-columns:1fr; }
     .arrow-col{display:none;}
-}
-</style>
-  </head>
-  <body>
-  <div class="wrap">
-    <div class="eyebrow">CHOP Emergency &middot; PediSTARS</div>
-    <h1>SimWars <span>2026</span></h1>
-    <div class="sub">Competition Structure &middot; 16 teams &rarr; 4 &rarr; 2 &rarr; 1 Champion</div>
+  }
 
-    <div class="stages">
-      <!-- STAGE 1 -->
-      <div class="stage-col col-blue">
-        <div class="stage-head">
-          <div class="stage-label">Stage 1</div>
-          <div class="stage-num">16</div>
-          <div class="stage-desc">teams &middot; Preliminary Rounds</div>
+  .schedule-section{margin-top:36px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:26px 28px;}
+  .schedule-title{font-size:20px; font-weight:800; text-align:center; margin-bottom:4px;}
+  .schedule-sub{text-align:center; color:var(--muted); font-size:13.5px; margin-bottom:22px;}
+  .schedule-round{margin-bottom:20px;}
+  .schedule-round:last-child{margin-bottom:0;}
+  .schedule-round-label{font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .schedule-rooms{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .schedule-room{border:1.5px solid var(--line); border-radius:10px; padding:12px 14px;}
+  .schedule-room-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;}
+  .schedule-room-name{font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;}
+  .group-badge{font-size:11px; font-weight:800; letter-spacing:.05em; padding:3px 10px; border-radius:20px; text-transform:uppercase;}
+  .group-red{background:#fee2e2; color:#b91c1c;}
+  .group-green{background:#dcfce7; color:#15803d;}
+  .group-blue{background:#dbeafe; color:#1d4ed8;}
+  .group-yellow{background:#fef9c3; color:#a16207;}
+  .team-chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .team-chip{background:#f1f3f7; border-radius:7px; padding:5px 10px; font-size:13px; font-weight:600; color:var(--ink);}
+  .team-chip.pending{color:var(--muted); font-style:italic; font-weight:500;}
+  @media (max-width:640px){ .schedule-rooms{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">CHOP Emergency &middot; PediSTARS</div>
+  <h1>SimWars <span>2026</span></h1>
+  <div class="sub">Competition Structure &middot; 16 teams &rarr; 4 &rarr; 2 &rarr; 1 Champion</div>
+
+  <div class="stages">
+    <!-- STAGE 1 -->
+    <div class="stage-col col-blue">
+      <div class="stage-head">
+        <div class="stage-label">Stage 1</div>
+        <div class="stage-num">16</div>
+        <div class="stage-desc">teams &middot; Preliminary Rounds</div>
       </div>
 
       <div class="card blue">
         <h3>Round One — BLS</h3>
         <div class="meta">4 cases &middot; 4 teams per case &middot; Sequential</div>
-          <div class="chip-row">
-            <span class="chip">B1</span><span class="chip">B2</span><span class="chip">B3</span><span class="chip">B4</span>
-          </div>
-          <div class="foot-note">Each team plays one case &middot; BLS scoring weight applied</div>
+        <div class="chip-row">
+          <span class="chip">B1</span><span class="chip">B4</span><span class="chip">B3</span><span class="chip">B2</span>
         </div>
-
-        <div class="card purple">
-          <h3>Round Two — PALS</h3>
-          <div class="meta">4 cases &middot; 4 teams per case &middot; Sequential</div>
-          <div class="chip-row">
-            <span class="chip">P1</span><span class="chip">P2</span><span class="chip">P3</span><span class="chip">P4</span>
-          </div>
-          <div class="foot-note">Each team plays one case &middot; PALS scoring weight applied</div>
-        </div>
-
-        <div class="below-note">Cross-case ranking &middot; PALS + BLS combined<br>Top 4 teams advance</div>
+        <div class="foot-note">Each team plays one case &middot; BLS scoring weight applied</div>
       </div>
 
-      <div class="arrow-col"><div class="arrow-track">&#9660; TOP 4</div></div>
-
-      <!-- STAGE 2 -->
-      <div class="stage-col col-teal">
-        <div class="stage-head">
-          <div class="stage-label">Stage 2</div>
-          <div class="stage-num">4</div>
-          <div class="stage-desc">teams &middot; Semi-Finals</div>
+      <div class="card purple">
+        <h3>Round Two — PALS</h3>
+        <div class="meta">4 cases &middot; 4 teams per case &middot; Sequential</div>
+        <div class="chip-row">
+          <span class="chip">P1</span><span class="chip">P3</span><span class="chip">P2</span><span class="chip">P4</span>
         </div>
+        <div class="foot-note">Each team plays one case &middot; PALS scoring weight applied</div>
+      </div>
 
-        <div class="card teal">
-          <h3>SF Round 1</h3>
-          <div class="meta">2 teams &middot; Case SF1 &middot; 15:00 hard stop</div>
+      <div class="below-note">Cross-case ranking &middot; PALS + BLS combined<br>Top 4 teams advance</div>
+    </div>
+
+    <div class="arrow-col"><div class="arrow-track">&#9660; TOP 4</div></div>
+
+    <!-- STAGE 2 -->
+    <div class="stage-col col-teal">
+      <div class="stage-head">
+        <div class="stage-label">Stage 2</div>
+        <div class="stage-num">4</div>
+        <div class="stage-desc">teams &middot; Semi-Finals</div>
+      </div>
+
+      <div class="card teal">
+        <h3>SF Round 1</h3>
+        <div class="meta">2 teams &middot; Case SF1 &middot; 15:00 hard stop</div>
         <div class="chip-row"><span class="chip">SF1</span></div>
         <div class="case-pill"><span class="lock">&#128274;</span>Case sealed until round start &middot; 15:00</div>
-          <div class="domain-row"><span>Domain I — Clinical Judgement</span><b>/ 40</b></div>
-          <div class="domain-row"><span>Domain II — Crisis Resource Management</span><b>/ 50</b></div>
-          <div class="domain-row"><span>Domain III — Global Entrustment</span><b>/ 10</b></div>
+        <div class="domain-row"><span>Domain I — Clinical Judgement</span><b>/ 40</b></div>
+        <div class="domain-row"><span>Domain II — Crisis Resource Management</span><b>/ 50</b></div>
+        <div class="domain-row"><span>Domain III — Global Entrustment</span><b>/ 10</b></div>
         <div class="total-row"><span>Total</span><span>/ 100</span></div>
       </div>
 
-        <div class="card teal">
-          <h3>SF Round 2</h3>
-          <div class="meta">2 teams &middot; Case SF2 &middot; 15:00 hard stop</div>
+      <div class="card teal">
+        <h3>SF Round 2</h3>
+        <div class="meta">2 teams &middot; Case SF2 &middot; 15:00 hard stop</div>
         <div class="chip-row"><span class="chip">SF2</span></div>
         <div class="case-pill"><span class="lock">&#128274;</span>Case sealed until round start &middot; 15:00</div>
-          <div class="domain-row"><span>Domain I — Clinical Judgement</span><b>/ 40</b></div>
-          <div class="domain-row"><span>Domain II — Crisis Resource Management</span><b>/ 50</b></div>
-          <div class="domain-row"><span>Domain III — Global Entrustment</span><b>/ 10</b></div>
+        <div class="domain-row"><span>Domain I — Clinical Judgement</span><b>/ 40</b></div>
+        <div class="domain-row"><span>Domain II — Crisis Resource Management</span><b>/ 50</b></div>
+        <div class="domain-row"><span>Domain III — Global Entrustment</span><b>/ 10</b></div>
         <div class="total-row"><span>Total</span><span>/ 100</span></div>
       </div>
 
-        <div class="below-note">Within-round comparison only<br>Winner of each round advances &middot; 2 finalists</div>
+      <div class="below-note">Within-round comparison only<br>Winner of each round advances &middot; 2 finalists</div>
+    </div>
+
+    <div class="arrow-col"><div class="arrow-track">&#9660; TOP 2</div></div>
+
+    <!-- STAGE 3 -->
+    <div class="stage-col col-orange">
+      <div class="stage-head">
+        <div class="stage-label">Stage 3</div>
+        <div class="stage-num">2</div>
+        <div class="stage-desc">finalists &middot; head-to-head</div>
       </div>
 
-      <div class="arrow-col"><div class="arrow-track">&#9660; TOP 2</div></div>
-
-      <!-- STAGE 3 -->
-      <div class="stage-col col-orange">
-        <div class="stage-head">
-          <div class="stage-label">Stage 3</div>
-          <div class="stage-num">2</div>
-          <div class="stage-desc">finalists &middot; head-to-head</div>
-        </div>
-
-        <div class="card orange">
-          <h3>Finals — Both Cases</h3>
+      <div class="card orange">
+        <h3>Finals — Both Cases</h3>
         <div class="meta">Both finalists play F1 + F2 &middot; Sequential &middot; Combined /200</div>
-          <div class="chip-row"><span class="chip">F1</span><span class="chip">F2</span></div>
-          <div class="case-pill"><span class="lock">&#128274;</span>Cases sealed until round start &middot; 15:00 each</div>
-          <div style="font-size:11px; font-weight:700; letter-spacing:1px; color:var(--muted); margin:10px 0 4px;">PER CASE (&times;2 = /200 TOTAL)</div>
-          <div class="domain-row"><span>Domain A — Clinical Management</span><b>/ 45</b></div>
-          <div class="domain-row"><span>Domain B — Teamwork &amp; Followership</span><b>/ 40</b></div>
-          <div class="domain-row"><span>Domain C — Shared Reasoning</span><b>/ 15</b></div>
-          <div class="total-row"><span>Combined Total (F1 + F2)</span><span>/ 200</span></div>
-        </div>
+        <div class="chip-row"><span class="chip">F1</span><span class="chip">F2</span></div>
+        <div class="case-pill"><span class="lock">&#128274;</span>Cases sealed until round start &middot; 15:00 each</div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:1px; color:var(--muted); margin:10px 0 4px;">PER CASE (&times;2 = /200 TOTAL)</div>
+        <div class="domain-row"><span>Domain A — Clinical Management</span><b>/ 45</b></div>
+        <div class="domain-row"><span>Domain B — Teamwork &amp; Followership</span><b>/ 40</b></div>
+        <div class="domain-row"><span>Domain C — Shared Reasoning</span><b>/ 15</b></div>
+        <div class="total-row"><span>Combined Total (F1 + F2)</span><span>/ 200</span></div>
+      </div>
 
-        <div class="card orange trophy-card">
-          <div class="emoji">&#127942;</div>
-          <h3>SimWars Champion 2026</h3>
-          <p>Highest combined score across F1 + F2</p>
-          <p class="muted">Tiebreaker: returning team leader &middot; 60s &middot; no conferring</p>
+      <div class="card orange trophy-card">
+        <div class="emoji">&#127942;</div>
+        <h3>SimWars Champion 2026</h3>
+        <p>Highest combined score across F1 + F2</p>
+        <p class="muted">Tiebreaker: returning team leader &middot; 60s &middot; no conferring</p>
       </div>
     </div>
   </div>
 
-    <div class="legend">
-      <div class="legend-item"><span class="dot blue"></span><span><b>Prelims:</b> Cross-case ranked — PALS + BLS scores combined. Difficulty parity matters here.</span></div>
-      <div class="legend-item"><span class="dot teal"></span><span><b>Semi-Finals:</b> Within-round only — SF1 and SF2 scores are never compared against each other. Weighting 40/50/10 (CRM-heavy). Case content is confidential and revealed only at round start.</span></div>
-      <div class="legend-item"><span class="dot orange"></span><span><b>Finals:</b> Both finalists play both cases. Weighting 45/40/15 (clinical-heavy). Judge per domain: one Physiology Judge, one Teamwork Judge. Case content is confidential and revealed only at round start.</span></div>
-    </div>
+  <div class="schedule-section">
+    <h2 class="schedule-title">Preliminary Round Schedule</h2>
+    <div class="schedule-sub">Room A runs PALS · Room B runs BLS · each group rotates rooms across the four rounds</div>
+    <div class="schedule-grid" id="scheduleGrid"></div>
   </div>
-  </body>
-  </html>
-  
+
+  <div class="legend">
+    <div class="legend-item"><span class="dot blue"></span><span><b>Prelims:</b> Cross-case ranked — PALS + BLS scores combined. Difficulty parity matters here.</span></div>
+    <div class="legend-item"><span class="dot teal"></span><span><b>Semi-Finals:</b> Within-round only — SF1 and SF2 scores are never compared against each other. Weighting 40/50/10 (CRM-heavy). Case content is confidential and revealed only at round start.</span></div>
+    <div class="legend-item"><span class="dot orange"></span><span><b>Finals:</b> Both finalists play both cases. Weighting 45/40/15 (clinical-heavy). Judge per domain: one Physiology Judge, one Teamwork Judge. Case content is confidential and revealed only at round start.</span></div>
+  </div>
+</div>
+<script>
+(function(){
+  // Prelim round → room → colour-group → draw-number mapping.
+  // Deliberately carries NO case IDs or titles — case content stays sealed until round start.
+  var SCHEDULE = [
+    { round: 1, rooms: [
+        { label: 'Room A · PALS', group: 'RED',    draws: [1,2,3,4] },
+        { label: 'Room B · BLS',  group: 'YELLOW', draws: [13,14,15,16] }
+    ]},
+    { round: 2, rooms: [
+        { label: 'Room A · PALS', group: 'GREEN', draws: [5,6,7,8] },
+        { label: 'Room B · BLS',  group: 'RED',   draws: [1,2,3,4] }
+    ]},
+    { round: 3, rooms: [
+        { label: 'Room A · PALS', group: 'BLUE',  draws: [9,10,11,12] },
+        { label: 'Room B · BLS',  group: 'GREEN', draws: [5,6,7,8] }
+    ]},
+    { round: 4, rooms: [
+        { label: 'Room A · PALS', group: 'YELLOW', draws: [13,14,15,16] },
+        { label: 'Room B · BLS',  group: 'BLUE',   draws: [9,10,11,12] }
+    ]}
+  ];
+  var GROUP_CLASS = { RED: 'group-red', GREEN: 'group-green', BLUE: 'group-blue', YELLOW: 'group-yellow' };
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function renderGrid(teamNames){
+    var grid = document.getElementById('scheduleGrid');
+    if (!grid) return;
+    grid.innerHTML = SCHEDULE.map(function(r){
+      var rooms = r.rooms.map(function(room){
+        var chips = room.draws.map(function(d){
+          var code = 'T' + d;
+          var name = teamNames[code];
+          var registered = name && name !== code;
+          var text = registered ? esc(name) : ('Draw ' + d + ' — TBD');
+          return '<span class="team-chip' + (registered ? '' : ' pending') + '">' + text + '</span>';
+        }).join('');
+        return '<div class="schedule-room">' +
+          '<div class="schedule-room-head">' +
+            '<span class="schedule-room-name">' + esc(room.label) + '</span>' +
+            '<span class="group-badge ' + GROUP_CLASS[room.group] + '">' + room.group + '</span>' +
+          '</div>' +
+          '<div class="team-chips">' + chips + '</div>' +
+        '</div>';
+      }).join('');
+      return '<div class="schedule-round">' +
+        '<div class="schedule-round-label">Round ' + r.round + '</div>' +
+        '<div class="schedule-rooms">' + rooms + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  fetch('/api/results')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var teamNames = {};
+      (data.all_teams || []).forEach(function(t){ teamNames[t.team] = t.name; });
+      renderGrid(teamNames);
+    })
+    .catch(function(){ renderGrid({}); });
+})();
+</script>
+</body>
+</html>

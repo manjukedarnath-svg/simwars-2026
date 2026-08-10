@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimWars 2026 — Preliminary Round Schedule</title>
+<style>
+  :root{
+    --ink:#1b2430; --muted:#6b7686; --line:#d7dce4;
+    --red:#b91c1c; --red-bg:#fee2e2;
+    --green:#15803d; --green-bg:#dcfce7;
+    --blue:#1d4ed8; --blue-bg:#dbeafe;
+    --yellow:#a16207; --yellow-bg:#fef9c3;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:28px 32px; background:#f7f8fb; color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  .wrap{max-width:1100px; margin:0 auto;}
+  .toolbar{display:flex; justify-content:flex-end; gap:10px; margin-bottom:16px;}
+  .toolbar button{
+    background:#1a56db; color:#fff; border:none; border-radius:8px; padding:9px 16px;
+    font-weight:700; font-size:0.85rem; cursor:pointer;
+  }
+  header{text-align:center; margin-bottom:24px;}
+  .eyebrow{letter-spacing:2px; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:6px;}
+  h1{font-size:30px; margin:0 0 6px; font-weight:800;}
+  .sub{color:var(--muted); font-size:14px;}
+
+  h2{font-size:16px; font-weight:800; margin:28px 0 10px; letter-spacing:.02em;}
+
+  table{width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden;}
+  caption{caption-side:top; text-align:left; font-size:12px; color:var(--muted); margin-bottom:6px;}
+  th, td{border:1px solid var(--line); padding:10px 12px; font-size:13.5px; text-align:left; vertical-align:top;}
+  thead th{background:#f1f3f7; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+
+  .badge{display:inline-block; font-size:11px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:3px 10px; border-radius:20px;}
+  .badge-red{background:var(--red-bg); color:var(--red);}
+  .badge-green{background:var(--green-bg); color:var(--green);}
+  .badge-blue{background:var(--blue-bg); color:var(--blue);}
+  .badge-yellow{background:var(--yellow-bg); color:var(--yellow);}
+
+  .teams-list{display:flex; flex-wrap:wrap; gap:6px;}
+  .team-slot{background:#f1f3f7; border-radius:6px; padding:4px 9px; font-size:12.5px; font-weight:600;}
+  .team-slot.pending{color:var(--muted); font-style:italic; font-weight:500;}
+
+  .fetch-note{font-size:11.5px; color:var(--muted); margin-top:6px;}
+
+  footer{margin-top:28px; font-size:11.5px; color:var(--muted); text-align:center;}
+
+  @media print{
+    body{background:#fff; padding:0;}
+    .toolbar{display:none;}
+    .wrap{max-width:none;}
+    table{page-break-inside:avoid;}
+    @page{size:landscape; margin:14mm;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar"><button onclick="window.print()">🖨 Print</button></div>
+
+  <header>
+    <div class="eyebrow">CHOP Emergency &middot; PediSTARS</div>
+    <h1>SimWars 2026 — Preliminary Round Schedule</h1>
+    <div class="sub">16 teams &middot; 4 colour groups &middot; 4 rounds &middot; Room A (PALS) + Room B (BLS) run in parallel</div>
+  </header>
+
+  <h2>By Colour Group</h2>
+  <table>
+    <thead>
+      <tr><th>Group</th><th>Teams (by draw)</th><th>PALS Round · Room A</th><th>BLS Round · Room B</th></tr>
+    </thead>
+    <tbody id="byGroupBody">
+      <tr>
+        <td><span class="badge badge-red">RED</span></td>
+        <td class="teams-list" data-draws="1,2,3,4"></td>
+        <td>Round 1 · Case P1</td>
+        <td>Round 2 · Case B4</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">GREEN</span></td>
+        <td class="teams-list" data-draws="5,6,7,8"></td>
+        <td>Round 2 · Case P3</td>
+        <td>Round 3 · Case B3</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">BLUE</span></td>
+        <td class="teams-list" data-draws="9,10,11,12"></td>
+        <td>Round 3 · Case P2</td>
+        <td>Round 4 · Case B2</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-yellow">YELLOW</span></td>
+        <td class="teams-list" data-draws="13,14,15,16"></td>
+        <td>Round 4 · Case P4</td>
+        <td>Round 1 · Case B1</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>By Round</h2>
+  <table>
+    <thead>
+      <tr><th>Round</th><th>Room A · PALS</th><th>Room B · BLS</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Round 1</td><td><span class="badge badge-red">RED</span> · Case P1</td><td><span class="badge badge-yellow">YELLOW</span> · Case B1</td></tr>
+      <tr><td>Round 2</td><td><span class="badge badge-green">GREEN</span> · Case P3</td><td><span class="badge badge-red">RED</span> · Case B4</td></tr>
+      <tr><td>Round 3</td><td><span class="badge badge-blue">BLUE</span> · Case P2</td><td><span class="badge badge-green">GREEN</span> · Case B3</td></tr>
+      <tr><td>Round 4</td><td><span class="badge badge-yellow">YELLOW</span> · Case P4</td><td><span class="badge badge-blue">BLUE</span> · Case B2</td></tr>
+    </tbody>
+  </table>
+
+  <div class="fetch-note" id="fetchNote">Loading live team names…</div>
+
+  <footer>SimWars 2026 &middot; Organiser reference &middot; case content confidential until round start</footer>
+</div>
+
+<script>
+(function(){
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function renderTeams(teamNames){
+    document.querySelectorAll('.teams-list[data-draws]').forEach(function(cell){
+      var draws = cell.getAttribute('data-draws').split(',');
+      cell.innerHTML = draws.map(function(d){
+        var code = 'T' + d;
+        var name = teamNames[code];
+        var registered = name && name !== code;
+        var text = registered ? esc(name) : ('Draw ' + d);
+        return '<span class="team-slot' + (registered ? '' : ' pending') + '">' + text + '</span>';
+      }).join('');
+    });
+  }
+  var note = document.getElementById('fetchNote');
+  fetch('/api/results')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var teamNames = {};
+      (data.all_teams || []).forEach(function(t){ teamNames[t.team] = t.name; });
+      renderTeams(teamNames);
+      note.textContent = 'Team names loaded live from the scoring system.';
+    })
+    .catch(function(){
+      renderTeams({});
+      note.textContent = 'Live team names unavailable in this view — showing draw numbers. Open via the live site to pull registered names.';
+    });
+})();
+</script>
+</body>
+</html>

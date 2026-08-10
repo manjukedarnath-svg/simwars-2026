@@ -2,6 +2,7 @@ from flask import Flask, request, send_file, render_template_string, jsonify, re
 import io
 import os
 import sqlite3
+from urllib.parse import quote
 from docx import Document
 
 DB_PATH = os.environ.get('DB_PATH', os.path.join(os.path.dirname(__file__), 'scores.db'))
@@ -58,7 +59,10 @@ button{width:100%;padding:10px;border:none;border-radius:8px;background:#7C3AED;
 
 def require_role():
     if session.get('role') not in ('organiser', 'judge'):
-        return redirect('/unlock?next=' + request.path)
+        full_path = request.path
+        if request.query_string:
+            full_path += '?' + request.query_string.decode()
+        return redirect('/unlock?next=' + quote(full_path, safe=''))
     return None
 
 @app.route('/unlock', methods=['GET', 'POST'])
@@ -1052,6 +1056,10 @@ def scoring():
 @app.route('/flow')
 def flow():
     return send_file(os.path.join(os.path.dirname(__file__), 'flow-of-program.html'))
+
+@app.route('/schedule-print')
+def schedule_print():
+    return send_file(os.path.join(os.path.dirname(__file__), 'prelim-schedule-printable.html'))
 
 @app.route('/register')
 def register():
