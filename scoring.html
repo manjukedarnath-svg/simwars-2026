@@ -3186,6 +3186,8 @@
         let activeTeamPals = '';
         let activeCaseBls = '';
         let activeTeamBls = '';
+        let activeSFTeamR1 = '';
+        let activeSFTeamR2 = '';
         let debrieferRevealed = false;
 
         function setActiveCasePals(caseName) {
@@ -3415,6 +3417,28 @@
                             needsRerenderJudge = true;
                             needsRerenderDeb = true;
                         }
+                        continue;
+                    }
+                    // Active SF Round 1 live team
+                    if (key === 'active_sf_team_r1') {
+                        if (value !== activeSFTeamR1) {
+                            activeSFTeamR1 = value;
+                            buildSFRoundCard('R1');
+                        }
+                        continue;
+                    }
+                    // Active SF Round 2 live team
+                    if (key === 'active_sf_team_r2') {
+                        if (value !== activeSFTeamR2) {
+                            activeSFTeamR2 = value;
+                            buildSFRoundCard('R2');
+                        }
+                        continue;
+                    }
+                    // SF submitted flags
+                    if (key.startsWith('sfSubmitted_') && value === 'true') {
+                        const parts = key.replace('sfSubmitted_', '').split('_'); // [R, team]
+                        sfApplySubmittedState(parts[0], parts[1]);
                         continue;
                     }
                     // Debriefer reveal flag
@@ -3740,6 +3764,50 @@
             return document.getElementById(map[j])?.value?.trim() || fallback[j];
         }
 
+        // ── SF Live Team control (mirrors prelims active-case/active-team) ──
+        function setActiveSFTeam(r, teamId) {
+            if (r === 'R1') { activeSFTeamR1 = teamId; } else { activeSFTeamR2 = teamId; }
+            saveToServer('active_sf_team_' + r.toLowerCase(), teamId);
+            buildSFRoundCard(r);
+        }
+
+        function sfApplySubmittedState(r, t) {
+            document.querySelectorAll(`#sfCard_${r}_${t} input`).forEach(el => {
+                el.disabled = true;
+                el.style.opacity = '0.6';
+            });
+            const btn = document.getElementById(`sfSubmitBtn_${r}_${t}`);
+            if (btn) {
+                btn.textContent = '✓ Submitted';
+                btn.style.background = '#02C39A';
+                btn.disabled = true;
+            }
+            const card = document.getElementById(`sfCard_${r}_${t}`);
+            if (card) card.style.background = '#f0fdf4';
+        }
+
+        function sfRestoreSubmittedForRound(r) {
+            const teams = r === 'R1' ? ['sf1', 'sf2'] : ['sf3', 'sf4'];
+            teams.forEach(t => {
+                if (serverCache[`sfSubmitted_${r}_${t}`] === 'true') sfApplySubmittedState(r, t);
+            });
+        }
+
+        function sfSubmitTeam(r, t) {
+            const activeTeam = r === 'R1' ? activeSFTeamR1 : activeSFTeamR2;
+            if (activeTeam && activeTeam !== t) {
+                alert(`Cannot submit: "${sfGetName(t)}" is not currently performing.\n\nThe operator has set "${sfGetName(activeTeam)}" as the live team.`);
+                return;
+            }
+            sfUpdateClinicalTotal(r, t, 'cj1');
+            sfUpdateClinicalTotal(r, t, 'cj2');
+            sfUpdateCRMTotal(r, t, 'crm1');
+            sfUpdateCRMTotal(r, t, 'crm2');
+            sfUpdateChiefTally(r, t);
+            saveToServer(`sfSubmitted_${r}_${t}`, 'true');
+            sfApplySubmittedState(r, t);
+        }
+
         function sfUpdateClinicalTotal(r, t, j) {
             let total = 0;
             const rd = SF_ROUNDS[r];
@@ -3861,8 +3929,11 @@
         function sfBuildTeamCard(r, t) {
             const teal = '#0d9488', blue = '#1d4ed8', purple = '#7c3aed';
             const name = sfGetName(t);
-            let h = '<div style="border:2px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:20px;">';
-            h += '<div style="font-size:1.05rem;font-weight:800;color:#111827;margin-bottom:14px;" class="sfLabel_' + t + '">' + name + '</div>';
+            let h = '<div id="sfCard_' + r + '_' + t + '" style="border:2px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:20px;">';
+            h += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px;">';
+            h += '<div style="font-size:1.05rem;font-weight:800;color:#111827;" class="sfLabel_' + t + '">' + name + '</div>';
+            h += '<button id="sfSubmitBtn_' + r + '_' + t + '" onclick="sfSubmitTeam(\'' + r + '\',\'' + t + '\')" style="background:' + teal + ';color:white;border:none;padding:6px 18px;border-radius:20px;font-weight:700;font-size:0.82rem;cursor:pointer;">✓ Submit</button>';
+            h += '</div>';
 
             // Domain I (two clinical judge sheets)
             h += '<div style="font-size:0.72rem;font-weight:700;color:' + teal + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical Judgement (two judges, score averaged)</div>';
@@ -3915,15 +3986,27 @@
             if (!container) return;
             const rd = SF_ROUNDS[r];
             // R1 → sf1 + sf2, R2 → sf3 + sf4
-            const teams = r === 'R1' ? ['sf1', 'sf2'] : ['sf3', 'sf4'];
+            const allTeams = r === 'R1' ? ['sf1', 'sf2'] : ['sf3', 'sf4'];
+            const activeTeam = r === 'R1' ? activeSFTeamR1 : activeSFTeamR2;
+            const teams = activeTeam ? allTeams.filter(t => t === activeTeam) : allTeams;
             let h = '<div class="card" style="border-left-color:#0d9488;">';
             h += '<h2><span class="emoji">🏟️</span> ' + rd.label + '</h2>';
-            h += '<div style="font-size:0.85rem;color:#0f766e;background:#f0fdfa;border-radius:8px;padding:8px 14px;margin-bottom:16px;">👥 ' + rd.patients + ' &nbsp;·&nbsp; ⏱ 15:00 hard stop</div>';
+            h += '<div style="font-size:0.85rem;color:#0f766e;background:#f0fdfa;border-radius:8px;padding:8px 14px;margin-bottom:12px;">👥 ' + rd.patients + ' &nbsp;·&nbsp; ⏱ 15:00 hard stop</div>';
+            // Live team control
+            h += '<div style="background:#fff;border:1.5px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+            h += '<span style="font-size:0.75rem;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.4px;">🔴 Live Team</span>';
+            h += '<select onchange="setActiveSFTeam(\'' + r + '\',this.value)" style="border:1.5px solid #99f6e4;border-radius:6px;padding:5px 10px;font-size:0.85rem;font-weight:700;">';
+            h += '<option value="">— Not set (show both) —</option>';
+            allTeams.forEach(t => { h += '<option value="' + t + '"' + (activeTeam === t ? ' selected' : '') + '>' + sfGetName(t) + '</option>'; });
+            h += '</select>';
+            if (activeTeam) h += '<span style="font-size:0.82rem;color:#0f766e;font-weight:600;">On stage: ' + sfGetName(activeTeam) + '</span>';
+            h += '</div>';
             h += buildResultsConsole(r);
             teams.forEach(t => { h += sfBuildTeamCard(r, t); });
             h += '<div style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (if required):</strong> ' + rd.tiebreaker + '</div>';
             h += '</div>';
             container.innerHTML = h;
+            sfRestoreSubmittedForRound(r);
         }
 
         function buildSFScoreCards() {
