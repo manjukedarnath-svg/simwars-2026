@@ -1988,6 +1988,11 @@ def participant_info():
 def team_guide_docx():
     return send_file(os.path.join(os.path.dirname(__file__), 'SimWars2026_Team_Guide.docx'))
 
+@app.route('/SimWars2026_Registration_Guide.docx')
+def registration_guide_docx():
+    return send_file(os.path.join(os.path.dirname(__file__), 'SimWars2026_Registration_Guide.docx'))
+
+
 
 
 if __name__ == '__main__':
