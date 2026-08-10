@@ -86,7 +86,7 @@ def unlock():
 CASES = [
     {
         "id": "B1",
-        "round": "ROUND ONE",
+        "round": "BLS CASES",
         "title": "Near Drowning / Submersion with VT Arrest",
         "summary": "12-year-old female (30 kg) was submerged in seawater. Rescuers gave rescue breaths and rushed her to ER. She is unresponsive, hypothermic (35°C), and in Pulseless VT arrest. The team must recognize shockable rhythm, start high-quality CPR, defibrillate, manage hypothermia, and correct hyperkalemia.",
         "background": "12-year-old girl was on a trip with friends in Goa. She was pulled from the water after submersion. She was unresponsive. Rescuers gave a few rescue breaths and rushed her to the ER.",
@@ -103,7 +103,7 @@ CASES = [
     },
     {
         "id": "B2",
-        "round": "ROUND ONE",
+        "round": "BLS CASES",
         "title": "PEA Arrest in a Child with Dilated Cardiomyopathy",
         "summary": "11-year-old male with known Dilated Cardiomyopathy (DCM) presents with 2-day history of fever and respiratory distress. He develops Torsades de Pointes and progresses to PEA arrest. The team must recognize Torsades, administer Magnesium sulfate, correct hypokalemia (K 2.5) and hypocalcemia (iCa 0.8), and perform high-quality CPR.",
         "background": "11-year-old male Varsha presents to the Pediatric ER with severe breathing difficulty. He is brought by his parent who gives a history of fever, cough, and cold for 2 days. He has become very dull and his response has decreased.",
@@ -120,7 +120,7 @@ CASES = [
     },
     {
         "id": "B3",
-        "round": "ROUND ONE",
+        "round": "BLS CASES",
         "title": "Electrocution with VT Arrest",
         "summary": "13-year-old male (30 kg) found unconscious at a construction site after electrical injury. He has burn marks on his right hand and left leg. He is in Pulseless VT arrest with severe hyperkalemia (K 7.5). The team must recognize hyperkalemia, administer Calcium, defibrillate, and manage the burn injury.",
         "background": "13-year-old boy was found unconscious at a construction site. Ambulance crew gave some CPR and brought him to the ER. He has shallow, irregular breaths.",
@@ -137,7 +137,7 @@ CASES = [
     },
     {
         "id": "B4",
-        "round": "ROUND ONE",
+        "round": "BLS CASES",
         "title": "Refractory Status Epilepticus with Respiratory Arrest",
         "summary": "12-year-old female with high-grade fever and seizures. She received Lorazepam and Leviteracetam at a local hospital but continues seizing. She develops respiratory arrest and PEA. The team must manage status epilepticus, recognize raised ICP (pupillary changes), and provide anticonvulsants, 3% NaCl/Mannitol, and intubation.",
         "background": "12-year-old Sita was brought in with active generalized seizures. She has been seizing on and off for the last 1 hour. Referred from an outside hospital.",
@@ -154,7 +154,7 @@ CASES = [
     },
     {
         "id": "P1",
-        "round": "ROUND TWO",
+        "round": "PALS CASES",
         "title": "Cardiogenic Shock (Fulminant Myocarditis)",
         "summary": "1-year-old previously well child (10 kg) with rapid history of breathing difficulty and signs of progressive shock following a minor upper respiratory illness. Child is in acute cardiogenic shock following fulminant myocarditis. The team must avoid the 'fluid trap' (20ml/kg will cause pulmonary edema), start inotropes (Adrenaline), and perform synchronized cardioversion for VT.",
         "background": "1-year-old girl Sita, previously well, brought with coryza for 4 days, cough for 2 days, decreased feeding and breathing difficulty. Admitted at local hospital for acute bronchiolitis. Referred for respiratory support.",
@@ -171,7 +171,7 @@ CASES = [
     },
     {
         "id": "P2",
-        "round": "ROUND TWO",
+        "round": "PALS CASES",
         "title": "Scorpion Sting Envenomation — Acute RV Strain and Diastolic Failure",
         "summary": "10-year-old male (30 kg) develops a scorpion-venom catecholamine storm after a red scorpion sting — acute RV strain with cold shock, clear lungs, and a raised JVP. The team must avoid large fluid boluses and noradrenaline, recognize the envenomation gestalt, and give Prazosin plus an inodilator to unload the RV before it progresses to biventricular failure.",
         "background": "Arjun, 10 years old, 30 kilos, brought in from a village about an hour away. He cried out in severe pain in his left foot around 2 a.m., followed by profuse sweating, vomiting, and frothing at the mouth. He is now very lethargic, breathing fast, and feels cold to the touch. The family saw a small, dark reddish-brown scorpion near his sleeping mat.",
@@ -189,7 +189,7 @@ CASES = [
     },
     {
         "id": "P3",
-        "round": "ROUND TWO",
+        "round": "PALS CASES",
         "title": "Acute Severe Asthma with Pneumothorax",
         "summary": "3-year-old known asthmatic (parents stopped inhalers due to steroid phobia) presents in acute severe asthma. He deteriorates, requires intubation, and develops a right-sided pneumothorax post-intubation. The team must manage the asthma, recognize the pneumothorax, and perform needle decompression/chest tube insertion.",
         "background": "3-year-old male Arun presents with severe breathing difficulty. Parent gives history of 2-day fever and cough that worsened abruptly. Father has been giving home nebulisations for 24 hours (3 doses of Salbutamol). Child is in marked distress, cannot finish a sentence, and is moderately agitated.",
@@ -206,7 +206,7 @@ CASES = [
     },
     {
         "id": "P4",
-        "round": "ROUND TWO",
+        "round": "PALS CASES",
         "title": "Refractory Septic Shock (Physiologically Difficult Airway)",
         "summary": "3-year-old female (15 kg) with refractory septic shock. She has zero physiologic reserve. The team must 'resuscitate before intubating,' avoid Propofol/Midazolam (use Ketamine + Rocuronium), prepare push-dose Epinephrine, and manage the post-intubation crash (reducing PEEP, giving push-dose Epi, fluid bolus).",
         "background": "3-year-old female Maya, previously healthy, presents with 3-day history of high fever, vomiting, and lethargy. Brought to the ED an hour ago and received 1×20ml/kg normal saline bolus. Now transferring to PICU.",
@@ -295,8 +295,8 @@ CASES = [
 # ROUND COLORS
 # ============================================
 ROUND_COLORS = {
-    "ROUND ONE": {"accent": "#1a56db", "light": "#ebf5ff", "badge": "#1e40af"},
-    "ROUND TWO": {"accent": "#7e3af2", "light": "#f5f3ff", "badge": "#5521b5"},
+    "BLS CASES": {"accent": "#1a56db", "light": "#ebf5ff", "badge": "#1e40af"},
+    "PALS CASES": {"accent": "#7e3af2", "light": "#f5f3ff", "badge": "#5521b5"},
     "SEMI-FINALS": {"accent": "#0d9488", "light": "#f0fdfa", "badge": "#0f766e"},
     "FINALS": {"accent": "#d97706", "light": "#fffbeb", "badge": "#92400e"},
 }
@@ -507,7 +507,7 @@ INDEX_TEMPLATE = """
 
   <div class="content">
     {% for round_name, round_cases in rounds.items() %}
-      {% set rclass = 'round-one' if 'ONE' in round_name else ('round-sf' if 'SEMI' in round_name else ('round-finals' if 'FINALS' in round_name else 'round-two')) %}
+      {% set rclass = 'round-one' if 'BLS' in round_name else ('round-sf' if 'SEMI' in round_name else ('round-finals' if 'FINALS' in round_name else 'round-two')) %}
       <div class="{{ rclass }}">
         <div class="round-header">
           <span class="round-label">{{ round_name }}</span>
@@ -1041,7 +1041,7 @@ def get_case(case_id):
         return "Case not found", 404
 
     fmt = request.args.get('format', 'html').lower()
-    colors = ROUND_COLORS.get(case['round'], ROUND_COLORS['ROUND ONE'])
+    colors = ROUND_COLORS.get(case['round'], ROUND_COLORS['BLS CASES'])
 
     # Prev/next navigation
     ids = [c['id'] for c in CASES]
@@ -1686,14 +1686,14 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
                     <a href="https://merry-intuition-production-1788.up.railway.app/scoring#tabBls" target="_blank" class="feature-card">
                         <div class="icon" style="color:#16a34a"><i class="fas fa-list-check"></i></div>
                         <div class="title">BLS Judge Sheet <span class="badge badge-bls">R1</span></div>
-                        <div class="desc">Round One · Cases B1–B4 · Clinical + Non-technical rubric per team.</div>
+                        <div class="desc">BLS Round · Cases B1–B4 · Clinical + Non-technical rubric per team.</div>
                         <div class="url">…/scoring#tabBls</div>
                     </a>
 
                     <a href="https://merry-intuition-production-1788.up.railway.app/scoring#tabPals" target="_blank" class="feature-card">
                         <div class="icon" style="color:#1d4ed8"><i class="fas fa-list-check"></i></div>
                         <div class="title">PALS Judge Sheet <span class="badge badge-pals">R2</span></div>
-                        <div class="desc">Round Two · Cases P1–P4 · Clinical + Non-technical rubric per team.</div>
+                        <div class="desc">PALS Round · Cases P1–P4 · Clinical + Non-technical rubric per team.</div>
                         <div class="url">…/scoring#tabPals</div>
                     </a>
 
