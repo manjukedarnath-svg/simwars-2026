@@ -1400,8 +1400,8 @@
             'B3': 'BLS',
             'B4': 'BLS'
         };
-        const palsWeights = [40, 30, 30];
-        const blsWeights = [40, 30, 30];
+        const palsWeights = [40, 50, 10];
+        const blsWeights = [50, 40, 10];
         // Case metadata loaded from SimWars Case Library
         const caseData = {
             'P1': {
@@ -2342,7 +2342,7 @@
                     const scoreColor = isPals ? 'var(--pals)' : 'var(--primary)';
                     const borderColor = debrieferRevealed ? 'var(--primary)' : '#fcd34d';
                     const sectionBg = debrieferRevealed ? '#f0f9ff' : '#fffbeb';
-                                    const labels = ['Clinical (40)', 'Teamwork (30)', 'Technical (30)'];
+                                    const labels = ['I — Clinical Judgement', 'II — Crisis Resource Mgmt', 'III — Global Entrustment'];
 
                     // Read judge grand total from rubric total span
                     const judgeSpan = document.querySelector(`[id="${team}_${prefix}_total"]`);
@@ -2384,7 +2384,7 @@
                     for (let i = 0; i < 3; i++) {
                         const maxVal = weights[i];
                         html += `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                            <span style="font-size:0.68rem;color:var(--text-muted);">${labels[i]}</span>
+                            <span style="font-size:0.68rem;color:var(--text-muted);">${labels[i]} (${maxVal})</span>
                             <input type="number" id="deb_${caseName}_${team}_${i}"
                                    min="0" max="${maxVal}" value="0"
                                    style="width:52px;border:1.5px solid ${scoreColor};border-radius:4px;padding:5px;text-align:center;font-size:0.95rem;background:white;"
