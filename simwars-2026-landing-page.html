@@ -466,9 +466,9 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
   .info-strip{font-size:.75rem;}
 }
 @media (max-width:600px){
-  .hero-brand-strip{flex-direction:column;gap:.7rem;margin-bottom:1rem;justify-content:center;}
-  .hero-brand-strip .brand-side{align-self:center;}
-  .hero-brand-strip .brand-center{width:100%;min-width:0;}
+  .hero-brand-strip{flex-direction:row;flex-wrap:wrap;gap:.7rem;margin-bottom:1rem;justify-content:center;}
+  .hero-brand-strip .brand-side{align-self:center;order:1;}
+  .hero-brand-strip .brand-center{order:2;flex:0 0 100%;width:100%;min-width:0;margin-top:.2rem;}
   .hero-brand-strip .brand-side img{height:34px;}
   .hero-brand-strip .brand-center img.simulus-logo{height:40px;}
   .hero-brand-strip .brand-center img.conf-banner{height:22px;max-width:92%;}
