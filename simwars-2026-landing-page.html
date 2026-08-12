@@ -736,6 +736,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
       <div style="margin-top:.9rem;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;">
         <a href="SimWars2026_Registration_Guide.docx" target="_blank" class="btn btn-sm btn-outline"><i class="fas fa-clipboard-list"></i> Registration Guide (doc)</a>
         <a href="javascript:void(0)" onclick="openVideoLaterForm()" class="btn btn-sm btn-outline"><i class="fas fa-video"></i> Submit Your Video</a>
+        <a href="javascript:void(0)" onclick="openCheckRegModal()" class="btn btn-sm btn-outline"><i class="fas fa-magnifying-glass"></i> Check Your Registration</a>
       </div>
       <p class="note" style="margin-top:1rem;font-size:.8rem;"><a href="#tools" style="color:var(--gold);"><i class="fas fa-lock"></i> View Prelim Standings (password required)</a></p>
 
@@ -797,6 +798,24 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
       </div>
       <div class="intake-status" id="videoLaterStatus"></div>
     </form>
+  </div>
+</div>
+
+<!-- CHECK YOUR REGISTRATION MODAL (public, no password — self-serve so coordinators stop fielding "did it work" calls) -->
+<div class="judge-modal-overlay" id="checkRegOverlay">
+  <div class="intake-modal-box" style="max-width:420px;">
+    <button type="button" class="intake-close-x" onclick="closeCheckRegModal()"><i class="fas fa-times"></i></button>
+    <h4 style="margin-top:0;">🔎 Check Your Registration</h4>
+    <p class="intake-sub">Type your team name and we'll confirm your draw number — no password needed.</p>
+    <div class="intake-field" style="margin-bottom:.2rem;">
+      <label for="checkRegTeamName">Team Name</label>
+      <input type="text" id="checkRegTeamName" placeholder="Exactly as entered at registration" onkeydown="if(event.key==='Enter')runCheckRegistration()">
+    </div>
+    <div class="intake-actions">
+      <button type="button" class="btn-cancel" onclick="closeCheckRegModal()">Close</button>
+      <button type="button" class="btn-submit" id="checkRegSubmitBtn" onclick="runCheckRegistration()">Check</button>
+    </div>
+    <div class="intake-status" id="checkRegStatus"></div>
   </div>
 </div>
 
@@ -1595,12 +1614,15 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
         body: new URLSearchParams(payload).toString(),
       });
       drawSubmitted = true;
-      intakeStatus.textContent = 'Thanks! Your team is registered as Team ' + payload.drawNumber + '.'
+      intakeStatus.textContent = '✅ Registered — you are Team ' + payload.drawNumber + '. Screenshot this before closing.'
         + (payload.introVideo ? '' : ' Don\'t forget to submit your intro video by 18 August 2026 — use the "Submit Your Video" link on the site.');
       intakeStatus.classList.add('show', 'ok');
       intakeSubmitBtn.textContent = 'Submitted';
       intakeForm.querySelectorAll('input, select').forEach(el => el.disabled = true);
-      setTimeout(closeIntakeModal, 3500);
+      const closeBtn = document.querySelector('#intakeFormStep .btn-cancel');
+      if (closeBtn) closeBtn.textContent = 'Done — Close';
+      // No auto-close: the confirmation stays on screen until the team closes it
+      // themselves, so they have time to read/screenshot their number.
     } catch (err) {
       intakeStatus.textContent = 'Something went wrong sending your submission. Please contact the coordinators below.';
       intakeStatus.classList.add('show', 'err');
@@ -1670,6 +1692,71 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
       videoLaterSubmitBtn.textContent = 'Submit Video';
     }
   });
+
+  // --- Check Your Registration (public, no password) ---
+  const checkRegOverlay = document.getElementById('checkRegOverlay');
+  const checkRegInput = document.getElementById('checkRegTeamName');
+  const checkRegStatus = document.getElementById('checkRegStatus');
+  const checkRegSubmitBtn = document.getElementById('checkRegSubmitBtn');
+
+  function openCheckRegModal() {
+    checkRegStatus.classList.remove('show', 'ok', 'err');
+    checkRegInput.value = '';
+    checkRegSubmitBtn.disabled = false;
+    checkRegSubmitBtn.textContent = 'Check';
+    checkRegOverlay.classList.add('show');
+    setTimeout(() => checkRegInput.focus(), 50);
+  }
+
+  function closeCheckRegModal() {
+    checkRegOverlay.classList.remove('show');
+  }
+
+  checkRegOverlay.addEventListener('click', (e) => {
+    if (e.target === checkRegOverlay) closeCheckRegModal();
+  });
+
+  async function runCheckRegistration() {
+    const query = checkRegInput.value.trim().toLowerCase();
+    checkRegStatus.classList.remove('show', 'ok', 'err');
+
+    if (!query) {
+      checkRegStatus.textContent = 'Type your team name first.';
+      checkRegStatus.classList.add('show', 'err');
+      return;
+    }
+    if (INTAKE_ENDPOINT === 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+      checkRegStatus.textContent = 'Lookup isn\'t connected yet — please contact the coordinators below.';
+      checkRegStatus.classList.add('show', 'err');
+      return;
+    }
+
+    checkRegSubmitBtn.disabled = true;
+    checkRegSubmitBtn.textContent = 'Checking…';
+
+    try {
+      const res = await fetch(INTAKE_ENDPOINT);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const teams = data.teams || [];
+      const match = teams.find(t => (t.teamName || '').trim().toLowerCase() === query)
+        || teams.find(t => (t.teamName || '').trim().toLowerCase().includes(query));
+
+      if (match) {
+        checkRegStatus.textContent = '✅ Found — "' + match.teamName + '" is registered as Team ' + match.drawNumber + '.';
+        checkRegStatus.classList.add('show', 'ok');
+      } else {
+        checkRegStatus.textContent = '❌ No team matching "' + checkRegInput.value.trim() + '" found yet. Check the spelling, or if you just registered, wait a few seconds and try again. Still stuck? Contact the coordinators below.';
+        checkRegStatus.classList.add('show', 'err');
+      }
+    } catch (err) {
+      checkRegStatus.textContent = 'Couldn\'t reach the registration sheet right now. Please try again in a moment.';
+      checkRegStatus.classList.add('show', 'err');
+    } finally {
+      checkRegSubmitBtn.disabled = false;
+      checkRegSubmitBtn.textContent = 'Check';
+    }
+  }
 </script>
 
 </body>
