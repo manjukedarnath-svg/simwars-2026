@@ -66,6 +66,17 @@ def require_role():
         return redirect('/unlock?next=' + quote(full_path, safe=''))
     return None
 
+def require_organiser():
+    """Stricter than require_role(): only the organiser password grants access.
+    Used for the full case scenario library (/library, /case/<id>) — judges get
+    a scenario summary on their own scoring sheet instead, not the full script."""
+    if session.get('role') != 'organiser':
+        full_path = request.path
+        if request.query_string:
+            full_path += '?' + request.query_string.decode()
+        return redirect('/unlock?next=' + quote(full_path, safe=''))
+    return None
+
 @app.route('/unlock', methods=['GET', 'POST'])
 def unlock():
     next_url = request.args.get('next') or request.form.get('next') or '/library'
@@ -258,6 +269,7 @@ CASES = [
     {
         "id": "F1",
         "round": "FINALS",
+        "active": False,  # Finals now runs a single case (F2, scored /200) — F1 kept for reference only, hidden from the Case Library grid
         "title": "Crashing on the Vent — Severe PARDS with Acute Cor Pulmonale",
         "summary": "Leo (6y, 20kg), day 3 PICU with influenza A pneumonia, is deeply sedated, paralysed, and desaturating on injurious ventilator settings (Pplat 34, ΔP 20). The declared team leader is removed (family emergency) and a substitute arrives — status ambiguous, later asserting seniority at 4:30 with a sepsis anchor. RV failure triggers hard at 4:00. The team must diagnose obstructive/RV-failure shock, halt the fluid bolus through graded assertiveness, request POCUS (D-sign, TAPSE 8mm), unload the lung (reduce MAP/PEEP), start epinephrine, add iNO, and correctly hand over to the returning leader at 9:30 — who must correct the false handover and disclose any fluid given. ECMO mode and rationale demanded at 14:00.",
         "background": "Leo is 6, 20kg, day 3 in PICU with influenza A pneumonia, intubated 24h. Deeply sedated and paralysed. Femoral CVL, right radial arterial line. Now desaturating. Your consultant has been called away — family emergency. The unit is sending someone to cover.",
@@ -1007,12 +1019,13 @@ def root_redirect():
 
 @app.route('/library')
 def index():
-    locked = require_role()
+    locked = require_organiser()
     if locked: return locked
     rounds = {}
-    for c in CASES:
+    active_cases = [c for c in CASES if c.get('active', True)]
+    for c in active_cases:
         rounds.setdefault(c['round'], []).append(c)
-    return render_template_string(INDEX_TEMPLATE, cases=CASES, rounds=rounds)
+    return render_template_string(INDEX_TEMPLATE, cases=active_cases, rounds=rounds)
 
 IMG_EXTS = ('.jpg', '.jpeg', '.png', '.webp', '.gif')
 
@@ -1036,6 +1049,8 @@ def get_case_images(case_id):
 
 @app.route('/case/<case_id>')
 def get_case(case_id):
+    locked = require_organiser()
+    if locked: return locked
     case = next((c for c in CASES if c['id'] == case_id), None)
     if not case:
         return "Case not found", 404
@@ -1707,7 +1722,7 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
                     <a href="https://merry-intuition-production-1788.up.railway.app/scoring#tabFinals" target="_blank" class="feature-card">
                         <div class="icon" style="color:#d97706"><i class="fas fa-medal"></i></div>
                         <div class="title">Finals Sheet <span class="badge badge-fn">Final</span></div>
-                        <div class="desc">F1 + F2 · Domain A / B / C · 45/40/15 weighting · /200 combined.</div>
+                        <div class="desc">F2 single case · Domain A / B / C · 90/80/30 weighting · /200 total.</div>
                         <div class="url">…/scoring#tabFinals</div>
                     </a>
 
@@ -1983,16 +1998,6 @@ def portal():
 @app.route('/simwars-2026-participant-info.html')
 def participant_info():
         return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-participant-info.html'))
-
-@app.route('/SimWars2026_Team_Guide.docx')
-def team_guide_docx():
-    return send_file(os.path.join(os.path.dirname(__file__), 'SimWars2026_Team_Guide.docx'))
-
-@app.route('/SimWars2026_Registration_Guide.docx')
-def registration_guide_docx():
-    return send_file(os.path.join(os.path.dirname(__file__), 'SimWars2026_Registration_Guide.docx'))
-
-
 
 
 if __name__ == '__main__':
