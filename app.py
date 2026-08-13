@@ -1075,8 +1075,12 @@ def get_case(case_id):
 
     if fmt == 'html':
         images = get_case_images(case_id)
-        html = render_template_string(CASE_TEMPLATE, case=case, colors=colors, prev_case=prev_case, next_case=next_case, images=images)
+        html = render_template_string(CASE_TEMPLATE, case=case, colors=colors, prev_case=prev_case, next_case=next_case, images=images, role=session.get('role'))
         return html, 200, {'Content-Type': 'text/html'}
+
+    # PDF/DOCX exports contain the full director script and answer key — organiser only.
+    if session.get('role') != 'organiser':
+        return "Full case export is organiser-only. Judges can view the case summary at /case/" + case_id, 403
 
     elif fmt == 'pdf':
         WeasyHTML = _get_weasyprint()
@@ -1141,9 +1145,53 @@ def scoring():
     if locked: return locked
     return send_file(os.path.join(os.path.dirname(__file__), 'scoring.html'))
 
+import json as _json
+
+# Actual round/room -> case allocations. Kept server-side only; only ever sent to the
+# browser when the visiting session is already authenticated as judge or organiser via
+# /unlock. Participants get zero trace of this in the HTML — not just CSS-hidden.
+# NOTE: BLS (Room B) order below follows the LIVE scoring.html schedule
+# (B1->Round1, B4->Round2, B3->Round3, B2->Round4). A separate reference file,
+# simwars-2026-judges-master-schedule.html, states a different BLS order (B1,B2,B4,B3) —
+# this discrepancy has not been resolved and should be confirmed with the organiser team
+# before round start.
+FLOW_CASE_DETAIL = {
+    "prelim": {
+        "1": {"A": {"code": "P1", "title": "Cardiogenic Shock (Fulminant Myocarditis)"},
+              "B": {"code": "B1", "title": "Near Drowning / Submersion with VT Arrest"}},
+        "2": {"A": {"code": "P3", "title": "Acute Severe Asthma with Pneumothorax"},
+              "B": {"code": "B4", "title": "Refractory Status Epilepticus with Respiratory Arrest"}},
+        "3": {"A": {"code": "P2", "title": "Scorpion Sting Envenomation — Acute RV Strain and Diastolic Failure"},
+              "B": {"code": "B3", "title": "Electrocution with VT Arrest"}},
+        "4": {"A": {"code": "P4", "title": "Refractory Septic Shock (Physiologically Difficult Airway)"},
+              "B": {"code": "B2", "title": "PEA Arrest in a Child with Dilated Cardiomyopathy"}},
+    },
+    "sf": {
+        "1": {"code": "SF1", "title": "The Quiet Head — Dual Paediatric Trauma"},
+        "2": {"code": "SF2", "title": "The Loud Wound — Dual Paediatric Trauma"},
+    },
+}
+
 @app.route('/flow')
 def flow():
-    return send_file(os.path.join(os.path.dirname(__file__), 'flow-of-program.html'))
+    # Public route — participants can view without logging in and see only the sealed /
+    # color-coded schedule. Judges/organisers who are already logged in (via /unlock) get
+    # the actual case allocations injected server-side. Unauthenticated visitors receive
+    # NO case-mapping data in the response at all (not merely hidden), so page source /
+    # devtools reveals nothing extra — same standard as the projector display fix.
+    path = os.path.join(os.path.dirname(__file__), 'flow-of-program.html')
+    with open(path, 'r', encoding='utf-8') as f:
+        html = f.read()
+    role = session.get('role')
+    if role in ('organiser', 'judge'):
+        inject = (
+            '<script>window.SIMWARS_ROLE = %s; window.SIMWARS_CASE_DETAIL = %s;</script>\n</head>'
+            % (_json.dumps(role), _json.dumps(FLOW_CASE_DETAIL))
+        )
+    else:
+        inject = '</head>'
+    html = html.replace('</head>', inject, 1)
+    return html, 200, {'Content-Type': 'text/html'}
 
 @app.route('/schedule-print')
 def schedule_print():
