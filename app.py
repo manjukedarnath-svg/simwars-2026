@@ -698,11 +698,16 @@ CASE_TEMPLATE = """
     <span class="sep">/</span>
     <span class="case-label">Case {{ case.id }}: {{ case.title[:40] }}{% if case.title|length > 40 %}…{% endif %}</span>
     <div class="topbar-actions">
+      {% if role == 'organiser' %}
       <a href="/case/{{ case.id }}?format=pdf" class="btn btn-ghost">⬇ PDF</a>
       <a href="/case/{{ case.id }}?format=docx" class="btn btn-ghost">⬇ DOCX</a>
+      {% endif %}
       <button onclick="window.print()" class="btn btn-outline">🖨 Print</button>
     </div>
   </nav>
+  {% if role != 'organiser' %}
+  <div style="background:#fef9c3;border-bottom:1px solid #fde68a;padding:8px 20px;font-size:0.8rem;font-weight:700;color:#854d0e;text-align:center;">⚖️ Judge view — case summary &amp; patient chart only. Full director script is organiser-only.</div>
+  {% endif %}
 
   <!-- Hero -->
   <div class="hero">
@@ -743,7 +748,8 @@ CASE_TEMPLATE = """
         </div>
       </div>
 
-      <!-- Stages -->
+      <!-- Stages (director script + answer key — organiser only) -->
+      {% if role == 'organiser' %}
       <div class="section">
         <div class="section-header">
           <div class="section-icon" style="background:#fef2f2">🔴</div>
@@ -798,9 +804,11 @@ CASE_TEMPLATE = """
           {% endfor %}
         </div>
       </div>
+      {% endif %}
 
-      <!-- Actors & Equipment -->
+      <!-- Actors (director/confederate script — organiser only) & Equipment (visible to both) -->
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        {% if role == 'organiser' %}
         <div class="section">
           <div class="section-header">
             <div class="section-icon" style="background:#f0fdf4">🎭</div>
@@ -808,6 +816,7 @@ CASE_TEMPLATE = """
           </div>
           <div class="section-body"><p>{{ case.actors }}</p></div>
         </div>
+        {% endif %}
         <div class="section">
           <div class="section-header">
             <div class="section-icon" style="background:#eff6ff">🩺</div>
@@ -1019,7 +1028,7 @@ def root_redirect():
 
 @app.route('/library')
 def index():
-    locked = require_organiser()
+    locked = require_role()
     if locked: return locked
     rounds = {}
     active_cases = [c for c in CASES if c.get('active', True)]
@@ -1049,7 +1058,7 @@ def get_case_images(case_id):
 
 @app.route('/case/<case_id>')
 def get_case(case_id):
-    locked = require_organiser()
+    locked = require_role()
     if locked: return locked
     case = next((c for c in CASES if c['id'] == case_id), None)
     if not case:
