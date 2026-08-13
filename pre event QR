@@ -1,0 +1,1096 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SimWars 2026 – Pre‑Event Questionnaire</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f4f7fb;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 30px 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px 45px;
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #0b2b4a;
+            border-left: 6px solid #1a73e8;
+            padding-left: 18px;
+            margin-bottom: 10px;
+        }
+        .subhead {
+            color: #3d5a78;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding-left: 24px;
+            border-bottom: 1px solid #e9edf2;
+            padding-bottom: 20px;
+        }
+        .part-divider {
+            background: #eef2f7;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 20px;
+            color: #0b2b4a;
+            margin: 48px 0 28px 0;
+            display: inline-block;
+        }
+        .part-divider small {
+            font-weight: 400;
+            font-size: 15px;
+            color: #3d5a78;
+            margin-left: 10px;
+        }
+        .section-title {
+            font-weight: 600;
+            font-size: 20px;
+            margin: 30px 0 16px 0;
+            color: #1a3d5e;
+            border-bottom: 2px solid #dde4ec;
+            padding-bottom: 8px;
+        }
+        .role-banner {
+            background: #f0f6ff;
+            border-left: 5px solid #1a73e8;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin: 16px 0 12px 0;
+            font-weight: 500;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+        label .optional {
+            font-weight: 400;
+            color: #6b7d93;
+            font-size: 13px;
+        }
+        .hint {
+            font-size: 14px;
+            color: #4a5f77;
+            margin-top: -2px;
+            margin-bottom: 8px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 15px;
+            background: white;
+            transition: 0.15s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #1a73e8;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26,115,232,0.15);
+        }
+        textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 24px;
+            background: #f9fafc;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .checkbox-group label, .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .checkbox-group input, .radio-group input {
+            width: auto;
+            accent-color: #1a73e8;
+            transform: scale(1.1);
+            margin-right: 3px;
+        }
+        .inline-radio {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 25px;
+            background: #f9fafc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .inline-radio label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        .inline-radio input[type="radio"] {
+            width: auto;
+            accent-color: #1a73e8;
+            transform: scale(1.1);
+        }
+        .likert-row {
+            display: grid;
+            grid-template-columns: 1fr 80px 80px 80px 80px 80px;
+            align-items: center;
+            background: #f9fafc;
+            border-radius: 10px;
+            padding: 6px 12px;
+            margin-bottom: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .likert-row .item-label {
+            font-size: 14px;
+            font-weight: 450;
+            padding-right: 10px;
+        }
+        .likert-row .radio-option {
+            text-align: center;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+        .likert-row .radio-option input {
+            width: auto;
+            margin: 0 auto 2px auto;
+            display: block;
+            accent-color: #1a73e8;
+            transform: scale(1.05);
+        }
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 80px 80px 80px 80px 80px;
+            padding: 6px 12px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #3d5a78;
+            border-bottom: 2px solid #d0d9e5;
+            margin-top: 8px;
+        }
+        .table-header span:not(:first-child) {
+            text-align: center;
+        }
+        .table-header span:first-child {
+            padding-left: 4px;
+        }
+
+        .role-section {
+            display: none;
+            margin-top: 8px;
+        }
+        .role-section.active {
+            display: block;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 700px) {
+            .grid-2col { grid-template-columns: 1fr; }
+            .likert-row {
+                grid-template-columns: 1fr 50px 50px 50px 50px 50px;
+                font-size: 13px;
+                padding: 8px 6px;
+            }
+            .table-header {
+                grid-template-columns: 1fr 50px 50px 50px 50px 50px;
+                font-size: 11px;
+            }
+            .container { padding: 20px 16px; }
+        }
+
+        .btn-submit {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 14px 34px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: 0.2s;
+        }
+        .btn-submit:hover {
+            background: #1557b0;
+            transform: scale(1.01);
+        }
+
+        .answer-key {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-top: 40px;
+            border: 1px dashed #3d7eb9;
+        }
+        .answer-key h3 {
+            color: #0b2b4a;
+            margin-bottom: 10px;
+        }
+        .answer-key table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .answer-key td {
+            padding: 4px 8px;
+            border-bottom: 1px solid #d5dee8;
+        }
+        .answer-key td:first-child {
+            font-weight: 600;
+        }
+
+        hr {
+            margin: 30px 0 20px 0;
+            border: none;
+            border-top: 2px dashed #d5dee8;
+        }
+        .note-privacy {
+            background: #eaf3fa;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #124072;
+            margin: 18px 0;
+        }
+        .comparison-table {
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f9fafc;
+            border-radius: 12px;
+        }
+        .comparison-table th {
+            background: #e2e8f0;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+
+    <!-- HEADER -->
+    <h1>⚕️ SimWars 2026 – Pre‑Event Questionnaire</h1>
+    <div class="subhead">
+        Participant Baseline Assessment &bull; Two parts &bull; ~12 min
+    </div>
+
+    <!-- PRIVACY NOTE -->
+    <div class="note-privacy">
+        <strong>🔒 Confidential</strong> – Your responses are seen only by the organising team (not judges).
+        Sensitive questions (anxiety, support needs) are for your comfort and safety.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PART 1 – SIMWARS AWARENESS                                     -->
+    <!-- ============================================================ -->
+
+    <div class="part-divider">Part 1 <small>Competition Awareness &amp; Readiness</small></div>
+
+    <!-- Comparison table -->
+    <div class="comparison-table">
+        <table>
+            <thead><tr><th>Aspect</th><th>Standard Simulation</th><th>SimWars 2026</th></tr></thead>
+            <tbody>
+                <tr><td>Primary Purpose</td><td>Learning – practice, make mistakes</td><td>Assessment &amp; competition – perform under pressure</td></tr>
+                <tr><td>Stakes</td><td>Low – mistakes welcomed</td><td>High – mistakes penalised</td></tr>
+                <tr><td>Audience</td><td>Closed</td><td>Public – live audience, projected video</td></tr>
+                <tr><td>Debriefing</td><td>In-depth, confidential, balanced</td><td>Public positive-only + private written feedback</td></tr>
+                <tr><td>Judging</td><td>Informal developmental feedback</td><td>Structured scoring by expert judges (rubrics)</td></tr>
+                <tr><td>Resources</td><td>Unlimited time, no constraints</td><td>15‑min hard stop, explicit resource decisions</td></tr>
+                <tr><td>Manikin</td><td>Guidance / prompting allowed</td><td>No prompting – <strong>you must DO</strong> (don't just ask)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION A -->
+    <div class="section-title">A. Rules &amp; Format Knowledge</div>
+
+    <div class="form-group">
+        <label>A1. Have you read the official SimWars 2026 Participant Information Pack?</label>
+        <select>
+            <option value="">– Please select –</option>
+            <option>Yes, thoroughly</option>
+            <option>Yes, briefly skimmed</option>
+            <option>No, not yet</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>A2. Please indicate your understanding of the following rules:</label>
+        <div style="overflow-x:auto; margin-top:6px;">
+            <table style="width:100%; border-collapse:collapse; background:#f9fafc; border-radius:12px; font-size:14px;">
+                <thead><tr style="background:#e2e8f0;">
+                    <th style="padding:8px 10px; text-align:left;">Statement</th>
+                    <th style="padding:8px 6px; text-align:center; width:80px;">Yes</th>
+                    <th style="padding:8px 6px; text-align:center; width:80px;">No</th>
+                    <th style="padding:8px 6px; text-align:center; width:80px;">Unsure</th>
+                </tr></thead>
+                <tbody>
+                    <tr><td style="padding:6px 10px;">15‑minute hard stop – pens down at whistle</td>
+                        <td style="text-align:center;"><input type="radio" name="r1" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r1" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r1" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Stage 5 penalty (–10) for entering a predefined rescue state</td>
+                        <td style="text-align:center;"><input type="radio" name="r2" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r2" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r2" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Scripted event at fixed time – scored on <em>response</em>, not prevention</td>
+                        <td style="text-align:center;"><input type="radio" name="r3" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r3" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r3" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Prelims: one judge per domain, no averaging</td>
+                        <td style="text-align:center;"><input type="radio" name="r4" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r4" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r4" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Semis: two judges per domain, marks <strong>averaged</strong> (not summed)</td>
+                        <td style="text-align:center;"><input type="radio" name="r5" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r5" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r5" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Domain I = clinical recognition; Domain II = <em>process</em> (not diagnosis)</td>
+                        <td style="text-align:center;"><input type="radio" name="r6" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r6" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r6" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Safety flags inform debrief/advancement – don't auto‑change marks</td>
+                        <td style="text-align:center;"><input type="radio" name="r7" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r7" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r7" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Confederate nurses will be present to assist and standardise flow</td>
+                        <td style="text-align:center;"><input type="radio" name="r8" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r8" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r8" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Live audience &amp; live video display projected on screen</td>
+                        <td style="text-align:center;"><input type="radio" name="r9" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r9" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r9" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Tiebreaker: team leader only, 60 sec, no conferring</td>
+                        <td style="text-align:center;"><input type="radio" name="r10" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r10" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r10" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Semis: manage <strong>two</strong> patients simultaneously</td>
+                        <td style="text-align:center;"><input type="radio" name="r11" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r11" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r11" value="unsure" /></td>
+                    </tr>
+                    <tr><td style="padding:6px 10px;">Finals: Clinical Management + Teamwork &amp; Followership + Shared Reasoning</td>
+                        <td style="text-align:center;"><input type="radio" name="r12" value="yes" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r12" value="no" /></td>
+                        <td style="text-align:center;"><input type="radio" name="r12" value="unsure" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>A3. Is there any aspect of the format, rules, or scoring you are particularly confused or worried about?</label>
+        <textarea rows="3"></textarea>
+    </div>
+
+    <!-- SECTION B -->
+    <div class="section-title">B. Debriefing Awareness &amp; Comfort</div>
+
+    <div class="form-group">
+        <label>B1. Are you familiar with the "positive‑only" public debrief concept?</label>
+        <select>
+            <option value="">– Please select –</option>
+            <option>Yes, I understand</option>
+            <option>I have heard of it but am not clear</option>
+            <option>No, this is new to me</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>B2. How comfortable are you receiving feedback—especially constructive—in front of an audience?</label>
+        <div class="inline-radio">
+            <label><input type="radio" name="b2" value="1" /> 1 – Very uncomfortable</label>
+            <label><input type="radio" name="b2" value="2" /> 2</label>
+            <label><input type="radio" name="b2" value="3" /> 3</label>
+            <label><input type="radio" name="b2" value="4" /> 4</label>
+            <label><input type="radio" name="b2" value="5" /> 5 – Very comfortable</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>B3. What makes a debriefing session MOST valuable to you? <span class="optional">(select up to 2)</span></label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" /> Constructive, specific feedback on improvement</label>
+            <label><input type="checkbox" /> Positive reinforcement on what I did well</label>
+            <label><input type="checkbox" /> Time to reflect on my own performance</label>
+            <label><input type="checkbox" /> Hearing perspectives of other team members</label>
+            <label><input type="checkbox" /> Structured framework (e.g., advocacy-inquiry)</label>
+            <label><input type="checkbox" /> Written/verbal feedback from facilitator</label>
+            <label><input type="checkbox" /> Other: <input type="text" style="width:auto;display:inline;padding:4px 8px;border-radius:6px;" placeholder="specify" /></label>
+        </div>
+    </div>
+
+    <!-- SECTION C -->
+    <div class="section-title">C. Competition‑Specific Anxieties &amp; Support</div>
+
+    <div class="form-group">
+        <label>C1. How anxious or stressed do you feel about SimWars?</label>
+        <div class="inline-radio">
+            <label><input type="radio" name="c1" value="1" /> 1 – Not at all (looking forward)</label>
+            <label><input type="radio" name="c1" value="2" /> 2</label>
+            <label><input type="radio" name="c1" value="3" /> 3</label>
+            <label><input type="radio" name="c1" value="4" /> 4</label>
+            <label><input type="radio" name="c1" value="5" /> 5 – Extremely (worried)</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>C2. Which aspects of the <em>competition itself</em> do you find MOST anxiety‑provoking? <span class="optional">(select all that apply)</span></label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" /> Being observed by judges/live audience</label>
+            <label><input type="checkbox" /> Performing skills under time pressure</label>
+            <label><input type="checkbox" /> Making a mistake in front of peers</label>
+            <label><input type="checkbox" /> Speaking up / challenging a senior in this setting</label>
+            <label><input type="checkbox" /> Managing two patients simultaneously</label>
+            <label><input type="checkbox" /> The public debriefing process</label>
+            <label><input type="checkbox" /> Not knowing what to expect (scripted events)</label>
+            <label><input type="checkbox" /> The tiebreaker process</label>
+            <label><input type="checkbox" /> Other: <input type="text" style="width:auto;display:inline;padding:4px 8px;border-radius:6px;" placeholder="specify" /></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>C3. Do you have any specific concerns about the live audience or video recording?</label>
+        <textarea rows="2"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>C4. Is there anything the organising team can do to make your <em>competition experience</em> more comfortable?</label>
+        <textarea rows="2"></textarea>
+    </div>
+
+    <hr />
+
+    <!-- ============================================================ -->
+    <!-- PART 2 – CLINICAL KAP                                          -->
+    <!-- ============================================================ -->
+
+    <div class="part-divider">Part 2 <small>Clinical Knowledge, Attitude &amp; Practice (KAP)</small></div>
+
+    <!-- SECTION 1 -->
+    <div class="section-title">1. Demographics &amp; Professional Background</div>
+
+    <div class="form-group">
+        <label>1.1 Email Address <span class="optional">(for confirmation)</span></label>
+        <input type="email" placeholder="you@hospital.org" />
+    </div>
+
+    <div class="grid-2col">
+        <div class="form-group">
+            <label>1.2 Primary professional role</label>
+            <select id="professionalRole" onchange="updateRoleSections()">
+                <option value="">– Please select –</option>
+                <option value="nurse">Registered Nurse / Nurse Practitioner</option>
+                <option value="resident">Paediatric Resident (PGY1‑3 / Senior)</option>
+                <option value="fellow">PICU Fellow / DM / DNB Trainee</option>
+                <option value="attending">Attending Physician / Consultant</option>
+                <option value="other">Other (Allied Health, Student, Paramedic, etc.)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>1.3 Current designation / grade</label>
+            <select>
+                <option value="">– Please select –</option>
+                <option>Intern / Foundation Year</option>
+                <option>Junior Resident (PGY1‑3)</option>
+                <option>Senior Resident</option>
+                <option>Fellow / Registrar</option>
+                <option>Attending / Consultant</option>
+                <option>Staff Nurse / Registered Nurse</option>
+                <option>Senior Staff Nurse / Charge Nurse</option>
+                <option>Nurse Educator / Clinical Instructor</option>
+                <option>EMT/CCT</option>
+                <option>Other</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="grid-2col">
+        <div class="form-group">
+            <label>1.4 Years of clinical experience <span class="optional">(post‑qualification)</span></label>
+            <select>
+                <option value="">– Please select –</option>
+                <option>&lt;1 year</option>
+                <option>1‑2 years</option>
+                <option>3‑5 years</option>
+                <option>6‑10 years</option>
+                <option>&gt;10 years</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>1.5 Primary clinical setting</label>
+            <select>
+                <option value="">– Please select –</option>
+                <option>Paediatric Emergency Department</option>
+                <option>Paediatric Intensive Care Unit</option>
+                <option>Neonatal Intensive Care Unit</option>
+                <option>Paediatric Ward / General Paediatrics</option>
+                <option>Operating Theatre / Anaesthesia</option>
+                <option>Mixed / Rotation‑based</option>
+                <option>Other</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>1.6 Paediatric resuscitation courses completed <span class="optional">(select all that apply)</span></label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" /> None</label>
+            <label><input type="checkbox" /> BLS</label>
+            <label><input type="checkbox" /> PALS</label>
+            <label><input type="checkbox" /> NLS / NRP</label>
+            <label><input type="checkbox" /> Other: <input type="text" style="width:auto;display:inline;padding:4px 8px;border-radius:6px;" placeholder="specify" /></label>
+        </div>
+    </div>
+
+    <!-- SECTION 2 – ROLE‑SPECIFIC EXPERIENCE -->
+    <div class="section-title">2. Role‑Specific Clinical Experience <span class="optional">(complete your role below)</span></div>
+
+    <!-- 2A – Nurse -->
+    <div id="roleSection2A" class="role-section">
+        <div class="role-banner">🧑‍⚕️ For Nurses (Registered, Staff, Charge, Educator)</div>
+        <div class="form-group">
+            <label>2A.1 Which tasks do you regularly perform? <span class="optional">(select all that apply)</span></label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" /> Airway assessment &amp; basic manoeuvres</label>
+                <label><input type="checkbox" /> Assisting with / performing intubation</label>
+                <label><input type="checkbox" /> Assisting with / performing vascular access (IV, IO)</label>
+                <label><input type="checkbox" /> Preparing &amp; administering emergency drugs</label>
+                <label><input type="checkbox" /> Operating defibrillator / monitor</label>
+                <label><input type="checkbox" /> Performing high‑quality CPR</label>
+                <label><input type="checkbox" /> Documenting / time log</label>
+                <label><input type="checkbox" /> Communicating with family members</label>
+                <label><input type="checkbox" /> SBAR handover to receiving teams</label>
+            </div>
+        </div>
+        <div class="grid-2col">
+            <div class="form-group">
+                <label>2A.2 How often do you participate in paediatric resuscitations?</label>
+                <select><option>Daily / Weekly</option><option>Monthly</option><option>A few times a year</option><option>Rarely / Never</option></select>
+            </div>
+            <div class="form-group">
+                <label>2A.3 Are you expected to independently prepare &amp; administer resuscitation drugs?</label>
+                <select><option>Yes, regularly</option><option>Yes, but under supervision</option><option>No, this is done by physician</option><option>Not applicable</option></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>2A.4 How confident are you in calculating weight‑based drug doses?</label>
+            <div class="inline-radio">
+                <label><input type="radio" name="nurseDose" value="1" /> 1 – Not confident (rely on charts)</label>
+                <label><input type="radio" name="nurseDose" value="2" /> 2</label>
+                <label><input type="radio" name="nurseDose" value="3" /> 3</label>
+                <label><input type="radio" name="nurseDose" value="4" /> 4</label>
+                <label><input type="radio" name="nurseDose" value="5" /> 5 – Very confident (under pressure)</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2B – Resident -->
+    <div id="roleSection2B" class="role-section">
+        <div class="role-banner">🩺 For Paediatric Residents (PGY1‑3 / Senior)</div>
+        <div class="form-group">
+            <label>2B.1 Which tasks do you regularly perform? <span class="optional">(select all that apply)</span></label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" /> Airway assessment &amp; basic manoeuvres</label>
+                <label><input type="checkbox" /> Performing endotracheal intubation</label>
+                <label><input type="checkbox" /> Vascular access (IV, IO)</label>
+                <label><input type="checkbox" /> Preparing &amp; administering emergency drugs</label>
+                <label><input type="checkbox" /> Operating defibrillator / monitor</label>
+                <label><input type="checkbox" /> Performing high‑quality CPR</label>
+                <label><input type="checkbox" /> Leading the team / clinical decisions</label>
+                <label><input type="checkbox" /> Communicating with family members</label>
+                <label><input type="checkbox" /> SBAR handover</label>
+            </div>
+        </div>
+        <div class="grid-2col">
+            <div class="form-group">
+                <label>2B.2 How often do you participate in paediatric resuscitations?</label>
+                <select><option>Daily / Weekly</option><option>Monthly</option><option>A few times a year</option><option>Rarely / Never</option></select>
+            </div>
+            <div class="form-group">
+                <label>2B.3 How frequently do you <strong>lead</strong> resuscitations as team leader?</label>
+                <select><option>Always / Most of the time</option><option>Sometimes</option><option>Rarely</option><option>Never – I am always in a supporting role</option></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>2B.4 Confidence in independently managing the following:</label>
+            <div style="overflow-x:auto;">
+                <div class="table-header"><span>Skill</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                <div class="likert-row"><span class="item-label">Airway management (including intubation)</span><span class="radio-option"><input type="radio" name="resAir" value="1" />1</span><span class="radio-option"><input type="radio" name="resAir" value="2" />2</span><span class="radio-option"><input type="radio" name="resAir" value="3" />3</span><span class="radio-option"><input type="radio" name="resAir" value="4" />4</span><span class="radio-option"><input type="radio" name="resAir" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Vascular access (IV, IO)</span><span class="radio-option"><input type="radio" name="resVasc" value="1" />1</span><span class="radio-option"><input type="radio" name="resVasc" value="2" />2</span><span class="radio-option"><input type="radio" name="resVasc" value="3" />3</span><span class="radio-option"><input type="radio" name="resVasc" value="4" />4</span><span class="radio-option"><input type="radio" name="resVasc" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Drug dose calculations under pressure</span><span class="radio-option"><input type="radio" name="resDrug" value="1" />1</span><span class="radio-option"><input type="radio" name="resDrug" value="2" />2</span><span class="radio-option"><input type="radio" name="resDrug" value="3" />3</span><span class="radio-option"><input type="radio" name="resDrug" value="4" />4</span><span class="radio-option"><input type="radio" name="resDrug" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">ECG interpretation in emergencies</span><span class="radio-option"><input type="radio" name="resEcg" value="1" />1</span><span class="radio-option"><input type="radio" name="resEcg" value="2" />2</span><span class="radio-option"><input type="radio" name="resEcg" value="3" />3</span><span class="radio-option"><input type="radio" name="resEcg" value="4" />4</span><span class="radio-option"><input type="radio" name="resEcg" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Leading a resuscitation team</span><span class="radio-option"><input type="radio" name="resLead" value="1" />1</span><span class="radio-option"><input type="radio" name="resLead" value="2" />2</span><span class="radio-option"><input type="radio" name="resLead" value="3" />3</span><span class="radio-option"><input type="radio" name="resLead" value="4" />4</span><span class="radio-option"><input type="radio" name="resLead" value="5" />5</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2C – Fellow -->
+    <div id="roleSection2C" class="role-section">
+        <div class="role-banner">🧠 For PICU Fellows / DM / DNB Trainees</div>
+        <div class="form-group">
+            <label>2C.1 Which complex procedures do you regularly perform? <span class="optional">(select all that apply)</span></label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" /> Endotracheal intubation (including difficult airways)</label>
+                <label><input type="checkbox" /> Central venous access</label>
+                <label><input type="checkbox" /> Arterial line insertion</label>
+                <label><input type="checkbox" /> Chest drain insertion</label>
+                <label><input type="checkbox" /> Needle cricothyroidotomy</label>
+                <label><input type="checkbox" /> Leading team / supervising juniors</label>
+                <label><input type="checkbox" /> Managing invasive ventilation</label>
+                <label><input type="checkbox" /> Vasoactive drug titration</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>2C.2 How often do you <strong>lead</strong> paediatric resuscitations?</label>
+            <select><option>Always / Most of the time</option><option>Sometimes</option><option>Rarely</option><option>I supervise but do not typically lead the immediate resuscitation</option></select>
+        </div>
+        <div class="form-group">
+            <label>2C.3 Confidence in managing complex scenarios:</label>
+            <div style="overflow-x:auto;">
+                <div class="table-header"><span>Skill</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                <div class="likert-row"><span class="item-label">Difficult airway / failed intubation</span><span class="radio-option"><input type="radio" name="felAir" value="1" />1</span><span class="radio-option"><input type="radio" name="felAir" value="2" />2</span><span class="radio-option"><input type="radio" name="felAir" value="3" />3</span><span class="radio-option"><input type="radio" name="felAir" value="4" />4</span><span class="radio-option"><input type="radio" name="felAir" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Central venous access</span><span class="radio-option"><input type="radio" name="felCv" value="1" />1</span><span class="radio-option"><input type="radio" name="felCv" value="2" />2</span><span class="radio-option"><input type="radio" name="felCv" value="3" />3</span><span class="radio-option"><input type="radio" name="felCv" value="4" />4</span><span class="radio-option"><input type="radio" name="felCv" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Invasive ventilation management</span><span class="radio-option"><input type="radio" name="felVent" value="1" />1</span><span class="radio-option"><input type="radio" name="felVent" value="2" />2</span><span class="radio-option"><input type="radio" name="felVent" value="3" />3</span><span class="radio-option"><input type="radio" name="felVent" value="4" />4</span><span class="radio-option"><input type="radio" name="felVent" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Vasoactive drug titration</span><span class="radio-option"><input type="radio" name="felVaso" value="1" />1</span><span class="radio-option"><input type="radio" name="felVaso" value="2" />2</span><span class="radio-option"><input type="radio" name="felVaso" value="3" />3</span><span class="radio-option"><input type="radio" name="felVaso" value="4" />4</span><span class="radio-option"><input type="radio" name="felVaso" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Post‑arrest care / TTM</span><span class="radio-option"><input type="radio" name="felPost" value="1" />1</span><span class="radio-option"><input type="radio" name="felPost" value="2" />2</span><span class="radio-option"><input type="radio" name="felPost" value="3" />3</span><span class="radio-option"><input type="radio" name="felPost" value="4" />4</span><span class="radio-option"><input type="radio" name="felPost" value="5" />5</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2D – Attending -->
+    <div id="roleSection2D" class="role-section">
+        <div class="role-banner">👨‍⚕️ For Attending Physicians / Consultants</div>
+        <div class="form-group">
+            <label>2D.1 Which tasks do you regularly <strong>perform or supervise</strong>? <span class="optional">(select all that apply)</span></label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" /> Leading team / high‑stakes decisions</label>
+                <label><input type="checkbox" /> Supervising airway (including difficult)</label>
+                <label><input type="checkbox" /> Supervising vascular access (central lines, IV, IO)</label>
+                <label><input type="checkbox" /> Supervising emergency drug administration</label>
+                <label><input type="checkbox" /> Teaching/supervising juniors in real‑time</label>
+                <label><input type="checkbox" /> Communicating with family during crises</label>
+                <label><input type="checkbox" /> Ethical / withdrawal of care decisions</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>2D.2 How frequently do you <strong>lead or supervise</strong> paediatric resuscitations?</label>
+            <select><option>Daily / Weekly</option><option>Monthly</option><option>A few times a year</option><option>Rarely / Never</option></select>
+        </div>
+        <div class="form-group">
+            <label>2D.3 Confidence in supervising trainees through the following:</label>
+            <div style="overflow-x:auto;">
+                <div class="table-header"><span>Skill</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+                <div class="likert-row"><span class="item-label">Difficult airway (supervisory role)</span><span class="radio-option"><input type="radio" name="attAir" value="1" />1</span><span class="radio-option"><input type="radio" name="attAir" value="2" />2</span><span class="radio-option"><input type="radio" name="attAir" value="3" />3</span><span class="radio-option"><input type="radio" name="attAir" value="4" />4</span><span class="radio-option"><input type="radio" name="attAir" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Hemodynamic instability / shock</span><span class="radio-option"><input type="radio" name="attShock" value="1" />1</span><span class="radio-option"><input type="radio" name="attShock" value="2" />2</span><span class="radio-option"><input type="radio" name="attShock" value="3" />3</span><span class="radio-option"><input type="radio" name="attShock" value="4" />4</span><span class="radio-option"><input type="radio" name="attShock" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Post‑arrest care / prognostication</span><span class="radio-option"><input type="radio" name="attPost" value="1" />1</span><span class="radio-option"><input type="radio" name="attPost" value="2" />2</span><span class="radio-option"><input type="radio" name="attPost" value="3" />3</span><span class="radio-option"><input type="radio" name="attPost" value="4" />4</span><span class="radio-option"><input type="radio" name="attPost" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">ECMO decision‑making / management</span><span class="radio-option"><input type="radio" name="attEcmo" value="1" />1</span><span class="radio-option"><input type="radio" name="attEcmo" value="2" />2</span><span class="radio-option"><input type="radio" name="attEcmo" value="3" />3</span><span class="radio-option"><input type="radio" name="attEcmo" value="4" />4</span><span class="radio-option"><input type="radio" name="attEcmo" value="5" />5</span></div>
+                <div class="likert-row"><span class="item-label">Teaching crisis resource management</span><span class="radio-option"><input type="radio" name="attCrm" value="1" />1</span><span class="radio-option"><input type="radio" name="attCrm" value="2" />2</span><span class="radio-option"><input type="radio" name="attCrm" value="3" />3</span><span class="radio-option"><input type="radio" name="attCrm" value="4" />4</span><span class="radio-option"><input type="radio" name="attCrm" value="5" />5</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3 – SIMULATION EXPERIENCE -->
+    <div class="section-title">3. General Simulation Experience <span class="optional">(baseline)</span></div>
+
+    <div class="grid-2col">
+        <div class="form-group">
+            <label>3.1 Have you ever participated in a simulation scenario as a participant?</label>
+            <select><option>Yes, many times</option><option>Yes, a few times</option><option>Yes, once</option><option>No, never</option></select>
+        </div>
+        <div class="form-group">
+            <label>3.2 High‑fidelity sessions attended in the last 12 months</label>
+            <select><option>0 – None</option><option>1‑2</option><option>3‑5</option><option>6‑10</option><option>&gt;10</option></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>3.3 Types of simulation you have participated in <span class="optional">(select all that apply)</span></label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" /> Task trainer / skills station</label>
+            <label><input type="checkbox" /> Full‑scenario with high‑fidelity manikin</label>
+            <label><input type="checkbox" /> Virtual reality / screen‑based</label>
+            <label><input type="checkbox" /> Standardised patient (actor)</label>
+            <label><input type="checkbox" /> In‑situ simulation (in clinical environment)</label>
+            <label><input type="checkbox" /> None of the above</label>
+        </div>
+    </div>
+
+    <div class="grid-2col">
+        <div class="form-group">
+            <label>3.4 In your most recent simulation, what was your primary role?</label>
+            <select>
+                <option>Team Leader / Lead Clinician</option><option>Airway lead</option>
+                <option>Circulation / IV access lead</option><option>Medication / Drug lead</option>
+                <option>Documentation / Time‑keeping</option><option>Observer / Debriefing participant</option>
+                <option>I have never participated</option><option>Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>3.5 Have you ever worked with a confederate (actor or embedded nurse)?</label>
+            <select><option>Yes</option><option>No</option><option>Not sure</option></select>
+        </div>
+    </div>
+
+    <!-- SECTION 4 – ROLE‑SPECIFIC SELF‑ASSESSMENT (NEWLY BRANCHED) -->
+    <div class="section-title">4. Role‑Specific Self‑Assessment <span class="optional">(knowledge &amp; skills)</span></div>
+    <div class="hint">
+        <strong>Rating:</strong> 1 = Needs significant guidance &nbsp;|&nbsp; 2 = Requires some supervision &nbsp;|&nbsp; 3 = Independent with occasional support &nbsp;|&nbsp; 4 = Can teach others &nbsp;|&nbsp; 5 = Expert (flawless under pressure)
+    </div>
+
+    <!-- 4A – Nurse -->
+    <div id="roleSection4A" class="role-section">
+        <div class="role-banner">🧑‍⚕️ Self‑Assessment – Nurses</div>
+        <div style="overflow-x:auto;">
+            <div class="table-header"><span>Item</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="likert-row"><span class="item-label">Prepare/administer emergency drugs (dose calculation + drawing up)</span><span class="radio-option"><input type="radio" name="n4a1" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a1" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a1" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a1" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a1" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Operate defibrillator/monitor (energy, mode, safe charging)</span><span class="radio-option"><input type="radio" name="n4a2" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a2" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a2" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a2" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a2" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">High‑quality CPR (rate, depth, recoil, minimal interruptions)</span><span class="radio-option"><input type="radio" name="n4a3" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a3" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a3" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a3" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a3" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Recognise deterioration &amp; escalate appropriately</span><span class="radio-option"><input type="radio" name="n4a4" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a4" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a4" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a4" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a4" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Closed‑loop communication (receiving/clarifying orders)</span><span class="radio-option"><input type="radio" name="n4a5" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a5" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a5" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a5" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a5" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Document events &amp; maintain time log under pressure</span><span class="radio-option"><input type="radio" name="n4a6" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a6" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a6" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a6" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a6" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Communicate with family members compassionately during emergency</span><span class="radio-option"><input type="radio" name="n4a7" value="1" />1</span><span class="radio-option"><input type="radio" name="n4a7" value="2" />2</span><span class="radio-option"><input type="radio" name="n4a7" value="3" />3</span><span class="radio-option"><input type="radio" name="n4a7" value="4" />4</span><span class="radio-option"><input type="radio" name="n4a7" value="5" />5</span></div>
+        </div>
+    </div>
+
+    <!-- 4B – Resident -->
+    <div id="roleSection4B" class="role-section">
+        <div class="role-banner">🩺 Self‑Assessment – Residents</div>
+        <div style="overflow-x:auto;">
+            <div class="table-header"><span>Item</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="likert-row"><span class="item-label">Structured ABCDE assessment within 60 seconds</span><span class="radio-option"><input type="radio" name="r4b1" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b1" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b1" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b1" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b1" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Bag‑mask ventilation &amp; assisting/ performing intubation</span><span class="radio-option"><input type="radio" name="r4b2" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b2" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b2" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b2" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b2" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Vascular access (IV, IO) independently</span><span class="radio-option"><input type="radio" name="r4b3" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b3" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b3" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b3" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b3" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Weight‑based drug dose calculations under pressure</span><span class="radio-option"><input type="radio" name="r4b4" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b4" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b4" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b4" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b4" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Recognise/differentiate paediatric arrhythmias on ECG</span><span class="radio-option"><input type="radio" name="r4b5" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b5" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b5" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b5" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b5" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Lead a small resuscitation team – delegate &amp; maintain overview</span><span class="radio-option"><input type="radio" name="r4b6" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b6" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b6" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b6" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b6" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Interpret blood gas &amp; electrolyte abnormalities in emergency</span><span class="radio-option"><input type="radio" name="r4b7" value="1" />1</span><span class="radio-option"><input type="radio" name="r4b7" value="2" />2</span><span class="radio-option"><input type="radio" name="r4b7" value="3" />3</span><span class="radio-option"><input type="radio" name="r4b7" value="4" />4</span><span class="radio-option"><input type="radio" name="r4b7" value="5" />5</span></div>
+        </div>
+    </div>
+
+    <!-- 4C – Fellow -->
+    <div id="roleSection4C" class="role-section">
+        <div class="role-banner">🧠 Self‑Assessment – PICU Fellows / DM / DNB</div>
+        <div style="overflow-x:auto;">
+            <div class="table-header"><span>Item</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="likert-row"><span class="item-label">RSI with preparation, drugs, equipment &amp; difficult airway contingency</span><span class="radio-option"><input type="radio" name="f4c1" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c1" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c1" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c1" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c1" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Central venous &amp; arterial line insertion (ultrasound guided)</span><span class="radio-option"><input type="radio" name="f4c2" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c2" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c2" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c2" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c2" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Invasive mechanical ventilation (initiate, troubleshoot, dyssynchrony)</span><span class="radio-option"><input type="radio" name="f4c3" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c3" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c3" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c3" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c3" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Titrate vasoactive infusions (Adrenaline, Noradrenaline, Milrinone)</span><span class="radio-option"><input type="radio" name="f4c4" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c4" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c4" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c4" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c4" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Post‑cardiac arrest care (TTM, targeted oxygenation/BP, seizures)</span><span class="radio-option"><input type="radio" name="f4c5" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c5" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c5" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c5" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c5" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Lead complex resuscitation while supervising juniors</span><span class="radio-option"><input type="radio" name="f4c6" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c6" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c6" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c6" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c6" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Identify &amp; manage tension pneumothorax (needle decompression / chest drain)</span><span class="radio-option"><input type="radio" name="f4c7" value="1" />1</span><span class="radio-option"><input type="radio" name="f4c7" value="2" />2</span><span class="radio-option"><input type="radio" name="f4c7" value="3" />3</span><span class="radio-option"><input type="radio" name="f4c7" value="4" />4</span><span class="radio-option"><input type="radio" name="f4c7" value="5" />5</span></div>
+        </div>
+    </div>
+
+    <!-- 4D – Attending -->
+    <div id="roleSection4D" class="role-section">
+        <div class="role-banner">👨‍⚕️ Self‑Assessment – Attendings / Consultants</div>
+        <div style="overflow-x:auto;">
+            <div class="table-header"><span>Item</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="likert-row"><span class="item-label">Supervise difficult airway / failed intubation algorithm</span><span class="radio-option"><input type="radio" name="a4d1" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d1" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d1" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d1" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d1" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Supervise complex resuscitations while allowing trainees to lead</span><span class="radio-option"><input type="radio" name="a4d2" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d2" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d2" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d2" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d2" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">ECMO / advanced mechanical support candidacy decisions</span><span class="radio-option"><input type="radio" name="a4d3" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d3" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d3" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d3" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d3" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Ethical dilemmas &amp; goals‑of‑care during active crises</span><span class="radio-option"><input type="radio" name="a4d4" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d4" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d4" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d4" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d4" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">In‑the‑moment teaching / feedback without disrupting flow</span><span class="radio-option"><input type="radio" name="a4d5" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d5" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d5" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d5" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d5" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Manage team dynamics &amp; psychological safety</span><span class="radio-option"><input type="radio" name="a4d6" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d6" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d6" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d6" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d6" value="5" />5</span></div>
+            <div class="likert-row"><span class="item-label">Advanced crisis communication (family, receiving teams)</span><span class="radio-option"><input type="radio" name="a4d7" value="1" />1</span><span class="radio-option"><input type="radio" name="a4d7" value="2" />2</span><span class="radio-option"><input type="radio" name="a4d7" value="3" />3</span><span class="radio-option"><input type="radio" name="a4d7" value="4" />4</span><span class="radio-option"><input type="radio" name="a4d7" value="5" />5</span></div>
+        </div>
+    </div>
+
+    <!-- SECTION 5 – MCQs -->
+    <div class="section-title">5. Objective Knowledge Check <span class="optional">(MCQs – single best answer)</span></div>
+
+    <div class="form-group">
+        <label>5.1 A 5‑year‑old with pulseless VT. Correct energy for FIRST defibrillation?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q1" /> A) 0.5 J/kg</label>
+            <label><input type="radio" name="q1" /> B) 1 J/kg</label>
+            <label><input type="radio" name="q1" /> C) 2 J/kg</label>
+            <label><input type="radio" name="q1" /> D) 4 J/kg</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.2 Most appropriate induction agent for RSI in acute severe asthma?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q2" /> A) Propofol</label>
+            <label><input type="radio" name="q2" /> B) Ketamine</label>
+            <label><input type="radio" name="q2" /> C) Midazolam</label>
+            <label><input type="radio" name="q2" /> D) Thiopentone</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.3 Torsades de Pointes failed to respond to defibrillation. NEXT intervention?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q3" /> A) Amiodarone</label>
+            <label><input type="radio" name="q3" /> B) Magnesium sulphate</label>
+            <label><input type="radio" name="q3" /> C) Lidocaine</label>
+            <label><input type="radio" name="q3" /> D) Adenosine</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.4 Finding MOST suggestive of raised ICP in head injury?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q4" /> A) Tachycardia &amp; hypotension</label>
+            <label><input type="radio" name="q4" /> B) Hypertension &amp; bradycardia</label>
+            <label><input type="radio" name="q4" /> C) Hypotension &amp; bradycardia</label>
+            <label><input type="radio" name="q4" /> D) Tachycardia &amp; hypertension</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.5 Hyperkalaemic cardiac arrest – FIRST pharmacological intervention?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q5" /> A) Insulin &amp; Dextrose</label>
+            <label><input type="radio" name="q5" /> B) Sodium bicarbonate</label>
+            <label><input type="radio" name="q5" /> C) Calcium gluconate</label>
+            <label><input type="radio" name="q5" /> D) Salbutamol</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.6 Peri‑intubation crash – MOST appropriate immediate response?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q6" /> A) Fluid bolus 20 mL/kg</label>
+            <label><input type="radio" name="q6" /> B) Push‑dose Epinephrine 10 mcg/kg</label>
+            <label><input type="radio" name="q6" /> C) Increase PEEP to 10 cmH₂O</label>
+            <label><input type="radio" name="q6" /> D) Midazolam for sedation</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.7 Post‑intubation: rising peak pressures + dropping SpO₂. FIRST step in DOPE?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q7" /> A) Displaced endotracheal tube</label>
+            <label><input type="radio" name="q7" /> B) Tension pneumothorax</label>
+            <label><input type="radio" name="q7" /> C) Kinked circuit</label>
+            <label><input type="radio" name="q7" /> D) Bronchospasm</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.8 Suspected meningococcal septicaemia – early adjunctive therapy?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q8" /> A) Hydrocortisone</label>
+            <label><input type="radio" name="q8" /> B) Fresh frozen plasma</label>
+            <label><input type="radio" name="q8" /> C) Tranexamic acid</label>
+            <label><input type="radio" name="q8" /> D) Mannitol</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.9 Known egg allergy – which drug to use with caution?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q9" /> A) Ketamine</label>
+            <label><input type="radio" name="q9" /> B) Propofol</label>
+            <label><input type="radio" name="q9" /> C) Midazolam</label>
+            <label><input type="radio" name="q9" /> D) Rocuronium</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>5.10 Hypothermic cardiac arrest (32°C) – correct defibrillation approach?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="q10" /> A) Adrenaline first, then defibrillate</label>
+            <label><input type="radio" name="q10" /> B) Defibrillate immediately as FIRST action</label>
+            <label><input type="radio" name="q10" /> C) Wait until &gt;34°C</label>
+            <label><input type="radio" name="q10" /> D) Defibrillation not indicated</label>
+        </div>
+    </div>
+
+    <!-- SECTION 6 – PERCEIVED CHALLENGES -->
+    <div class="section-title">6. Perceived Clinical Challenges</div>
+    <div class="form-group">
+        <label>6.1 Select your TOP 3 most challenging clinical aspects <span class="optional">(choose up to 3)</span></label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" /> ECG interpretation</label>
+            <label><input type="checkbox" /> Drug dose calculations</label>
+            <label><input type="checkbox" /> Airway management</label>
+            <label><input type="checkbox" /> Vascular access</label>
+            <label><input type="checkbox" /> Team coordination &amp; delegation</label>
+            <label><input type="checkbox" /> Family communication</label>
+            <label><input type="checkbox" /> Prioritisation under time pressure</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>6.2 Which clinical scenarios do you feel LEAST prepared for? <span class="optional">(select all that apply)</span></label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" /> Cardiac arrest</label>
+            <label><input type="checkbox" /> Arrhythmias</label>
+            <label><input type="checkbox" /> Shock (septic, cardiogenic, hypovolaemic)</label>
+            <label><input type="checkbox" /> Respiratory failure / Asthma</label>
+            <label><input type="checkbox" /> Status epilepticus</label>
+            <label><input type="checkbox" /> Trauma (head injury, haemorrhage)</label>
+            <label><input type="checkbox" /> Metabolic emergencies</label>
+            <label><input type="checkbox" /> Post‑operative complications</label>
+            <label><input type="checkbox" /> Environmental emergencies</label>
+            <label><input type="checkbox" /> Toxicology / Overdose</label>
+            <label><input type="checkbox" /> Other: <input type="text" style="width:auto;display:inline;padding:4px 8px;border-radius:6px;" placeholder="specify" /></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>6.3 How comfortable are you managing a scenario with TWO critically ill patients simultaneously?</label>
+        <div class="inline-radio">
+            <label><input type="radio" name="twoPats" value="1" /> 1 – Very uncomfortable</label>
+            <label><input type="radio" name="twoPats" value="2" /> 2</label>
+            <label><input type="radio" name="twoPats" value="3" /> 3</label>
+            <label><input type="radio" name="twoPats" value="4" /> 4</label>
+            <label><input type="radio" name="twoPats" value="5" /> 5 – Very comfortable</label>
+        </div>
+    </div>
+
+    <!-- SECTION 7 – GOALS -->
+    <div class="section-title">7. Clinical Learning Goals &amp; Teaching Needs</div>
+    <div class="form-group">
+        <label>7.1 What specific clinical skills or knowledge do you hope to improve?</label>
+        <textarea rows="2"></textarea>
+    </div>
+    <div class="form-group">
+        <label>7.2 Is there any aspect of paediatric resuscitation you would like dedicated teaching on?</label>
+        <textarea rows="2"></textarea>
+    </div>
+
+    <!-- SECTION 8 – BEHAVIOURAL ATTITUDES -->
+    <div class="section-title">8. General Behavioural Attitudes (Speaking Up &amp; Help‑Seeking)</div>
+    <div class="form-group">
+        <label>8.1 If unsure about a clinical decision, how likely are you to speak up and ask for help?</label>
+        <div class="inline-radio">
+            <label><input type="radio" name="help" value="1" /> 1 – Very unlikely (stay quiet)</label>
+            <label><input type="radio" name="help" value="2" /> 2</label>
+            <label><input type="radio" name="help" value="3" /> 3</label>
+            <label><input type="radio" name="help" value="4" /> 4</label>
+            <label><input type="radio" name="help" value="5" /> 5 – Very likely (speak up immediately)</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>8.2 If you see a potential safety concern (wrong dose, incorrect procedure), how likely are you to challenge it – even if the decision‑maker is more senior?</label>
+        <div class="inline-radio">
+            <label><input type="radio" name="challenge" value="1" /> 1 – Very unlikely (stay silent)</label>
+            <label><input type="radio" name="challenge" value="2" /> 2</label>
+            <label><input type="radio" name="challenge" value="3" /> 3</label>
+            <label><input type="radio" name="challenge" value="4" /> 4</label>
+            <label><input type="radio" name="challenge" value="5" /> 5 – Very likely (challenge assertively)</label>
+        </div>
+    </div>
+
+    <!-- SECTION 9 – ACCESSIBILITY -->
+    <div class="section-title">9. General Accessibility / Support Needs</div>
+    <div class="form-group">
+        <label>9.1 Do you have any general accessibility or support needs we should be aware of? <span class="optional">(physical, hearing/visual, learning, etc.)</span></label>
+        <textarea rows="2"></textarea>
+    </div>
+
+    <hr />
+
+    <!-- FOOTER -->
+    <div style="text-align:center; margin-top:20px;">
+        <button class="btn-submit" onclick="alert('This is a demo form. In production, responses would be submitted to the server.')">✓ Submit Questionnaire</button>
+    </div>
+    <p style="text-align:center; color:#5f7d9c; font-size:14px; margin-top:12px;">
+        Thank you for completing both parts. Your responses help us deliver a safe, fair, and educationally rich SimWars 2026.
+    </p>
+
+    <!-- ANSWER KEY (visible for organisers) -->
+    <div class="answer-key">
+        <h3>📋 ANSWER KEY – For Organisers Only</h3>
+        <table>
+            <tr><td>5.1</td><td>C) 2 J/kg</td></tr>
+            <tr><td>5.2</td><td>B) Ketamine</td></tr>
+            <tr><td>5.3</td><td>B) Magnesium sulphate</td></tr>
+            <tr><td>5.4</td><td>B) Hypertension &amp; bradycardia</td></tr>
+            <tr><td>5.5</td><td>C) Calcium gluconate</td></tr>
+            <tr><td>5.6</td><td>B) Push‑dose Epinephrine 10 mcg/kg</td></tr>
+            <tr><td>5.7</td><td>A) Displaced ETT (DOPE: Displacement first)</td></tr>
+            <tr><td>5.8</td><td>A) Hydrocortisone</td></tr>
+            <tr><td>5.9</td><td>B) Propofol (egg allergy – propofol contains egg lecithin)</td></tr>
+            <tr><td>5.10</td><td>B) Defibrillate immediately as FIRST action</td></tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    function updateRoleSections() {
+        // Get selected role
+        const role = document.getElementById('professionalRole').value;
+
+        // All role section IDs (2A,2B,2C,2D and 4A,4B,4C,4D)
+        const sections = [
+            'roleSection2A', 'roleSection2B', 'roleSection2C', 'roleSection2D',
+            'roleSection4A', 'roleSection4B', 'roleSection4C', 'roleSection4D'
+        ];
+        // Hide all
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('active');
+        });
+
+        // Show matching pairs
+        if (role === 'nurse') {
+            document.getElementById('roleSection2A').classList.add('active');
+            document.getElementById('roleSection4A').classList.add('active');
+        } else if (role === 'resident') {
+            document.getElementById('roleSection2B').classList.add('active');
+            document.getElementById('roleSection4B').classList.add('active');
+        } else if (role === 'fellow') {
+            document.getElementById('roleSection2C').classList.add('active');
+            document.getElementById('roleSection4C').classList.add('active');
+        } else if (role === 'attending') {
+            document.getElementById('roleSection2D').classList.add('active');
+            document.getElementById('roleSection4D').classList.add('active');
+        }
+        // 'other' shows none – they can skip role-specific sections
+    }
+
+    // On page load, run once to set initial state
+    document.addEventListener('DOMContentLoaded', updateRoleSections);
+</script>
+
+</body>
+</html>
+```
