@@ -1271,6 +1271,20 @@
                 <div style="background:#fff;border:1px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#0f766e;">
                     ⚖️ <strong>Averaging rule:</strong> Two Clinical judges each score Domain I out of 40 independently. Domain mark = their <strong>mean</strong> (not sum). Same for Domain II. Never sum two sheets in a domain.
                 </div>
+                <!-- On-device judge role picker: hides the other 3 judges' sheets on THIS device,
+                     regardless of which link was used to open the page. Persists via localStorage
+                     so judges don't need to be sent a special URL — just tell them which button to tap. -->
+                <div id="sfMyRolePicker" style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+                    <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other judges' sheets so no one sees each other's marks)</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <button onclick="sfSetMyRole('cj1')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical Judge 1</button>
+                        <button onclick="sfSetMyRole('cj2')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical Judge 2</button>
+                        <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM Judge 1</button>
+                        <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM Judge 2</button>
+                        <button onclick="sfSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
+                    </div>
+                    <div id="sfMyRoleStatus" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
+                </div>
                 <!-- Judge names -->
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px;">
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
@@ -1789,17 +1803,19 @@
                     <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><tbody>${rows}</tbody></table></div>`;
             } else if (r.type === 'rhythm') {
                 const c = r.flag==='crit'?'#f87171':'#fb923c';
+                // NOTE: r.action deliberately NOT rendered here — this is the public projector feed
+                // (audience + competing team watch this live). It would hand the team the correct
+                // management step mid-scenario. Judges/organisers see it in their own console instead.
                 body = `<div style="text-align:center;padding:40px 20px;">
                     <div style="font-size:2.8rem;font-weight:900;color:${c};margin-bottom:14px;line-height:1.2;">${r.rhythm}</div>
-                    <div style="font-size:1.2rem;color:#94a3b8;margin-bottom:28px;">${r.rate}</div>
-                    ${r.action?`<div style="font-size:1.1rem;font-weight:700;color:${c};background:rgba(239,68,68,0.12);border:2px solid ${c};border-radius:14px;padding:16px 28px;display:inline-block;">${r.action}</div>`:''}
+                    <div style="font-size:1.2rem;color:#94a3b8;">${r.rate}</div>
                 </div>`;
             } else {
-                const c = r.flag==='crit'?'#f87171':'#fb923c';
+                // NOTE: r.note deliberately NOT rendered here — same reason as above; this is the
+                // public projector feed, not the organiser/judge console (see buildResultPreview).
                 body = `<div>
                     <div style="font-size:0.8rem;font-weight:700;color:#94a3b8;margin-bottom:16px;letter-spacing:0.12em;text-transform:uppercase;">${r.label}</div>
-                    <div style="font-size:1.25rem;color:#e2e8f0;line-height:1.9;margin-bottom:20px;">${r.findings}</div>
-                    ${r.note?`<div style="font-size:1rem;font-weight:700;color:${c};background:rgba(239,68,68,0.1);border:2px solid ${c};border-radius:12px;padding:16px 22px;">${r.note}</div>`:''}
+                    <div style="font-size:1.25rem;color:#e2e8f0;line-height:1.9;">${r.findings}</div>
                 </div>`;
             }
             return `<div style="font-family:'Courier New',monospace;color:#e2e8f0;">${header}${body}</div>`;
@@ -4080,6 +4096,35 @@
             sfRestoreSubmittedForRound(r);
         }
 
+        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2' };
+
+        function sfApplyMyRoleHiding(j) {
+            const existing = document.getElementById('sfMyRoleStyle');
+            if (existing) existing.remove();
+            const allJudges = ['cj1', 'cj2', 'crm1', 'crm2'];
+            if (j) {
+                const style = document.createElement('style');
+                style.id = 'sfMyRoleStyle';
+                style.textContent = allJudges
+                    .filter(x => x !== j)
+                    .map(x => `.sf-judgeblock-${x}{display:none !important;}`)
+                    .join('\n');
+                document.head.appendChild(style);
+            }
+            const statusEl = document.getElementById('sfMyRoleStatus');
+            if (statusEl) {
+                statusEl.textContent = j
+                    ? `🔒 Locked to ${SF_JUDGE_LABELS[j]} on this device — only this sheet is shown. Tap "Show All" to undo.`
+                    : '';
+            }
+        }
+
+        function sfSetMyRole(j) {
+            if (j) { localStorage.setItem('simwars_sf_my_role', j); }
+            else { localStorage.removeItem('simwars_sf_my_role'); }
+            sfApplyMyRoleHiding(j);
+        }
+
         function buildSFScoreCards() {
             buildSFRoundCard('R1');
             buildSFRoundCard('R2');
@@ -4529,6 +4574,10 @@
             buildTeamNameInputs();
             buildSFScoreCards();
             buildFNScoreCards();
+            try {
+                const savedSFRole = localStorage.getItem('simwars_sf_my_role');
+                if (savedSFRole) sfApplyMyRoleHiding(savedSFRole);
+            } catch (e) {}
             renderScoreInputs();
             renderPalsJudgeSheets();
             renderBlsJudgeSheets();
