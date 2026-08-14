@@ -1411,12 +1411,40 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     judgeOverlay.classList.remove('show');
   }
 
+  // Opens a new tab and POSTs the password straight to the Flask app's own /unlock
+  // endpoint (same one used by every password-gated page). This is what actually sets
+  // the server-side session role — the modal above is just a UI convenience. Without
+  // this step the server never learns the visitor is a judge/organiser, so role-gated
+  // pages like /flow silently fall back to the public/participant view.
+  function serverUnlock(password, nextPath) {
+    const base = 'https://merry-intuition-production-1788.up.railway.app';
+    const winName = 'sw_unlock_' + Date.now();
+    window.open('', winName);
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = base + '/unlock';
+    form.target = winName;
+    form.style.display = 'none';
+    const nextInput = document.createElement('input');
+    nextInput.name = 'next';
+    nextInput.value = nextPath;
+    form.appendChild(nextInput);
+    const pwInput = document.createElement('input');
+    pwInput.name = 'password';
+    pwInput.value = password;
+    form.appendChild(pwInput);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
   function checkJudgePassword() {
     const pass = judgeInput.value;
     if (judgeMode === 'directLink') {
       if (pass === JUDGE_PASSWORD) {
         closeJudgeModal();
-        window.open(judgePendingUrl, '_blank');
+        var nextPath = judgePendingUrl.replace(/^https?:\/\/[^/]+/, '') || '/';
+        serverUnlock(pass, nextPath);
       } else {
         judgeError.classList.add('show');
       }
@@ -1424,10 +1452,10 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     }
     if (judgeSelectedRole === 'organiser' && pass === ORGANISER_PASSWORD) {
       closeJudgeModal();
-      window.open(ORGANISER_URL, '_blank');
+      serverUnlock(pass, '/scoring?role=organiser');
     } else if (judgeSelectedRole === 'judge' && pass === JUDGE_PASSWORD) {
       closeJudgeModal();
-      window.open(JUDGE_VIEW_URL, '_blank');
+      serverUnlock(pass, '/scoring?role=judge');
     } else {
       judgeError.classList.add('show');
     }
