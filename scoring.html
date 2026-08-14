@@ -915,6 +915,37 @@
             </div>
             </div>
 
+            <!-- Investigations Console — organiser-only, projector control -->
+            <div class="card" style="border-left-color:#1e40af; background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);">
+                <h2><span class="emoji">📋</span> Investigations Console <span style="font-size:0.7rem;font-weight:700;color:#1d4ed8;background:white;border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;">ORGANISER ONLY</span></h2>
+                <p style="color:#1e40af; font-size:0.85rem; margin-bottom:14px;">
+                    Pull up labs, imaging and rhythm results for any case and push them to the projector display. This is not visible on any judge sheet — judges only see a scenario summary.
+                </p>
+                <select id="invConsoleCaseSelect" onchange="renderInvConsole(this.value)" style="width:100%; max-width:420px; padding:9px 14px; border-radius:8px; border:2px solid #1e40af; font-size:0.9rem; font-weight:700; color:#1e3a5f; background:white; cursor:pointer; margin-bottom:14px;">
+                    <option value="">— Select a case —</option>
+                    <optgroup label="PALS Cases">
+                        <option value="P1">P1 · Cardiogenic Shock</option>
+                        <option value="P2">P2 · Scorpion Sting Envenomation</option>
+                        <option value="P3">P3 · Asthma + Pneumothorax</option>
+                        <option value="P4">P4 · Refractory Septic Shock</option>
+                    </optgroup>
+                    <optgroup label="BLS Cases">
+                        <option value="B1">B1 · Near Drowning / VT Arrest</option>
+                        <option value="B2">B2 · Torsades / Long QT Arrest</option>
+                        <option value="B3">B3 · Electrocution with VT Arrest</option>
+                        <option value="B4">B4 · Refractory Status Epilepticus</option>
+                    </optgroup>
+                    <optgroup label="Semi-Finals">
+                        <option value="R1">SF Round 1 · "The Quiet Head"</option>
+                        <option value="R2">SF Round 2 · "The Loud Wound"</option>
+                    </optgroup>
+                    <optgroup label="Finals">
+                        <option value="F2">F2 · The Tense Abdomen</option>
+                    </optgroup>
+                </select>
+                <div id="invConsoleContainer"></div>
+            </div>
+
             <!-- Share Judge Links -->
             <div class="card" style="border-left-color:#7C3AED; background:linear-gradient(135deg,#f5f3ff 0%,#ede9fe 100%);">
                 <h2><span class="emoji">🔗</span> Share Judge Links</h2>
@@ -1240,6 +1271,20 @@
                 <div style="background:#fff;border:1px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#0f766e;">
                     ⚖️ <strong>Averaging rule:</strong> Two Clinical judges each score Domain I out of 40 independently. Domain mark = their <strong>mean</strong> (not sum). Same for Domain II. Never sum two sheets in a domain.
                 </div>
+                <!-- On-device judge role picker: hides the other 3 judges' sheets on THIS device,
+                     regardless of which link was used to open the page. Persists via localStorage
+                     so judges don't need to be sent a special URL — just tell them which button to tap. -->
+                <div id="sfMyRolePicker" style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+                    <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other judges' sheets so no one sees each other's marks)</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <button onclick="sfSetMyRole('cj1')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical Judge 1</button>
+                        <button onclick="sfSetMyRole('cj2')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical Judge 2</button>
+                        <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM Judge 1</button>
+                        <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM Judge 2</button>
+                        <button onclick="sfSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
+                    </div>
+                    <div id="sfMyRoleStatus" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
+                </div>
                 <!-- Judge names -->
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px;">
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
@@ -1320,7 +1365,7 @@
                     Single case (F2 &mdash; &ldquo;The Tense Abdomen&rdquo;), scored directly out of 200: Domain A: Clinical Management (90 pts) · Domain B: Teamwork &amp; Followership (80 pts) · Domain C: Shared Reasoning (30 pts) = <strong>200 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#92400e;">
-                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain A independently (90 pts). Teamwork Judge scores Domain B independently (80 pts). Both judges agree Domain C collectively (30 pts) after private notes — before domain totals are calculated.
+                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain A independently (45 pts). Teamwork Judge scores Domain B independently (40 pts). Both judges agree Domain C collectively (15 pts) after private notes — before domain totals are calculated.
                 </div>
                 <!-- Judge names -->
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px;">
@@ -1400,8 +1445,8 @@
             'B3': 'BLS',
             'B4': 'BLS'
         };
-        const palsWeights = [40, 50, 10];
-        const blsWeights = [50, 40, 10];
+        const palsWeights = [40, 30, 30];
+        const blsWeights = [40, 30, 30];
         // Case metadata loaded from SimWars Case Library
         const caseData = {
             'P1': {
@@ -1501,6 +1546,369 @@
                 keyLabs: 'pH 7.28, PCO2 52, HCO3 24, Na 148, Glucose 180, WBC 12, CT head: diffuse cerebral oedema + tonsillar herniation risk.'
             }
         };
+        // ================================================================
+        // INVESTIGATIONS CONSOLE DATA
+        // ================================================================
+        const CASE_RESULTS = {
+            'B1': { results: [
+                { id:'vbg', icon:'🔬', label:'VBG / ABG', type:'lab', rows:[
+                    ['pH','7.18','7.35–7.45','crit'],['PaCO₂','48 mmHg','35–45','high'],
+                    ['HCO₃⁻','18 mEq/L','22–26','low'],['BE','−8 mmol/L','−2 to +2','low'],
+                    ['SpO₂','54%','95–100%','crit'],['Temp','35.0 °C','36.5–37.5','low']
+                ]},
+                { id:'bmp', icon:'🔬', label:'Electrolytes / Metabolic', type:'lab', rows:[
+                    ['Na⁺','148 mEq/L','135–145','high'],['K⁺','4.5 mEq/L','3.5–5.0','norm'],
+                    ['Glucose','140 mg/dL','70–110','high'],['Lactate','8.0 mmol/L','< 2.2','crit']
+                ]},
+                { id:'ecg', icon:'📈', label:'Cardiac Monitor / ECG', type:'rhythm',
+                  rhythm:'Pulseless Ventricular Tachycardia', rate:'187 /min',
+                  action:'⚡ SHOCKABLE — Defibrillate 2 J/kg FIRST', flag:'crit' }
+            ]},
+            'B2': { results: [
+                { id:'vbg', icon:'🔬', label:'VBG', type:'lab', rows:[
+                    ['pH','7.10','7.35–7.45','crit'],['PCO₂','72 mmHg','35–45','crit'],
+                    ['HCO₃⁻','18 mEq/L','22–26','low'],['BE','−10 mmol/L','−2 to +2','low'],
+                    ['Lactate','5 mmol/L','< 2.2','high'],['SpO₂','68%','95–100%','crit']
+                ]},
+                { id:'bmp', icon:'🔬', label:'Electrolytes / Metabolic', type:'lab', rows:[
+                    ['Na⁺','135 mEq/L','135–145','norm'],['K⁺','2.5 mEq/L','3.5–5.0','crit'],
+                    ['Cl⁻','89 mEq/L','98–106','low'],['iCa','0.8 mmol/L','1.1–1.3','crit'],
+                    ['Mg²⁺','0.5 mmol/L','0.7–1.0','low'],['Glucose','86 mg/dL','70–110','norm']
+                ]},
+                { id:'ecg', icon:'📈', label:'Cardiac Monitor / ECG', type:'rhythm',
+                  rhythm:'Torsades de Pointes', rate:'Polymorphic VT — twisting peaks · QTc >500 ms',
+                  action:'⚡ SHOCKABLE + Magnesium 50 mg/kg IV — BOTH required', flag:'crit' }
+            ]},
+            'B3': { results: [
+                { id:'vbg', icon:'🔬', label:'VBG', type:'lab', rows:[
+                    ['pH','7.12','7.35–7.45','crit'],['PCO₂','45 mmHg','35–45','norm'],
+                    ['HCO₃⁻','14 mEq/L','22–26','crit'],['BE','−14 mmol/L','−2 to +2','crit'],
+                    ['Lactate','6.0 mmol/L','< 2.2','crit']
+                ]},
+                { id:'bmp', icon:'🔬', label:'Electrolytes / CK / Renal', type:'lab', rows:[
+                    ['Na⁺','140 mEq/L','135–145','norm'],['K⁺','7.5 mEq/L','3.5–5.0','crit'],
+                    ['Creatinine','1.8 mg/dL','0.3–0.7','high'],
+                    ['CK','12,000 U/L','< 200','crit'],['Myoglobin','↑↑ markedly elevated','< 90 μg/L','crit']
+                ]},
+                { id:'ecg', icon:'📈', label:'Cardiac Monitor / ECG', type:'rhythm',
+                  rhythm:'Pulseless Ventricular Tachycardia', rate:'190 /min',
+                  action:'⚡ SHOCKABLE + Calcium gluconate IV for K⁺ 7.5 immediately', flag:'crit' }
+            ]},
+            'B4': { results: [
+                { id:'vbg', icon:'🔬', label:'VBG', type:'lab', rows:[
+                    ['pH','7.28','7.35–7.45','low'],['PCO₂','52 mmHg','35–45','high'],
+                    ['HCO₃⁻','24 mEq/L','22–26','norm'],['Lactate','6 mmol/L','< 2.2','crit']
+                ]},
+                { id:'bmp', icon:'🔬', label:'Electrolytes / Metabolic', type:'lab', rows:[
+                    ['Na⁺','148 mEq/L','135–145','high'],['Glucose','180 mg/dL','70–110','high'],
+                    ['WBC','12 ×10³/μL','4.5–11','high']
+                ]},
+                { id:'ct', icon:'🖥️', label:'CT Head', type:'imaging',
+                  findings:'Diffuse cerebral oedema. Sulcal effacement bilaterally. Early tonsillar herniation risk. No focal contusion. Midline intact.',
+                  flag:'crit', note:'⚠️ Raised ICP confirmed — unequal pupils. 3% NaCl or Mannitol + Head elevation 30°.' }
+            ]},
+            'P1': { results: [
+                { id:'cardiac', icon:'🔬', label:'Cardiac Biomarkers', type:'lab', rows:[
+                    ['Troponin T','2.8 ng/mL','< 0.05','crit'],['BNP','1,200 pg/mL','< 100','crit'],
+                    ['Lactate','4.2 mmol/L','< 2.2','high'],['Na⁺','138 mEq/L','135–145','norm'],
+                    ['K⁺','4.1 mEq/L','3.5–5.0','norm'],['iCa','1.1 mmol/L','1.1–1.3','norm']
+                ]},
+                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
+                  findings:'Cardiomegaly (CTR > 0.65). Bilateral pulmonary oedema. Kerley B lines at bases. Small bilateral pleural effusions. No pneumothorax.',
+                  flag:'high', note:'Do NOT give fluid bolus — cardiogenic pulmonary oedema. Start Adrenaline infusion.' },
+                { id:'echo', icon:'🫀', label:'Echo / POCUS', type:'imaging',
+                  findings:'EF 15% (severely reduced, ref 55–70%). Global hypokinesia. Dilated LA and LV. Small pericardial effusion. Moderate mitral regurgitation.',
+                  flag:'crit', note:'⚡ EF 15% — Cardiogenic shock confirmed. Inotrope + Synchronized cardioversion 0.5 J/kg.' }
+            ]},
+            'P2': { results: [
+                { id:'bmp', icon:'🔬', label:'BMP / Glucose / Electrolytes', type:'lab', rows:[
+                    ['Glucose','28 mg/dL','70–110','crit'],['Na⁺','122 mEq/L','135–145','crit'],
+                    ['K⁺','3.8 mEq/L','3.5–5.0','norm'],['Urea','22 mg/dL','7–20','high'],
+                    ['Creatinine','0.9 mg/dL','0.3–0.7','high']
+                ]},
+                { id:'inflam', icon:'🔬', label:'Inflammatory Markers', type:'lab', rows:[
+                    ['WBC','22 ×10³/μL','4.5–11','crit'],['CRP','180 mg/L','< 5','crit'],
+                    ['Procalcitonin','42 μg/L','< 0.25','crit'],['Lactate','6.1 mmol/L','< 2.2','crit']
+                ]},
+                { id:'cx', icon:'🔬', label:'Blood Culture', type:'other',
+                  findings:'Pending. Clinical picture: gram-positive cocci in clusters — likely Staphylococcus aureus (post-cardiac surgery wound infection). Broad-spectrum empirical cover required.',
+                  flag:'high', note:'⚠️ Start Meropenem + Vancomycin NOW — do NOT wait for culture result.' }
+            ]},
+            'P3': { results: [
+                { id:'abg', icon:'🔬', label:'ABG (Pre-Intubation)', type:'lab', rows:[
+                    ['pH','7.08','7.35–7.45','crit'],['PaCO₂','82 mmHg','35–45','crit'],
+                    ['PaO₂','55 mmHg','80–100','crit'],['HCO₃⁻','24 mEq/L','22–26','norm'],
+                    ['BE','−8 mmol/L','−2 to +2','low'],['SpO₂','72%','95–100%','crit']
+                ]},
+                { id:'cxr', icon:'🩻', label:'CXR (Post-Intubation)', type:'imaging',
+                  findings:'RIGHT-sided pneumothorax — absent lung markings right lower zone. Tracheal deviation to LEFT. Mediastinal shift confirmed. LEFT lung hyperinflated. ETT midline (no endobronchial intubation).',
+                  flag:'crit', note:'⚠️ TENSION PNEUMOTHORAX — Needle decompression 2nd ICS MCL right side IMMEDIATELY, then chest drain.' }
+            ]},
+            'P4': { results: [
+                { id:'abg', icon:'🔬', label:'ABG', type:'lab', rows:[
+                    ['pH','7.05','7.35–7.45','crit'],['PaCO₂','52 mmHg','35–45','high'],
+                    ['PaO₂','88 mmHg','80–100','norm'],['HCO₃⁻','11 mEq/L','22–26','crit'],
+                    ['BE','−17 mmol/L','−2 to +2','crit'],['Lactate','9.2 mmol/L','< 2.2','crit']
+                ]},
+                { id:'bmp', icon:'🔬', label:'BMP / Electrolytes / Renal', type:'lab', rows:[
+                    ['Na⁺','132 mEq/L','135–145','low'],['K⁺','5.1 mEq/L','3.5–5.0','high'],
+                    ['Urea','35 mg/dL','7–20','crit'],['Creatinine','1.4 mg/dL','0.3–0.7','crit']
+                ]},
+                { id:'inflam', icon:'🔬', label:'Inflammatory Markers', type:'lab', rows:[
+                    ['WBC','28 ×10³/μL','4.5–11','crit'],['CRP','240 mg/L','< 5','crit'],
+                    ['Procalcitonin','88 μg/L','< 0.25','crit']
+                ]}
+            ]},
+            // ── SEMI-FINALS ─────────────────────────────────
+            'R1': { results: [
+                { id:'ananya_bloods', icon:'🔬', label:'Ananya — Trauma Bloods', type:'lab', rows:[
+                    ['Hb','11.8 g/dL','11.5–15.5','norm'],['Hct','34%','35–45','low'],
+                    ['Platelets','182 ×10³/μL','150–400','norm'],['INR','1.2','0.9–1.2','norm'],
+                    ['Glucose','90 mg/dL','70–110','norm'],['Group','O Rh+','—','norm']
+                ]},
+                { id:'ananya_ct', icon:'🖥️', label:'Ananya — Outside CT Head Report', type:'imaging',
+                  findings:'Right temporal extradural haematoma — small, 7 mm maximum thickness, biconvex hyperdense collection. No midline shift. Temporal bone fracture identified. Right temporal scalp haematoma. Recommend repeat imaging or neurosurgical review if neurological deterioration.',
+                  flag:'crit', note:'⚠️ Father says "they said it was normal." READ THE REPORT. Small EDH confirmed — acts quickly once decompensation starts.' },
+                { id:'vihaan_fast', icon:'🫀', label:'Vihaan — FAST Ultrasound', type:'imaging',
+                  findings:'Trace free fluid in right perihepatic (Morrison\'s pouch). No pericardial effusion. No left upper quadrant fluid. No pelvic fluid. Haemodynamically stable (HR 168, BP 96/60 consistent with pain/distress, not shock).',
+                  flag:'high', note:'Calibrated response required — NOT theatre. Surgical consult + serial exam + repeat FAST in 30 min.' },
+                { id:'vihaan_bloods', icon:'🔬', label:'Vihaan — Trauma Bloods', type:'lab', rows:[
+                    ['Hb','10.2 g/dL','10.5–14.5','low'],['Hct','29%','33–43','low'],
+                    ['Platelets','210 ×10³/μL','150–400','norm'],['Glucose','82 mg/dL','70–110','norm'],
+                    ['Na⁺','138 mEq/L','135–145','norm'],['Group','O Rh+','—','norm']
+                ]}
+            ]},
+            'R2': { results: [
+                { id:'meera_fast', icon:'🫀', label:'Meera — FAST Ultrasound', type:'imaging',
+                  findings:'POSITIVE — significant free fluid: Morrison\'s pouch (right perihepatic), splenorenal recess (left upper quadrant), pelvis. Spleen poorly visualised — grade IV laceration suspected. No pericardial effusion.',
+                  flag:'crit', note:'⚡ Haemodynamically UNSTABLE + Positive FAST = Theatre / IR — NOT CT. Do not send to scanner.' },
+                { id:'meera_bloods', icon:'🔬', label:'Meera — Trauma Bloods', type:'lab', rows:[
+                    ['Hb','10.1 → 8.2 g/dL','11.5–15.5','crit'],['Hct','30% → 24%','35–45','crit'],
+                    ['Platelets','185 ×10³/μL','150–400','norm'],['INR','1.1','0.9–1.2','norm'],
+                    ['Na⁺','136 mEq/L','135–145','norm'],['Group','O Rh−','—','norm']
+                ]},
+                { id:'mtp', icon:'🩸', label:'Massive Transfusion Protocol', type:'other',
+                  findings:'O-negative blood: 2 units available immediately in fridge. MTP cooler (1:1:1 — PRBC:FFP:Platelets) activated on request. TXA 15 mg/kg IV over 10 min.',
+                  flag:'high', note:'Activate MTP early. TXA within 3 hours of injury. No further crystalloid — blood products only.' },
+                { id:'diya_assess', icon:'🟢', label:'Diya — Clinical Assessment', type:'imaging',
+                  findings:'GCS 15 throughout. HR 130→116, BP 98/62, SpO2 99%. Alert, moving all limbs. Scalp laceration with subgaleal haematoma — no skull fracture, no LOC. No abdominal mechanism — FAST not indicated.',
+                  flag:'norm', note:'Low-risk head injury. No neuroimaging indicated clinically. Scalp wound: direct pressure then staples/tissue adhesive.' }
+            ]},
+            // ── FINALS ──────────────────────────────────────
+            'F1': { results: [
+                { id:'abg', icon:'🔬', label:'ABG (30 min old)', type:'lab', rows:[
+                    ['pH','7.28','7.35–7.45','low'],['PaCO₂','58 mmHg','35–45','high'],
+                    ['PaO₂','55 mmHg','80–100','crit'],['HCO₃⁻','25 mEq/L','22–26','norm'],
+                    ['OI (FiO2×MAP/PaO2)','32','< 4 = normal','crit'],['FiO2','0.85','—','crit']
+                ]},
+                { id:'vent', icon:'⚙️', label:'Ventilator Parameters', type:'imaging',
+                  findings:'Rate 24/min · Vt 110 mL (5.5 mL/kg) · PEEP 14 · PIP 34 · Pplat 34 cmH₂O · ΔP 20 cmH₂O · Ti 0.8s · MAP 21 · FiO2 0.85.',
+                  flag:'crit', note:'⚠️ INJURIOUS VENTILATION: Pplat 34 (target ≤28) · ΔP 20 (target ≤15) · MAP 21 → HIGH mean airway pressure driving RV failure. Do NOT escalate PEEP.' },
+                { id:'cvp', icon:'📈', label:'CVP Trend + Haemodynamics', type:'rhythm',
+                  rhythm:'CVP: 8 → 16 cmH₂O (RISING as BP FALLS)', rate:'HR 145 · BP 88/50 → 65/35 · SpO₂ 82–84%',
+                  action:'⚡ RV FAILURE: rising CVP + falling BP + high MAP = obstructive/RV-failure shock. NOT septic shock.', flag:'crit' },
+                { id:'pocus', icon:'🫀', label:'POCUS Clips (available on request)', type:'imaging',
+                  findings:'PSAX view: D-shaped interventricular septum (septal bowing → obstructive physiology). Apical 4-chamber: severely dilated RV (RV:LV ratio >1). M-mode TAPSE: 8 mm (severely impaired, normal >17 mm). IVC: dilated, non-collapsing. LV: small, underfilled.',
+                  flag:'crit', note:'⚡ Cor pulmonale confirmed. Unload the lung FIRST (reduce MAP/PEEP) → then iNO 20ppm → Epinephrine 0.05–0.1 mcg/kg/min. Milrinone NO BOLUS.' }
+            ]},
+            'F2': { results: [
+                { id:'iap', icon:'📊', label:'Intra-Abdominal Pressure (IAP)', type:'lab', rows:[
+                    ['IAP (bladder manometry)','26 mmHg','< 12 mmHg','crit'],
+                    ['Grade','IV — Abdominal Compartment Syndrome','—','crit'],
+                    ['MAP','67 mmHg','—','norm'],['APP (MAP − IAP)','41 mmHg','target >60','crit'],
+                    ['Urine output','Nil × 8 hours','> 1 mL/kg/h','crit']
+                ]},
+                { id:'bloods', icon:'🔬', label:'Blood Tests', type:'lab', rows:[
+                    ['Hct','48% → 31% (dropping)','35–45','crit'],['Platelets','12 ×10³/μL','150–400','crit'],
+                    ['Lactate','6.2 mmol/L','< 2.2','crit'],['pH','7.18','7.35–7.45','crit'],
+                    ['K⁺','5.8 mEq/L','3.5–5.0','crit'],['Creatinine','2.1 mg/dL','0.5–1.0','crit'],
+                    ['Dengue NS1','POSITIVE','Negative','crit'],['CVP','18 cmH₂O','4–8','high']
+                ]},
+                { id:'pocus', icon:'🫀', label:'POCUS Clips (available on request)', type:'imaging',
+                  findings:'Gross ascites (anechoic fluid filling abdomen — large volume). Thickened gallbladder wall (dengue leak). Bilateral pleural effusions (dependent). IVC: dilated, non-collapsing (⚠️ falsely reassuring — reflects compressed outflow/transmitted IAP, NOT true fluid replete). LV: small, hyperdynamic (true story — underfilled despite high CVP).',
+                  flag:'crit', note:'⚠️ CVP 18 = MISLEADING. The IVC is falsely reassuring. The small hyperdynamic LV is the honest finding — underfilled. Decompress the abdomen: paracentesis is the only action that restores urine output.' },
+                { id:'blood_products', icon:'🩸', label:'Blood Products (available)', type:'other',
+                  findings:'Packed cells: available. Platelets (12 ×10³): REQUIRED before paracentesis — active bleeding risk at puncture site. FFP: available but large volumes raise IAP +2 and MAP −5 — use targeted. Crystalloid: DO NOT run — worsens abdominal compartment syndrome.',
+                  flag:'crit', note:'⚡ Packed cells 10 mL/kg + Platelets before paracentesis. Paracentesis (1.2 L drained) → IAP 26→14 → MAP +12 → Urine within 10 min.' }
+            ]}
+        };
+
+        const RESULT_FLAG_COLOR = { crit:'#ef4444', high:'#f97316', low:'#3b82f6', norm:'#22c55e' };
+        const RESULT_FLAG_LABEL = { crit:'⬆⬆ CRITICAL', high:'⬆ HIGH', low:'⬇ LOW', norm:'' };
+
+        function buildResultPreview(r) {
+            if (r.type === 'lab') {
+                const rows = r.rows.map(([p, v, ref, f]) => {
+                    const c = RESULT_FLAG_COLOR[f] || '#888';
+                    return `<tr>
+                        <td style="font-family:monospace;font-size:0.75rem;padding:2px 8px;color:var(--text-secondary);white-space:nowrap;">${p}</td>
+                        <td style="font-family:monospace;font-size:0.82rem;font-weight:700;padding:2px 8px;color:${c};">${v}</td>
+                        <td style="font-size:0.68rem;padding:2px 8px;color:var(--text-muted);">${ref}</td>
+                        <td style="font-size:0.68rem;padding:2px 8px;color:${c};">${RESULT_FLAG_LABEL[f]||''}</td>
+                    </tr>`;
+                }).join('');
+                return `<table style="border-collapse:collapse;width:100%;"><tbody>${rows}</tbody></table>`;
+            }
+            if (r.type === 'rhythm') {
+                const c = r.flag === 'crit' ? '#ef4444' : '#f97316';
+                return `<div>
+                    <div style="font-weight:700;color:${c};margin-bottom:4px;">${r.rhythm}</div>
+                    <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:4px;">Rate: ${r.rate}</div>
+                    ${r.action ? `<div style="font-size:0.75rem;font-weight:700;color:${c};background:#fff1f2;border-left:3px solid ${c};padding:4px 8px;border-radius:0 6px 6px 0;">${r.action}</div>` : ''}
+                </div>`;
+            }
+            if (r.type === 'imaging' || r.type === 'other') {
+                const c = r.flag === 'crit' ? '#ef4444' : '#f97316';
+                return `<div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.6;">
+                    ${r.findings}
+                    ${r.note ? `<div style="margin-top:5px;font-size:0.75rem;font-weight:700;color:${c};background:#fff1f2;border-left:3px solid ${c};padding:4px 8px;border-radius:0 6px 6px 0;">${r.note}</div>` : ''}
+                </div>`;
+            }
+            return '';
+        }
+
+        function buildProjFragment(caseName, resultId) {
+            const cr = CASE_RESULTS[caseName];
+            if (!cr) return '';
+            const r = cr.results.find(x => x.id === resultId);
+            if (!r) return '';
+            const cd = caseData[caseName] || {};
+            // SF round-level results (keys 'R1'/'R2') aren't in caseData — fall back to SF_ROUNDS for a real title/patients.
+            const sfr = (typeof SF_ROUNDS !== 'undefined') ? SF_ROUNDS[caseName] : undefined;
+            const displayTitle = cd.title || (sfr ? sfr.label.replace(/^Round \d+ — /, '') : caseName);
+            const displayPatient = cd.patient || (sfr ? sfr.patients : '');
+            const ts = new Date().toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+            const FC = { crit:'#f87171', high:'#fb923c', low:'#60a5fa', norm:'#4ade80' };
+            const FB = { crit:'rgba(239,68,68,0.15)', high:'rgba(249,115,22,0.12)', low:'rgba(96,165,250,0.12)', norm:'rgba(74,222,128,0.07)' };
+            const header = `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #1e3a5f;">
+                <div>
+                    <div style="font-size:0.7rem;color:#4ade80;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">CHOP Emergency · SimWars 2026</div>
+                    <div style="font-size:1.6rem;font-weight:900;color:#ffffff;line-height:1.2;">${caseName} — ${displayTitle}</div>
+                    <div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;">${displayPatient}</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;padding-left:20px;">
+                    <div style="font-size:2.5rem;">${r.icon}</div>
+                    <div style="font-size:0.7rem;color:#475569;margin-top:4px;">${ts}</div>
+                </div>
+            </div>`;
+            let body = '';
+            if (r.type === 'lab') {
+                const rows = r.rows.map(([p,v,ref,f]) => `<tr style="border-bottom:1px solid #0f172a;">
+                    <td style="padding:14px 20px;font-family:'Courier New',monospace;font-size:1.05rem;color:#94a3b8;font-weight:500;">${p}</td>
+                    <td style="padding:14px 20px;font-family:'Courier New',monospace;font-size:1.45rem;font-weight:900;color:${FC[f]||'#ccc'};background:${FB[f]||'transparent'};">${v}</td>
+                    <td style="padding:14px 20px;font-size:0.85rem;color:#475569;">${ref}</td>
+                    <td style="padding:14px 20px;font-size:0.85rem;font-weight:700;color:${FC[f]||'#888'};">${f==='crit'?'⬆⬆ CRITICAL':f==='high'?'⬆ HIGH':f==='low'?'⬇ LOW':''}</td>
+                </tr>`).join('');
+                body = `<div style="font-size:0.8rem;font-weight:700;color:#94a3b8;margin-bottom:12px;letter-spacing:0.12em;text-transform:uppercase;">${r.label}</div>
+                    <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><tbody>${rows}</tbody></table></div>`;
+            } else if (r.type === 'rhythm') {
+                const c = r.flag==='crit'?'#f87171':'#fb923c';
+                // NOTE: r.action deliberately NOT rendered here — this is the public projector feed
+                // (audience + competing team watch this live). It would hand the team the correct
+                // management step mid-scenario. Judges/organisers see it in their own console instead.
+                body = `<div style="text-align:center;padding:40px 20px;">
+                    <div style="font-size:2.8rem;font-weight:900;color:${c};margin-bottom:14px;line-height:1.2;">${r.rhythm}</div>
+                    <div style="font-size:1.2rem;color:#94a3b8;">${r.rate}</div>
+                </div>`;
+            } else {
+                // NOTE: r.note deliberately NOT rendered here — same reason as above; this is the
+                // public projector feed, not the organiser/judge console (see buildResultPreview).
+                body = `<div>
+                    <div style="font-size:0.8rem;font-weight:700;color:#94a3b8;margin-bottom:16px;letter-spacing:0.12em;text-transform:uppercase;">${r.label}</div>
+                    <div style="font-size:1.25rem;color:#e2e8f0;line-height:1.9;">${r.findings}</div>
+                </div>`;
+            }
+            return `<div style="font-family:'Courier New',monospace;color:#e2e8f0;">${header}${body}</div>`;
+        }
+
+        function displayBase() {
+            return window.location.protocol === 'file:'
+                ? 'https://merry-intuition-production-1788.up.railway.app'
+                : window.location.origin;
+        }
+
+        function openDisplayWindow(btnEl) {
+            const w = window.open(displayBase() + '/display', 'simwars_display', 'width=1280,height=800,menubar=no,toolbar=no');
+            if (w) {
+                window._dispWin = w;
+                try { w.focus(); } catch (e) {}
+                if (btnEl) { const orig = btnEl.textContent; btnEl.textContent = '✓ Opened'; setTimeout(() => { btnEl.textContent = orig; }, 1500); }
+            } else {
+                alert('Your browser blocked the popup.\n\nAllow popups for this site (click the blocked-popup icon in the address bar), or open this link manually on the projector screen:\n\n' + displayBase() + '/display');
+            }
+            return w;
+        }
+
+        function projectResult(caseName, resultId, btnEl) {
+            const frag = buildProjFragment(caseName, resultId);
+            if (!frag) return;
+            saveToServer('proj_html', frag);
+            // Immediate feedback on the button itself, regardless of popup outcome —
+            // the push to the display screen has happened either way.
+            if (btnEl) {
+                const orig = btnEl.textContent;
+                btnEl.textContent = '✓ Sent';
+                btnEl.style.background = '#02C39A';
+                btnEl.style.borderColor = '#02C39A';
+                btnEl.style.color = 'white';
+                setTimeout(() => {
+                    btnEl.textContent = orig;
+                    btnEl.style.background = '#eff6ff';
+                    btnEl.style.borderColor = '#3b82f6';
+                    btnEl.style.color = '#1d4ed8';
+                }, 1200);
+            }
+            if (!window._dispWin || window._dispWin.closed) {
+                const w = window.open(displayBase() + '/display', 'simwars_display', 'width=1280,height=800,menubar=no,toolbar=no');
+                if (w) {
+                    window._dispWin = w;
+                } else {
+                    // Popup blocked — the data was still saved to the server (confirmed above),
+                    // it just isn't visible until a display window is opened manually.
+                    alert('Sent to the display feed, but your browser blocked the popup window.\n\nClick "🖥️ Open Display Screen" at the top of this Investigations Console once, then Project buttons will update it automatically — or open this link on the projector:\n\n' + displayBase() + '/display');
+                }
+            }
+        }
+
+        function buildResultsConsole(caseName) {
+            const cr = CASE_RESULTS[caseName];
+            if (!cr) return '';
+            const items = cr.results.map(r => {
+                const preview = buildResultPreview(r);
+                return `<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:var(--surface-2);gap:8px;">
+                        <span style="font-size:0.82rem;font-weight:700;color:var(--text-primary);">${r.icon} ${r.label}</span>
+                        <button onclick="projectResult('${caseName}','${r.id}', this)" style="font-size:0.72rem;padding:4px 12px;border:1px solid #3b82f6;border-radius:6px;cursor:pointer;background:#eff6ff;color:#1d4ed8;white-space:nowrap;font-weight:600;">
+                            📡 Project
+                        </button>
+                    </div>
+                    <div style="padding:8px 10px;">${preview}</div>
+                </div>`;
+            }).join('');
+            return `<details style="margin-bottom:12px;border:1px solid #2563eb;border-radius:10px;overflow:hidden;">
+                <summary style="padding:8px 14px;background:linear-gradient(135deg,#1e3a5f,#1e40af);color:#e0f0ff;font-size:0.82rem;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                    <span>📋 INVESTIGATIONS CONSOLE</span>
+                    <span style="display:flex;align-items:center;gap:10px;">
+                        <button onclick="event.preventDefault();event.stopPropagation();openDisplayWindow(this);" style="font-size:0.72rem;padding:4px 10px;border:1px solid rgba(255,255,255,0.5);border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.12);color:#e0f0ff;white-space:nowrap;font-weight:600;">🖥️ Open Display Screen</button>
+                        <span style="font-size:0.7rem;font-weight:400;opacity:0.8;">▼ Expand to reveal &amp; project results</span>
+                    </span>
+                </summary>
+                <div style="padding:10px;background:var(--bg);">${items}</div>
+            </details>`;
+        }
+
+        // Organiser-only Investigations Console on the Master Scoreboard tab.
+        // This is the single place results get pushed to the projector — judge
+        // sheets never render buildResultsConsole() themselves.
+        function renderInvConsole(caseName) {
+            const container = document.getElementById('invConsoleContainer');
+            if (!container) return;
+            if (!caseName) { container.innerHTML = ''; return; }
+            container.innerHTML = buildResultsConsole(caseName);
+            const details = container.querySelector('details');
+            if (details) details.open = true;
+            try { localStorage.setItem('simwars_inv_console_case', caseName); } catch (e) {}
+        }
 
         const specialCategories = [
             { id: 'cpr', icon: '🫀', label: 'Best CPR' },
@@ -2342,7 +2750,7 @@
                     const scoreColor = isPals ? 'var(--pals)' : 'var(--primary)';
                     const borderColor = debrieferRevealed ? 'var(--primary)' : '#fcd34d';
                     const sectionBg = debrieferRevealed ? '#f0f9ff' : '#fffbeb';
-                                    const labels = ['I — Clinical Judgement', 'II — Crisis Resource Mgmt', 'III — Global Entrustment'];
+                                    const labels = ['Clinical (40)', 'Teamwork (30)', 'Technical (30)'];
 
                     // Read judge grand total from rubric total span
                     const judgeSpan = document.querySelector(`[id="${team}_${prefix}_total"]`);
@@ -2384,7 +2792,7 @@
                     for (let i = 0; i < 3; i++) {
                         const maxVal = weights[i];
                         html += `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                            <span style="font-size:0.68rem;color:var(--text-muted);">${labels[i]} (${maxVal})</span>
+                            <span style="font-size:0.68rem;color:var(--text-muted);">${labels[i]}</span>
                             <input type="number" id="deb_${caseName}_${team}_${i}"
                                    min="0" max="${maxVal}" value="0"
                                    style="width:52px;border:1.5px solid ${scoreColor};border-radius:4px;padding:5px;text-align:center;font-size:0.95rem;background:white;"
@@ -3617,15 +4025,15 @@
             // Domain I (two clinical judge sheets)
             h += '<div style="font-size:0.72rem;font-weight:700;color:' + teal + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical Judgement (two judges, score averaged)</div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
-            h += '<div>' + sfBuildClinicalSheet(r, t, 'cj1') + '</div>';
-            h += '<div>' + sfBuildClinicalSheet(r, t, 'cj2') + '</div>';
+            h += '<div class="sf-judgeblock-cj1">' + sfBuildClinicalSheet(r, t, 'cj1') + '</div>';
+            h += '<div class="sf-judgeblock-cj2">' + sfBuildClinicalSheet(r, t, 'cj2') + '</div>';
             h += '</div>';
 
             // Domain II (two CRM judge sheets)
             h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Crisis Resource Management (two judges, score averaged)</div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
-            h += '<div>' + sfBuildCRMSheet(r, t, 'crm1') + '</div>';
-            h += '<div>' + sfBuildCRMSheet(r, t, 'crm2') + '</div>';
+            h += '<div class="sf-judgeblock-crm1">' + sfBuildCRMSheet(r, t, 'crm1') + '</div>';
+            h += '<div class="sf-judgeblock-crm2">' + sfBuildCRMSheet(r, t, 'crm2') + '</div>';
             h += '</div>';
 
             // Domain III — Global
@@ -3686,6 +4094,35 @@
             h += '</div>';
             container.innerHTML = h;
             sfRestoreSubmittedForRound(r);
+        }
+
+        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2' };
+
+        function sfApplyMyRoleHiding(j) {
+            const existing = document.getElementById('sfMyRoleStyle');
+            if (existing) existing.remove();
+            const allJudges = ['cj1', 'cj2', 'crm1', 'crm2'];
+            if (j) {
+                const style = document.createElement('style');
+                style.id = 'sfMyRoleStyle';
+                style.textContent = allJudges
+                    .filter(x => x !== j)
+                    .map(x => `.sf-judgeblock-${x}{display:none !important;}`)
+                    .join('\n');
+                document.head.appendChild(style);
+            }
+            const statusEl = document.getElementById('sfMyRoleStatus');
+            if (statusEl) {
+                statusEl.textContent = j
+                    ? `🔒 Locked to ${SF_JUDGE_LABELS[j]} on this device — only this sheet is shown. Tap "Show All" to undo.`
+                    : '';
+            }
+        }
+
+        function sfSetMyRole(j) {
+            if (j) { localStorage.setItem('simwars_sf_my_role', j); }
+            else { localStorage.removeItem('simwars_sf_my_role'); }
+            sfApplyMyRoleHiding(j);
         }
 
         function buildSFScoreCards() {
@@ -3874,7 +4311,7 @@
             const gtEl   = document.getElementById('fn_' + caseId + '_' + t + '_grandTotal');
             if (gtEl) {
                 gtEl.textContent = total.toFixed(0);
-                gtEl.style.color = total >= 160 ? '#065f46' : total >= 120 ? '#d97706' : '#374151';
+                gtEl.style.color = total >= 80 ? '#065f46' : total >= 60 ? '#d97706' : '#374151';
             }
         }
 
@@ -3895,7 +4332,7 @@
             const cd = FN_CASES[caseId];
             const amber = '#d97706';
             let h = '<div style="background:white;border:1.5px solid ' + amber + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN A — CLINICAL MANAGEMENT &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 90</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN A — CLINICAL MANAGEMENT &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 45</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#92400e;margin-bottom:8px;" class="fnJName_phys">' + fnGetJudge('phys') + '</div>';
             h += '<div style="font-size:0.72rem;color:#6b7280;background:#fffbeb;border-radius:5px;padding:5px 8px;margin-bottom:10px;">Score each item 0 up to its maximum. Partial/delayed performance earns a proportional mark.</div>';
             cd.stages.forEach(stage => {
@@ -3925,7 +4362,7 @@
             const cd = FN_CASES[caseId];
             const blue = '#1d4ed8';
             let h = '<div style="background:white;border:1.5px solid ' + blue + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN B — TEAMWORK &amp; FOLLOWERSHIP &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 80</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN B — TEAMWORK &amp; FOLLOWERSHIP &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 40</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#1e40af;margin-bottom:8px;" class="fnJName_tw">' + fnGetJudge('tw') + '</div>';
             h += '<table style="width:100%;border-collapse:collapse;">';
             cd.twItems.forEach(item => {
@@ -3938,7 +4375,7 @@
             h += '</table>';
             // Speaking-up ladder
             h += '<div style="background:#eff6ff;border-radius:7px;padding:9px 11px;margin-top:8px;font-size:0.73rem;color:#1e40af;">';
-            h += '<strong>Speaking-up ladder (16 pts):</strong> 0–2 = silent compliance · 4–6 = hints only (Level 1) · 8–10 = one challenger with reason, persists · 12–14 = two challenge with reasons, bolus halted · <strong>16 = two+ at Level 2+, one restates after override, bolus/crystalloid physically halted, alternative named aloud</strong>. Content over tone. Do not double-count with the 12-point clinical halting item.';
+            h += '<strong>Speaking-up ladder (8 pts):</strong> 0–1 = silent compliance · 2–3 = hints only (Level 1) · 4–5 = one challenger with reason, persists · 6–7 = two challenge with reasons, bolus halted · <strong>8 = two+ at Level 2+, one restates after override, bolus/crystalloid physically halted, alternative named aloud</strong>. Content over tone. Do not double-count with the 6-point clinical halting item.';
             h += '</div>';
             h += '<div style="font-size:0.72rem;color:#6b7280;margin-top:6px;font-style:italic;">' + cd.twNote + '</div>';
             h += '</div>';
@@ -3949,7 +4386,7 @@
             const cd = FN_CASES[caseId];
             const purple = '#7c3aed';
             let h = '<div style="background:white;border:1.5px solid ' + purple + '40;border-radius:10px;padding:14px;margin-bottom:12px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🧩 DOMAIN C — SHARED REASONING &nbsp;·&nbsp; Collective / 30</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🧩 DOMAIN C — SHARED REASONING &nbsp;·&nbsp; Collective / 15</div>';
             h += '<p style="font-size:0.8rem;color:#374151;margin-bottom:8px;font-style:italic;">' + cd.sharedPrompt + '</p>';
             h += '<div style="margin-bottom:10px;">';
             cd.sharedAnchors.forEach(a => {
@@ -3960,8 +4397,8 @@
             const id = 'fn_' + caseId + '_' + t + '_shared';
             h += '<div style="display:flex;align-items:center;gap:10px;">';
             h += '<label style="font-size:0.85rem;font-weight:700;color:#374151;">Agreed mark:</label>';
-            h += '<input type="number" id="' + id + '" min="0" max="30" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(30,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
-            h += '<span style="font-size:0.82rem;color:#6b7280;">/ 30</span>';
+            h += '<input type="number" id="' + id + '" min="0" max="15" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(15,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
+            h += '<span style="font-size:0.82rem;color:#6b7280;">/ 15</span>';
             h += '</div></div>';
             return h;
         }
@@ -3981,9 +4418,9 @@
             h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="fnLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain A — Clinical Management (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 90</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain B — Teamwork &amp; Followership (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 80</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain C — Shared Reasoning (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 30</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain A — Clinical Management (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 45</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain B — Teamwork &amp; Followership (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 40</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain C — Shared Reasoning (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 15</td></tr>';
             h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0</span> / 200</td></tr>';
             h += '</table></div>';
             h += '</div>';
@@ -4044,6 +4481,10 @@
             bls:       { label: '❤️ BLS Judges',     tab: 'tabJudgeBls',  color: '#006D8C', bg: '#E6F4F7', hint: 'Room B scoring sheet' },
             debriefer: { label: '🎓 Debriefer',       tab: 'tabDebriefer', color: '#065f46', bg: '#f0fdf4', hint: 'Secret scoring & reveal' },
             prizes:    { label: '🏅 Special Prizes',  tab: 'tabPrizes',    color: '#92400e', bg: '#fffbeb', hint: 'Prize leaderboard' },
+            'sf-cj1':  { label: '🏟️ Semi-Finals — Clinical Judge 1', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj1' },
+            'sf-cj2':  { label: '🏟️ Semi-Finals — Clinical Judge 2', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj2' },
+            'sf-crm1': { label: '🏟️ Semi-Finals — CRM Judge 1',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm1' },
+            'sf-crm2': { label: '🏟️ Semi-Finals — CRM Judge 2',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm2' },
         };
 
         function buildShareLinks() {
@@ -4095,6 +4536,18 @@
             // Switch to the correct tab
             const target = document.querySelector(`[data-tab="${meta.tab}"]`);
             if (target) target.click();
+            // Semi-Finals judge-specific views: hide the other three judges' raw score
+            // entry blocks so no judge can see (or accidentally edit) a colleague's
+            // marks — each judge only ever sees their own Domain I or Domain II sheet.
+            if (meta.sfOnly) {
+                const allJudges = ['cj1', 'cj2', 'crm1', 'crm2'];
+                const style = document.createElement('style');
+                style.textContent = allJudges
+                    .filter(j => j !== meta.sfOnly)
+                    .map(j => `.sf-judgeblock-${j}{display:none !important;}`)
+                    .join('\n');
+                document.head.appendChild(style);
+            }
         }
 
         function applyJudgeRoleLock() {
@@ -4121,6 +4574,10 @@
             buildTeamNameInputs();
             buildSFScoreCards();
             buildFNScoreCards();
+            try {
+                const savedSFRole = localStorage.getItem('simwars_sf_my_role');
+                if (savedSFRole) sfApplyMyRoleHiding(savedSFRole);
+            } catch (e) {}
             renderScoreInputs();
             renderPalsJudgeSheets();
             renderBlsJudgeSheets();
@@ -4133,6 +4590,14 @@
                 calculateChampions();
                 calculateSpecialPrizes();
             }, 100);
+            try {
+                const savedInvCase = localStorage.getItem('simwars_inv_console_case');
+                if (savedInvCase) {
+                    const sel = document.getElementById('invConsoleCaseSelect');
+                    if (sel) { sel.value = savedInvCase; renderInvConsole(savedInvCase); }
+                }
+            } catch (e) {}
+
             // Apply view lock if ?view= param present
             const viewParam = new URLSearchParams(window.location.search).get('view');
             if (viewParam) applyViewLock(viewParam);
