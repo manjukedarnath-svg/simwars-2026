@@ -2384,6 +2384,77 @@ def portal():
 def participant_info():
         return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-participant-info.html'))
 
+@app.route('/draw-sheet')
+def draw_sheet():
+    locked = require_role()
+    if locked: return locked
+    return DRAW_SHEET_TEMPLATE
+
+DRAW_SHEET_TEMPLATE = r"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIM WARS 2026 — Official Draw Sheet</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Inter,-apple-system,'Segoe UI',sans-serif;background:#f4f1f7;color:#2a0a44;padding:1.5rem;}
+.sheet{max-width:900px;margin:0 auto;background:#fff;border-radius:14px;padding:1.6rem 1.8rem;box-shadow:0 8px 30px rgba(42,10,68,.12);}
+h1{font-size:1.35rem;font-weight:900;text-align:center;}
+.sub{text-align:center;color:#6a5a72;font-size:.85rem;margin:.3rem 0 1.2rem;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.g{border-radius:12px;padding:.9rem 1rem;}
+.g h2{font-size:.75rem;font-weight:900;letter-spacing:.12em;margin-bottom:.5rem;}
+.t{display:flex;justify-content:space-between;gap:.6rem;font-size:.86rem;padding:.35rem 0;border-bottom:1px dashed rgba(0,0,0,.08);}
+.t:last-child{border-bottom:none;}
+.t .n{font-weight:900;}
+.t .tbd{color:#9aa0ae;font-style:italic;}
+.sched{margin-top:1.3rem;}
+.sched h2{font-size:1rem;font-weight:900;margin-bottom:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+th,td{border:1px solid #e8e0ee;padding:.45rem .6rem;text-align:left;}
+th{background:#f4effa;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;}
+.badge{display:inline-block;font-size:.68rem;font-weight:900;padding:.15rem .55rem;border-radius:40px;}
+.toolbar{display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto 1rem;}
+.btn{background:#2a0a44;color:#fff;font-weight:800;font-size:.82rem;padding:.55rem 1.1rem;border-radius:60px;text-decoration:none;border:none;cursor:pointer;}
+@page{size:A4;margin:10mm;}
+@media print{body{background:#fff;padding:0;}.toolbar{display:none;}.sheet{box-shadow:none;padding:0;}}
+</style></head><body>
+<div class="toolbar"><a class="btn" href="/register">&#8592; Home</a><button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button></div>
+<div class="sheet">
+<h1>🎲 SIM WARS 2026 — Official Draw &amp; Colour Groups</h1>
+<div class="sub">Drawn 21 Aug 2026 · 16 teams · Prelims Fri 22 Aug, DHEE Hospitals · <span id="stamp"></span></div>
+<div class="grid" id="groups">Loading teams…</div>
+<div class="sched">
+<h2>Preliminary Round Schedule</h2>
+<table><thead><tr><th>Round</th><th>Time</th><th>Room A · PALS</th><th>Room B · BLS</th></tr></thead>
+<tbody>
+<tr><td><b>R1</b></td><td>10:00 – 11:30</td><td><span class="badge" style="background:#fdecea;color:#b02a37;">RED</span> draws 1–4</td><td><span class="badge" style="background:#fef9c3;color:#a16207;">YELLOW</span> draws 13–16</td></tr>
+<tr><td><b>R2</b></td><td>11:45 – 13:15</td><td><span class="badge" style="background:#e8f7f1;color:#0d8a72;">GREEN</span> draws 5–8</td><td><span class="badge" style="background:#fdecea;color:#b02a37;">RED</span> draws 1–4</td></tr>
+<tr><td><b>R3</b></td><td>14:00 – 15:30</td><td><span class="badge" style="background:#eef6fc;color:#2f6fd1;">BLUE</span> draws 9–12</td><td><span class="badge" style="background:#e8f7f1;color:#0d8a72;">GREEN</span> draws 5–8</td></tr>
+<tr><td><b>R4</b></td><td>15:30 – 17:00</td><td><span class="badge" style="background:#fef9c3;color:#a16207;">YELLOW</span> draws 13–16</td><td><span class="badge" style="background:#eef6fc;color:#2f6fd1;">BLUE</span> draws 9–12</td></tr>
+</tbody></table>
+</div>
+</div>
+<script>
+var INTAKE='https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec';
+var GROUPS=[{name:'RED',draws:[1,2,3,4],bg:'#fdecea',fg:'#b02a37'},{name:'GREEN',draws:[5,6,7,8],bg:'#e8f7f1',fg:'#0d8a72'},{name:'BLUE',draws:[9,10,11,12],bg:'#eef6fc',fg:'#2f6fd1'},{name:'YELLOW',draws:[13,14,15,16],bg:'#fef9c3',fg:'#a16207'}];
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+document.getElementById('stamp').textContent='Generated '+new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})+' IST';
+fetch(INTAKE).then(function(r){return r.json();}).then(function(d){
+ var byDraw={};(d.teams||[]).forEach(function(t){byDraw[parseInt(t.drawNumber,10)]=t;});
+ var h='';
+ GROUPS.forEach(function(g){
+  h+='<div class="g" style="background:'+g.bg+';"><h2 style="color:'+g.fg+';">'+g.name+' GROUP</h2>';
+  g.draws.forEach(function(n){
+   var t=byDraw[n];
+   h+='<div class="t"><span><span class="n" style="color:'+g.fg+';">'+n+'</span> · '+(t?esc(t.teamName):'<span class="tbd">TBD</span>')+'</span>'
+     +(t&&t.members?'<span style="font-size:.72rem;color:#6a5a72;max-width:55%;text-align:right;">'+esc(Array.isArray(t.members)?t.members.join(', '):t.members)+'</span>':'')+'</div>';
+  });
+  h+='</div>';
+ });
+ document.getElementById('groups').innerHTML=h;
+}).catch(function(){document.getElementById('groups').innerHTML='<div style="color:#b02a37;">Could not load team intake — check connection.</div>';});
+</script>
+</body></html>"""
+
 @app.route('/simwars-2026-questionnaire.html')
 def questionnaire():
     return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-questionnaire.html'))
