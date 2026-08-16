@@ -865,13 +865,18 @@ CASE_TEMPLATE = """
 
       <!-- Investigations Console -->
       <div class="inv-console">
-        <div class="inv-title">🖼️ CXR / Echo / CT Images</div>
+        <div class="inv-title">🖼️ CXR / Echo / CT — Images &amp; Clips</div>
         {% if images %}
         <div id="inv-images">
           {% for img in images %}
-          <button class="inv-image-btn" onclick="pushImage('{{ img.url }}', '{{ img.label|e }}', this)">
+          <button class="inv-image-btn" onclick="pushMedia('{{ img.url }}', '{{ img.label|e }}', '{{ img.kind }}', this)">
+            {% if img.kind == 'video' %}
+            <video class="inv-image-thumb" src="{{ img.url }}" muted loop autoplay playsinline></video>
+            <span class="inv-image-label">🎥 {{ img.label }}</span>
+            {% else %}
             <img class="inv-image-thumb" src="{{ img.url }}" alt="{{ img.label|e }}">
             <span class="inv-image-label">{{ img.label }}</span>
+            {% endif %}
           </button>
           {% endfor %}
         </div>
@@ -883,6 +888,7 @@ CASE_TEMPLATE = """
       <!-- Investigations Console -->
       <div class="inv-console">
         <div class="inv-title">📺 Push to Display</div>
+        <div style="font-size:0.72rem;color:#94a3b8;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.35);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5;">🎛️ The full one-tap result buttons for this case (VBG, rhythm, imaging…) are on the <a href="/scoring" style="color:#60a5fa;font-weight:700;">Scoring Console</a> — use that during the live run. Below is a quick fallback only.</div>
         <div style="font-size:0.65rem;color:#64748b;margin:-6px 0 10px;" id="inv-room-note"></div>
         <div id="inv-cards"></div>
         <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.07);padding-top:10px;">
@@ -1012,20 +1018,23 @@ CASE_TEMPLATE = """
       pushHtml('Investigation Result', result, document.getElementById('inv-push'));
     }
 
-    function pushImage(url, label, btnEl) {
+    function pushMedia(url, label, kind, btnEl) {
       var t = ts();
+      var media = kind === 'video'
+        ? '<video src="' + url + '" autoplay loop muted playsinline controls style="max-width:100%;max-height:78vh;border-radius:6px;box-shadow:0 4px 30px rgba(0,0,0,0.5);"></video>'
+        : '<img src="' + url + '" style="max-width:100%;max-height:78vh;border-radius:6px;box-shadow:0 4px 30px rgba(0,0,0,0.5);" />';
       var html = '<div style="padding:24px 40px;display:flex;flex-direction:column;align-items:center;">'
         + '<div style="width:100%;display:flex;align-items:baseline;gap:16px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:14px;">'
         + '<div style="font-size:2rem;font-weight:800;color:#f1f5f9;letter-spacing:-0.02em;">' + label + '</div>'
         + '<div style="font-size:0.9rem;color:#334155;font-family:\'Courier New\',monospace;margin-left:auto;">' + t + '</div>'
         + '</div>'
-        + '<img src="' + url + '" style="max-width:100%;max-height:78vh;border-radius:6px;box-shadow:0 4px 30px rgba(0,0,0,0.5);" />'
+        + media
         + '<div style="margin-top:20px;font-size:0.68rem;color:#1e3a5f;letter-spacing:0.14em;text-transform:uppercase;align-self:flex-start;">SimWars 2026 · Case ' + CASE_ID + '</div>'
         + '</div>';
-      fetch('/api/score', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({key:'proj_html', value: html})})
+      fetch('/api/score', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({key:'proj_html_' + DISPLAY_ROOM, value: html})})
         .then(function() {
           if (btnEl) { btnEl.style.borderColor = '#16a34a'; setTimeout(function(){ btnEl.style.borderColor = ''; }, 3500); }
-          document.getElementById('inv-status').textContent = '✓ ' + label + ' pushed at ' + t;
+          document.getElementById('inv-status').textContent = '✓ ' + label + ' pushed at ' + t + ' → Display ' + DISPLAY_ROOM.toUpperCase();
         })
         .catch(function() { document.getElementById('inv-status').textContent = 'Error — check connection.'; });
     }
@@ -1055,6 +1064,7 @@ def index():
     return render_template_string(INDEX_TEMPLATE, cases=active_cases, rounds=rounds)
 
 IMG_EXTS = ('.jpg', '.jpeg', '.png', '.webp', '.gif')
+VID_EXTS = ('.mp4', '.mov', '.webm', '.m4v')
 
 def get_case_images(case_id):
     """Auto-discover real investigation images (CXR / Echo-POCUS / CT) dropped into
@@ -1066,12 +1076,13 @@ def get_case_images(case_id):
         return []
     images = []
     for f in sorted(os.listdir(folder)):
-        if not f.lower().endswith(IMG_EXTS):
+        if not f.lower().endswith(IMG_EXTS + VID_EXTS):
             continue
         stem = os.path.splitext(f)[0]
         label = re.sub(r'^\d+[_-]\s*', '', stem).replace('_', ' ').replace('-', ' ').strip()
         label = label.title() if label else f
-        images.append({'file': f, 'label': label, 'url': f'/static/investigations/{case_id}/{f}'})
+        images.append({'file': f, 'label': label, 'url': f'/static/investigations/{case_id}/{f}',
+                       'kind': 'video' if f.lower().endswith(VID_EXTS) else 'image'})
     return images
 
 @app.route('/case/<case_id>')
