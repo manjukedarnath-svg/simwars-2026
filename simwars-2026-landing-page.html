@@ -553,6 +553,12 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
       <span class="pill p3"><i class="fas fa-flag-checkered"></i>&nbsp; Aug 23 &middot; Semis &amp; Finals &middot; VASA</span>
       <span class="pill p4"><i class="fas fa-people-group"></i>&nbsp; 16 Teams &middot; 4 Members Each</span>
     </div>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:1.1rem;">
+      <a href="https://merry-intuition-production-1788.up.railway.app/scoreboard" target="_blank" style="background:var(--magenta);color:#fff;font-size:.85rem;font-weight:800;padding:.6rem 1.2rem;border-radius:60px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2);">⚔️ Team / Mentor Login</a>
+      <a href="javascript:void(0)" onclick="openJudgeModal(null,'judge')" style="background:#fff;color:var(--purple-900);font-size:.85rem;font-weight:800;padding:.6rem 1.2rem;border-radius:60px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2);">⚖️ Judge Login</a>
+      <a href="javascript:void(0)" onclick="openJudgeModal(null,'organiser')" style="background:var(--gold);color:var(--purple-900);font-size:.85rem;font-weight:800;padding:.6rem 1.2rem;border-radius:60px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2);">🏛️ Organiser Login</a>
+    </div>
+    <div style="text-align:center;font-size:.78rem;margin-top:.5rem;opacity:.85;">Teams &amp; mentors sign in with <b>@SIMwarsTEAM&lt;draw number&gt;</b> — everything else you need is in “What do you need?” just below.</div>
   </div>
 </section>
 
@@ -581,20 +587,26 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
   <div class="container">
     <div class="section-eyebrow">Jump straight to it</div>
     <h2 class="section-title" style="font-size:1.7rem;">What do you need?</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;max-width:1040px;margin:0 auto;">
-      <a href="https://merry-intuition-production-1788.up.railway.app/flow" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--magenta);"><div style="font-size:1.4rem;">🗓️</div><b style="font-size:.9rem;">Day Itinerary &amp; Round Times</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Your colour group's schedule</div></a>
-      <a href="https://merry-intuition-production-1788.up.railway.app/simwars-2026-questionnaire.html" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--gold);"><div style="font-size:1.4rem;">📋</div><b style="font-size:.9rem;">Pre-Event Questionnaire</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Open now · ~10 min</div></a>
-      <a href="https://merry-intuition-production-1788.up.railway.app/simwars-2026-participant-info.html" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--teal);"><div style="font-size:1.4rem;">📖</div><b style="font-size:.9rem;">Participant Info Pack</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Study topics · rubrics · rules</div></a>
-      <a href="https://merry-intuition-production-1788.up.railway.app/stay" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--blue);"><div style="font-size:1.4rem;">🚇</div><b style="font-size:.9rem;">Stay &amp; Travel Brochure</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Hotels · metro route · maps</div></a>
-      <a href="javascript:void(0)" onclick="openCheckRegModal()" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--purple-600);"><div style="font-size:1.4rem;">🔎</div><b style="font-size:.9rem;">Check Your Registration</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Team name → draw number</div></a>
-      <a href="javascript:void(0)" onclick="openVideoLaterForm()" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--magenta);"><div style="font-size:1.4rem;">🎬</div><b style="font-size:.9rem;">Submit Intro Video</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Due 18 August</div></a>
-      <a href="https://merry-intuition-production-1788.up.railway.app/scoreboard" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--gold);"><div style="font-size:1.4rem;">🏆</div><b style="font-size:.9rem;">Team &amp; Score Board</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Unlocks on event day</div></a>
-      <a href="#about" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--teal);"><div style="font-size:1.4rem;">❓</div><b style="font-size:.9rem;">About · Format · Rules</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">What SIM WARS is</div></a>
-      <a href="#prizes" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--blue);"><div style="font-size:1.4rem;">🏅</div><b style="font-size:.9rem;">Special Prizes</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">6 bonus categories</div></a>
-      <a href="#venue" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--purple-600);"><div style="font-size:1.4rem;">📍</div><b style="font-size:.9rem;">Venues &amp; Directions</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Maps · QR · how to reach</div></a>
-      <a href="#contacts" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--magenta);"><div style="font-size:1.4rem;">📞</div><b style="font-size:.9rem;">Contact Coordinators</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Phones &amp; email</div></a>
+    <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem;">
+      <button type="button" class="role-tab" data-role="teams" onclick="showRolePanel('teams')" style="background:var(--magenta);color:#fff;border:none;font-weight:800;font-size:.85rem;padding:.55rem 1.2rem;border-radius:60px;cursor:pointer;">⚔️ Teams &amp; Mentors</button>
+      <button type="button" class="role-tab" data-role="judges" onclick="showRolePanel('judges')" style="background:#fff;color:var(--purple-900);border:1.5px solid var(--purple-900);font-weight:800;font-size:.85rem;padding:.55rem 1.2rem;border-radius:60px;cursor:pointer;">⚖️ Judges</button>
+      <button type="button" class="role-tab" data-role="orgs" onclick="showRolePanel('orgs')" style="background:#fff;color:var(--purple-900);border:1.5px solid var(--purple-900);font-weight:800;font-size:.85rem;padding:.55rem 1.2rem;border-radius:60px;cursor:pointer;">🏛️ Organisers</button>
     </div>
+    <div id="rolePanel-teams" class="role-panel" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;max-width:1040px;margin:0 auto;"><a href="https://merry-intuition-production-1788.up.railway.app/flow" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--magenta);"><div style="font-size:1.4rem;">🗓️</div><b style="font-size:.9rem;">Day Itinerary & Round Times</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Your colour group's schedule</div></a><a href="https://merry-intuition-production-1788.up.railway.app/simwars-2026-questionnaire.html" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--gold);"><div style="font-size:1.4rem;">📋</div><b style="font-size:.9rem;">Pre-Event Questionnaire</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Open now · ~10 min</div></a><a href="https://merry-intuition-production-1788.up.railway.app/simwars-2026-participant-info.html" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--teal);"><div style="font-size:1.4rem;">📖</div><b style="font-size:.9rem;">Participant Info Pack</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Study topics · rubrics · rules</div></a><a href="https://merry-intuition-production-1788.up.railway.app/stay" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--blue);"><div style="font-size:1.4rem;">🚇</div><b style="font-size:.9rem;">Stay & Travel Brochure</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Hotels · metro route · maps</div></a><a href="javascript:void(0)" onclick="openCheckRegModal()" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--purple-600);"><div style="font-size:1.4rem;">🔎</div><b style="font-size:.9rem;">Check Your Registration</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Team name → draw number</div></a><a href="javascript:void(0)" onclick="openVideoLaterForm()" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--magenta);"><div style="font-size:1.4rem;">🎬</div><b style="font-size:.9rem;">Submit Intro Video</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Due 18 August</div></a><a href="https://merry-intuition-production-1788.up.railway.app/scoreboard" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--gold);"><div style="font-size:1.4rem;">🏆</div><b style="font-size:.9rem;">Team & Score Board</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Team password · unlocks event day</div></a></div>
+    <div id="rolePanel-judges" class="role-panel" style="display:none;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;max-width:760px;margin:0 auto;"><a href="javascript:void(0)" onclick="openJudgeModal(null,'judge')" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--magenta);"><div style="font-size:1.4rem;">⚖️</div><b style="font-size:.9rem;">Judge Login — Scoring Sheet</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Score your assigned room live</div></a><a href="javascript:void(0)" onclick="openJudgeModal('https://merry-intuition-production-1788.up.railway.app/flow')" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--purple-600);"><div style="font-size:1.4rem;">🗺️</div><b style="font-size:.9rem;">Detailed Flow — Judges</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Cases · rooms · timings</div></a><a href="https://merry-intuition-production-1788.up.railway.app/scoreboard" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--gold);"><div style="font-size:1.4rem;">🏆</div><b style="font-size:.9rem;">Score Board</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Live standings from 21 Aug</div></a></div>
+    <div id="rolePanel-orgs" class="role-panel" style="display:none;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;max-width:1000px;margin:0 auto;"><a href="javascript:void(0)" onclick="openJudgeModal(null,'organiser')" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--purple-600);"><div style="font-size:1.4rem;">🏛️</div><b style="font-size:.9rem;">Organiser Login</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Every tool, sheet & case, live</div></a><a href="javascript:void(0)" onclick="openJudgeModal('https://merry-intuition-production-1788.up.railway.app/library')" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--teal);"><div style="font-size:1.4rem;">📚</div><b style="font-size:.9rem;">Case Library</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">All case files & consoles</div></a><a href="javascript:void(0)" onclick="openJudgeModal('https://merry-intuition-production-1788.up.railway.app/display')" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--blue);"><div style="font-size:1.4rem;">🖥️</div><b style="font-size:.9rem;">Projector Display</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Master screen & results</div></a><a href="https://merry-intuition-production-1788.up.railway.app/scoreboard" target="_blank" style="background:#fff;border-radius:.9rem;padding:1rem;box-shadow:0 3px 10px rgba(42,10,68,.06);text-decoration:none;color:var(--text-dark);border-top:4px solid var(--gold);"><div style="font-size:1.4rem;">🏆</div><b style="font-size:.9rem;">Score Board</b><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Live across all rounds</div></a></div>
   </div>
+  <script>
+  function showRolePanel(r){
+    ['teams','judges','orgs'].forEach(function(k){
+      var p=document.getElementById('rolePanel-'+k);if(p)p.style.display=(k===r)?'grid':'none';
+    });
+    document.querySelectorAll('.role-tab').forEach(function(b){
+      var on=b.getAttribute('data-role')===r;
+      b.style.background=on?'var(--magenta)':'#fff';b.style.color=on?'#fff':'var(--purple-900)';b.style.border=on?'none':'1.5px solid var(--purple-900)';
+    });
+  }
+  </script>
 </section>
 
 <!-- WHAT IS SIM WARS -->
@@ -903,7 +915,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
 <!-- VENUE -->
 <section id="venue" class="container">
   <div class="section-eyebrow">Where</div>
-  <h2 class="section-title">Event Venue &amp; Schedule</h2>
+  <h2 class="section-title">Venues &amp; Directions</h2>
   <p class="section-sub">Prelims and finals run at two separate venues across Bengaluru.</p>
   <div class="venue-grid">
     <div class="venue-card reveal">
@@ -1153,40 +1165,7 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
 </section>
 
 <!-- PORTAL: 3-MODE ENTRY -->
-<section id="portal">
-  <div class="container">
-    <div class="section-eyebrow" style="color:var(--gold);">Choose Your Entry</div>
-    <h2 class="section-title" style="color:#fff;">Enter SIM WARS</h2>
-    <p class="section-sub" style="color:rgba(255,255,255,.7);">Three doors in, depending on who you are.</p>
-    <div class="portal-grid">
-      <div class="portal-card reveal">
-        <div class="portal-icon">&#9876;&#65039;</div>
-        <h3>Warrior Mode</h3>
-        <p class="portal-sub">Competing Teams</p>
-        <p>Topics to study, do's &amp; don'ts, and your team intake &mdash; everything you need before you step into the room.</p>
-        <div class="portal-links">
-          <a href="simwars-2026-participant-info.html" target="_blank"><i class="fas fa-book-open"></i> Participant Info Pack</a>
-          <a href="simwars-2026-participant-info.html#dos-donts" target="_blank"><i class="fas fa-list-check"></i> Do's &amp; Don'ts</a>
-          <a href="#warriors"><i class="fas fa-flag-checkered"></i> Your Team &amp; Draw Number</a>
-        </div>
-      </div>
-      <div class="portal-card reveal">
-        <div class="portal-icon">&#127963;&#65039;</div>
-        <h3>Pillar Mode</h3>
-        <p class="portal-sub">Organisers</p>
-        <p>Full access &mdash; every tool, every sheet, every case, live.</p>
-        <a href="javascript:void(0)" onclick="openJudgeModal(null,'organiser')" class="btn btn-sm"><i class="fas fa-lock"></i> Organiser Login</a>
-      </div>
-      <div class="portal-card reveal">
-        <div class="portal-icon">&#9878;&#65039;</div>
-        <h3>Judge Mode</h3>
-        <p class="portal-sub">Judges</p>
-        <p>Your scoring sheet, plus case details when you need them.</p>
-        <a href="javascript:void(0)" onclick="openJudgeModal(null,'judge')" class="btn btn-sm"><i class="fas fa-lock"></i> Judge Login</a>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- FOOTER CTA -->
 <div class="footer-cta">
@@ -1423,9 +1402,15 @@ footer .copyright{margin-top:1rem;color:rgba(255,255,255,.35);font-size:.75rem;}
     } else {
       judgeMode = 'roleGate';
       judgePendingUrl = null;
-      roleToggle.style.display = 'flex';
-      judgeModalTitle.textContent = 'Judge Mode Access';
-      judgeModalSub.textContent = 'Choose your role and enter your password.';
+      if (presetRole) {
+        roleToggle.style.display = 'none';
+        judgeModalTitle.textContent = presetRole === 'organiser' ? 'Organiser Login' : 'Judge Login';
+        judgeModalSub.textContent = presetRole === 'organiser' ? "Enter the organisers' password to continue." : "Enter the judges' password to continue.";
+      } else {
+        roleToggle.style.display = 'flex';
+        judgeModalTitle.textContent = 'Judge Mode Access';
+        judgeModalSub.textContent = 'Choose your role and enter your password.';
+      }
       selectJudgeRole(presetRole || 'organiser');
     }
     setTimeout(() => judgeInput.focus(), 50);

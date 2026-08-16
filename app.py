@@ -97,7 +97,7 @@ def require_organiser():
 def unlock():
     next_url = request.args.get('next') or request.form.get('next') or '/library'
     if request.method == 'POST':
-        pw = request.form.get('password', '')
+        pw = request.form.get('password', '').strip()
         if pw == ORGANISER_PASSWORD:
             session['role'] = 'organiser'
             return redirect(next_url)
@@ -1273,8 +1273,8 @@ def register():
 
 @app.route('/version')
 def version_stamp():
-    # sanity check: open /version on the live site — must say BUILD-2026-08-16-C
-    return 'BUILD-2026-08-16-C', 200, {'Content-Type': 'text/plain', 'Cache-Control': 'no-store'}
+    # sanity check: open /version on the live site — must say BUILD-2026-08-16-D
+    return 'BUILD-2026-08-16-D', 200, {'Content-Type': 'text/plain', 'Cache-Control': 'no-store'}
 
 JUDGE_SLOTS = ('cj1', 'cj2', 'cj3', 'crm1', 'crm2')
 
@@ -1351,7 +1351,7 @@ def set_judge_identity():
 def gate():
     """Server-side password check for the landing page — keeps passwords out of
     the public page source and signs the session in at the same time."""
-    pw = str((request.get_json(silent=True) or {}).get('password', ''))
+    pw = str((request.get_json(silent=True) or {}).get('password', '')).strip()
     if pw == ORGANISER_PASSWORD:
         session['role'] = 'organiser'
         return jsonify({'ok': True, 'role': 'organiser'})
@@ -1585,7 +1585,7 @@ button{width:100%;background:#d81b7a;color:#fff;border:none;padding:.85rem;borde
 @app.route('/scoreboard', methods=['GET', 'POST'])
 def scoreboard():
     if request.method == 'POST':
-        pw = request.form.get('password', '')
+        pw = request.form.get('password', '').strip()
         if pw == ORGANISER_PASSWORD:
             session['role'] = 'organiser'
         elif pw == JUDGE_PASSWORD:
