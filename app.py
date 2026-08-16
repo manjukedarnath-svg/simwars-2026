@@ -1489,6 +1489,7 @@ tr.me td{background:#fdf1f6;font-weight:800;}
 </style></head><body>
 <div class="bar"><h1>🏆 SIM WARS 2026 — Team &amp; Score Board</h1><div style="display:flex;gap:.8rem;align-items:center;"><span class="role">{{ role }}{% if team_number %} · Team {{ team_number }}{% endif %}</span><a href="/register">← Site</a></div></div>
 <div class="wrap">
+<div class="card"><h2>Team Board — Colour Groups (from the draw)</h2><div id="groups" class="empty">Loading teams…</div></div>
 <div class="card"><h2>Prelim Standings — combined /200</h2><div id="prelim" class="empty">Loading…</div></div>
 <div class="card"><h2>Semi-Finalists</h2><div id="sf" class="empty">—</div></div>
 <div class="card"><h2>Finals</h2><div id="fin" class="empty">—</div></div>
@@ -1496,7 +1497,43 @@ tr.me td{background:#fdf1f6;font-weight:800;}
 </div>
 <script>
 var MY_TEAM = {{ my_team_js }};
+var IS_ORG = {{ is_org_js }};
+var INTAKE = 'https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec';
+var GROUPS = [
+  {name:'RED',    draws:[1,2,3,4],     bg:'#fdecea', fg:'#b02a37'},
+  {name:'GREEN',  draws:[5,6,7,8],     bg:'#e8f7f1', fg:'#0d8a72'},
+  {name:'BLUE',   draws:[9,10,11,12],  bg:'#eef6fc', fg:'#2f6fd1'},
+  {name:'YELLOW', draws:[13,14,15,16], bg:'#fef9c3', fg:'#a16207'}
+];
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function loadGroups(){
+ fetch(INTAKE).then(function(r){return r.json();}).then(function(d){
+  var byDraw={};(d.teams||[]).forEach(function(t){byDraw[parseInt(t.drawNumber,10)]=t;});
+  var h='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax('+(IS_ORG?'260':'190')+'px,1fr));gap:.8rem;">';
+  GROUPS.forEach(function(g){
+   h+='<div style="background:'+g.bg+';border-radius:12px;padding:.8rem .9rem;">'
+    +'<div style="font-size:.7rem;font-weight:900;letter-spacing:.1em;color:'+g.fg+';margin-bottom:.5rem;">'+g.name+' GROUP</div>'
+    +g.draws.map(function(n){
+      var t=byDraw[n];var me=MY_TEAM&&n===MY_TEAM;
+      var head='<div style="font-size:.84rem;'+(me?'font-weight:800;':'')+'"><b style="color:'+g.fg+';">'+n+'</b> · '+(t?esc(t.teamName):'<span style="color:#9aa0ae;font-style:italic;">TBD</span>')+'</div>';
+      var members='';
+      if(IS_ORG&&t){
+        members='<div style="margin-top:.3rem;font-size:.74rem;color:#5a5266;line-height:1.5;">'
+          +[[t.m1name,t.m1desig],[t.m2name,t.m2desig],[t.m3name,t.m3desig],[t.m4name,t.m4desig]]
+            .filter(function(m){return m[0];})
+            .map(function(m){return esc(m[0])+(m[1]?' <span style="color:#9aa0ae;">· '+esc(m[1])+'</span>':'');})
+            .join('<br>')
+          +(t.leaderName?'<div style="margin-top:.2rem;color:'+g.fg+';font-weight:700;">Lead: '+esc(t.leaderName)+'</div>':'')
+          +'</div>';
+      }
+      return '<div style="background:#fff;border-radius:8px;padding:.4rem .6rem;margin-bottom:.35rem;'+(me?'outline:2px solid '+g.fg+';':'')+'">'+head+members+'</div>';
+     }).join('')+'</div>';
+  });
+  h+='</div>';
+  var el=document.getElementById('groups');el.className='';el.innerHTML=h;
+ }).catch(function(){document.getElementById('groups').textContent='Could not reach the registration sheet.';});
+}
+loadGroups();
 function load(){
  fetch('/api/results').then(function(r){return r.json();}).then(function(d){
   var rows=(d.prelim&&d.prelim.length?d.prelim:[]);
@@ -1568,7 +1605,8 @@ def scoreboard():
                      % (role, opens.strftime('%d %b %Y, %H:%M'))), error=None), 403
     tn = session.get('team_number') if role == 'team' else None
     return render_template_string(SCOREBOARD_TEMPLATE, role=role, team_number=tn,
-                                  my_team_js=(str(tn) if tn else 'null'))
+                                  my_team_js=(str(tn) if tn else 'null'),
+                                  is_org_js=('true' if role == 'organiser' else 'false'))
 
 
 DISPLAY_TEMPLATE = """<!DOCTYPE html>
