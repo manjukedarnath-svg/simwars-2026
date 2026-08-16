@@ -17,7 +17,7 @@ h1{font-size:1.9rem;font-weight:900;text-align:center;margin:.9rem 0 .2rem;lette
 .sub{text-align:center;color:var(--muted);font-size:.92rem;margin-bottom:1.5rem;}
 .venues{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.5rem;}
 .venue{border-radius:.8rem;padding:.9rem;text-align:center;font-size:.82rem;font-weight:700;}
-.venue img{height:34px;display:block;margin:0 auto .4rem;}
+.venue img{height:24px;display:block;margin:0 auto .4rem;}
 .item{display:flex;gap:.9rem;border:1.5px solid #eee0ea;border-left:5px solid var(--magenta);border-radius:.9rem;padding:.9rem 1.1rem;margin-bottom:.6rem;align-items:flex-start;background:#fff;}
 .item .em{font-size:1.35rem;flex-shrink:0;}
 .item h3{font-size:.95rem;font-weight:800;color:var(--purple-900);}
@@ -28,14 +28,21 @@ h1{font-size:1.9rem;font-weight:900;text-align:center;margin:.9rem 0 .2rem;lette
 .qrrow img{width:150px;height:150px;}
 .qrrow .cap{font-size:.85rem;font-weight:800;color:var(--purple-600);max-width:180px;line-height:1.5;}
 .foot{text-align:center;font-size:.78rem;color:var(--muted);margin-top:1.6rem;font-weight:600;}
+
+@page{size:A4;margin:10mm;}
+@media print{
+  body{padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .flyer{max-width:100%;box-shadow:none;}
+  .why div,.item,.lnk,.pass,.venue,.offer,.qrrow,.qr{break-inside:avoid;page-break-inside:avoid;}
+}
 </style>
 </head>
 <body>
 <div class="flyer">
   <div class="logos">
-    <div class="brandrow">
+    <div class="brandrow" style="flex-direction:column;gap:.5rem;">
       <img src="static/images/pedistars-logo.png" alt="PediSTARS India" style="height:52px;">
-      <img src="static/images/simulus-logo.png" alt="SIMULUS 11" style="height:52px;">
+      <img src="static/images/simulus-logo.png" alt="SIMULUS 11" style="height:46px;">
     </div>
     <div class="ribbon">11<sup>th</sup> Annual National Conference of PediSTARS on Healthcare Simulation</div>
     <img src="static/images/simwars-logo.png" alt="Pediatric SIM WARS" style="height:110px;margin-top:.3rem;">

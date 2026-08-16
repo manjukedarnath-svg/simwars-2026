@@ -6,7 +6,7 @@
 <style>
 :root{--purple-900:#2a0a44;--magenta:#d81b7a;--gold:#f5a623;--teal:#0d9488;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:#f4f1f7;color:#2a0a44;padding:2.2rem 1rem 3rem;}
+body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:#fff url('static/images/flyer-bg-top.png') top center no-repeat;background-size:100% auto;color:#2a0a44;padding:2.2rem 1rem 3rem;}
 a{color:var(--magenta);} a:hover{color:#6a1362;}
 .flyer{max-width:640px;margin:0 auto;background:#fff;border-radius:1.4rem;box-shadow:0 12px 40px rgba(42,10,68,.14);overflow:hidden;}
 .head{background:linear-gradient(160deg,#2a0a44 0%,#1c0733 100%);color:#fff;padding:2rem 1.8rem;text-align:center;}
@@ -23,9 +23,28 @@ a{color:var(--magenta);} a:hover{color:#6a1362;}
 .pass .code{font-family:'Courier New',monospace;font-size:1.3rem;font-weight:900;letter-spacing:.05em;color:#b9790f;}
 .qr{text-align:center;padding:0 1.8rem 1.8rem;}
 .qr img{width:150px;height:150px;}
+.logos{display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-bottom:1.3rem;}
+.ribbon{background:linear-gradient(90deg,#6a1362,#d81b7a);color:#fff;font-weight:700;font-size:.85rem;padding:.45rem 1.6rem;border-radius:4px;text-align:center;}
+
+@page{size:A4;margin:10mm;}
+@media print{
+  body{padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .flyer{max-width:100%;box-shadow:none;}
+  .why div,.item,.lnk,.pass,.venue,.offer,.qrrow,.qr{break-inside:avoid;page-break-inside:avoid;}
+}
 </style>
 </head>
 <body>
+<div class="logos">
+  <img src="static/images/pedistars-logo.png" alt="PediSTARS India" style="height:52px;">
+  <img src="static/images/simulus-logo.png" alt="SIMULUS 11" style="height:46px;">
+  <div class="ribbon">11<sup>th</sup> Annual National Conference of PediSTARS on Healthcare Simulation</div>
+  <img src="static/images/simwars-logo.png" alt="Pediatric SIM WARS" style="height:100px;margin-top:.2rem;">
+  <div style="display:flex;align-items:center;gap:1.6rem;margin-top:.4rem;">
+    <img src="static/images/dhee-logo.png" alt="DHEE Hospitals" style="height:28px;">
+    <img src="static/images/vasa-logo.png" alt="VASA" style="height:28px;">
+  </div>
+</div>
 <div class="flyer">
   <div class="head">
     <div class="eyebrow">SIM WARS 2026 · For Mentors &amp; Programme Directors</div>
