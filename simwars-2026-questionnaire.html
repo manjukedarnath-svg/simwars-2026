@@ -142,6 +142,7 @@ body { font-family:'Inter',system-ui,sans-serif; background:var(--bg-light); col
 <div class="brandbar">
     <span class="brand-name">SIM WARS 2026</span>
     <span class="brand-sub">Part of SIMULUS 11 · PediSTARS India · 22–23 Aug 2026, Bengaluru</span>
+    <a href="/register" style="color:#f5a623;font-weight:700;font-size:0.85rem;text-decoration:none;white-space:nowrap;">← Back to SIM WARS site · answers auto-saved on this device</a>
 </div>
 <!-- ===== MAIN FORM ===== -->
 <div id="questionnaireWrap">
@@ -750,8 +751,38 @@ body { font-family:'Inter',system-ui,sans-serif; background:var(--bg-light); col
 <!-- ========================================================================== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // In-memory app state only — no localStorage/sessionStorage, by design.
+    // In-memory app state + a localStorage draft so teams can leave and come back later.
     const appState = { teamNumber: null, answers: null };
+    const DRAFT_KEY = 'sw26_questionnaire_draft';
+    const form_el = function(){ return document.getElementById('questionnaire'); };
+    function saveDraft() {
+        try {
+            const f = form_el(); if (!f) return;
+            const d = { teamNumber: appState.teamNumber, fields: {} };
+            f.querySelectorAll('input[name], select[name], textarea[name]').forEach(function(el){
+                if (el.type === 'radio') { if (el.checked) d.fields[el.name] = el.value; }
+                else if (el.type === 'checkbox') { if (!d.fields[el.name]) d.fields[el.name] = []; if (el.checked) d.fields[el.name].push(el.value); }
+                else if (el.value) d.fields[el.name] = el.value;
+            });
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+        } catch (e) {}
+    }
+    function restoreDraft() {
+        try {
+            const raw = localStorage.getItem(DRAFT_KEY); if (!raw) return null;
+            const d = JSON.parse(raw); const f = form_el(); if (!f || !d.fields) return d;
+            f.querySelectorAll('input[name], select[name], textarea[name]').forEach(function(el){
+                const v = d.fields[el.name]; if (v == null) return;
+                if (el.type === 'radio') { if (el.value === v) { el.checked = true; el.dispatchEvent(new Event('change', {bubbles:true})); } }
+                else if (el.type === 'checkbox') { if (Array.isArray(v) && v.indexOf(el.value) !== -1) { el.checked = true; el.dispatchEvent(new Event('change', {bubbles:true})); } }
+                else { el.value = v; el.dispatchEvent(new Event('change', {bubbles:true})); }
+            });
+            return d;
+        } catch (e) { return null; }
+    }
+    let draftTimer = null;
+    document.addEventListener('input', function(){ clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 400); }, true);
+    document.addEventListener('change', function(){ clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 400); }, true);
 
     // ---------------------------------------------------------------
     // Build the 12-row A2 rules table and the 5-item confidence grids
@@ -884,9 +915,13 @@ document.addEventListener('DOMContentLoaded', function() {
         appState.teamNumber = teamInput.value.trim();
         gate.classList.add('hidden');
         questionnaireWrap.classList.add('visible');
+        restoreDraft();
+        saveDraft();
         const firstInput = questionnaireWrap.querySelector('input, select, textarea');
         if (firstInput) firstInput.focus();
     }
+    // Pre-fill the team number if a saved draft exists on this device
+    try { const _d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (_d && _d.teamNumber) teamInput.value = _d.teamNumber; } catch (e) {}
     gateBtn.addEventListener('click', enterTeam);
     teamInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') enterTeam(); });
     teamInput.addEventListener('input', function() { if (gateError.textContent) validateTeam(); });
@@ -1055,6 +1090,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submissionDetail.textContent = res && res.ok
                 ? 'Your responses are saved with the organisers. You can also download a JSON copy below.'
                 : 'Saving to the server failed — please download the JSON copy below and email it to the coordinators.';
+            if (res && res.ok) { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
         }).catch(function(){
             submissionDetail.textContent = 'You appear to be offline — please download the JSON copy below and email it to the coordinators.';
         });

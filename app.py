@@ -4,6 +4,7 @@ import os
 import re
 import sqlite3
 from urllib.parse import quote
+from datetime import datetime, timedelta
 from docx import Document
 
 DB_PATH = os.environ.get('DB_PATH', os.path.join(os.path.dirname(__file__), 'scores.db'))
@@ -34,6 +35,17 @@ app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'simwars-2026-change-me')
 
 ORGANISER_PASSWORD = '@MSPtrio2023sim'
 JUDGE_PASSWORD = '@SIMblore2014'
+TEAM_PASSWORD_PREFIX = '@SIMwarsTEAM'  # full password = prefix + draw number, e.g. @SIMwarsTEAM7
+
+def _ist_now():
+    return datetime.utcnow() + timedelta(hours=5, minutes=30)
+
+# Scoreboard opens per role (IST): organisers immediately, judges 21 Aug, teams event day 22 Aug
+SCOREBOARD_OPENS = {
+    'organiser': None,
+    'judge': datetime(2026, 8, 21, 0, 0),
+    'team': datetime(2026, 8, 22, 0, 0),
+}
 
 UNLOCK_TEMPLATE = '''
 <!DOCTYPE html>
@@ -871,6 +883,7 @@ CASE_TEMPLATE = """
       <!-- Investigations Console -->
       <div class="inv-console">
         <div class="inv-title">📺 Push to Display</div>
+        <div style="font-size:0.65rem;color:#64748b;margin:-6px 0 10px;" id="inv-room-note"></div>
         <div id="inv-cards"></div>
         <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.07);padding-top:10px;">
           <div style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Custom result</div>
@@ -913,6 +926,9 @@ CASE_TEMPLATE = """
 
     var STAGES = {{ case.stages | tojson }};
     var CASE_ID = {{ case.id | tojson }};
+    // Room routing: PALS cases (P*) project to Room A's display, BLS (B*) to Room B's,
+    // semis/finals to the main-hall display. /display?room=a|b|main picks the screen.
+    var DISPLAY_ROOM = /^P/i.test(CASE_ID) ? 'a' : (/^B/i.test(CASE_ID) ? 'b' : 'main');
 
     function ts() {
       var n = new Date();
@@ -932,10 +948,10 @@ CASE_TEMPLATE = """
         + '<div style="line-height:1.8;">' + lines + '</div>'
         + '<div style="margin-top:28px;font-size:0.68rem;color:#1e3a5f;letter-spacing:0.14em;text-transform:uppercase;">SimWars 2026 · Case ' + CASE_ID + '</div>'
         + '</div>';
-      fetch('/api/score', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({key:'proj_html', value: html})})
+      fetch('/api/score', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({key:'proj_html_' + DISPLAY_ROOM, value: html})})
         .then(function() {
           if (btnEl) { var orig = btnEl.textContent; btnEl.textContent = '✓ Live'; btnEl.style.background='#16a34a'; setTimeout(function(){ btnEl.textContent = orig; btnEl.style.background=''; }, 3500); }
-          document.getElementById('inv-status').textContent = '✓ ' + label + ' pushed at ' + t;
+          document.getElementById('inv-status').textContent = '✓ ' + label + ' pushed at ' + t + ' → Display ' + DISPLAY_ROOM.toUpperCase();
         })
         .catch(function() { document.getElementById('inv-status').textContent = 'Error — check connection.'; });
     }
@@ -975,6 +991,8 @@ CASE_TEMPLATE = """
 
     function buildCards() {
       var container = document.getElementById('inv-cards');
+      var rn = document.getElementById('inv-room-note');
+      if (rn) rn.textContent = 'This case projects to: ' + (DISPLAY_ROOM==='main' ? 'Main Hall display' : 'Room ' + DISPLAY_ROOM.toUpperCase() + ' display') + ' (/display?room=' + DISPLAY_ROOM + ')';
       var all = [];
       STAGES.forEach(function(s, i) {
         all = all.concat(parseInvestigations(s, i+1));
@@ -1194,9 +1212,10 @@ FLOW_CASE_DETAIL = {
         "1": {"code": "SF1", "title": "The Quiet Head — Dual Paediatric Trauma",
               "patient": "Ananya Rao · 7 yr · 24 kg + Vihaan Rao · 18 mo · 10 kg",
               "pearl": "Lucid interval is a trap — read the CT report yourself (EDH), don’t accept the father’s ‘normal’; calibrated response to Vihaan’s trace FAST"},
-        "2": {"code": "SF2", "title": "The Loud Wound — Dual Paediatric Trauma",
-              "patient": "Meera Iyer · 8 yr · 26 kg + Diya Iyer · 3 yr · 14 kg",
-              "pearl": "Loud visible bleeding (Diya) is the distractor — positive FAST + shock (Meera) = theatre/IR not CT; activate MTP 1:1:1 + TXA"},
+    "final": {
+        "code": "F2", "title": "The Tense Abdomen — Severe Dengue with Abdominal Compartment Syndrome",
+        "patient": "Rehan · 10 yr · 30 kg · Dengue day 5, critical phase, ~70mL/kg crystalloid pre-loaded",
+        "pearl": "Recognize abdominal compartment syndrome (IAP 28) — STOP fluids, drain the abdomen (paracentesis), don’t anchor on haemorrhagic shock despite haematemesis",
     },
 }
 
@@ -1271,7 +1290,14 @@ def get_scores():
     with get_db() as conn:
         rows = conn.execute('SELECT key, value FROM scores').fetchall()
     data = {row['key']: row['value'] for row in rows}
-    if session.get('role') == 'judge':
+    role = session.get('role')
+    if role not in ('organiser', 'judge', 'team'):
+        # Public (projector displays): only the pushed display payloads, never scores.
+        return jsonify({k: v for k, v in data.items() if k.startswith('proj_html')})
+    if role == 'team':
+        # Teams poll the scoreboard via /api/results; raw score keys stay sealed.
+        return jsonify({k: v for k, v in data.items() if k.startswith('proj_html')})
+    if role == 'judge':
         my_slot = session.get('judge_slot') or ''
         deb_revealed = data.get('debriefer_revealed') == 'true'
         data = {k: v for k, v in data.items() if _key_visible_to_judge(k, my_slot, deb_revealed)}
@@ -1313,10 +1339,18 @@ def gate():
     if pw == JUDGE_PASSWORD:
         session['role'] = 'judge'
         return jsonify({'ok': True, 'role': 'judge'})
+    if pw.startswith(TEAM_PASSWORD_PREFIX):
+        suffix = pw[len(TEAM_PASSWORD_PREFIX):]
+        if suffix.isdigit() and 1 <= int(suffix) <= 16:
+            session['role'] = 'team'
+            session['team_number'] = int(suffix)
+            return jsonify({'ok': True, 'role': 'team', 'team': int(suffix)})
     return jsonify({'ok': False}), 403
 
 @app.route('/api/score', methods=['POST'])
 def save_score():
+    if session.get('role') not in ('organiser', 'judge'):
+        return jsonify({'error': 'locked'}), 403
     data = request.get_json()
     key = data.get('key')
     value = data.get('value')
@@ -1330,6 +1364,8 @@ def save_score():
 
 @app.route('/api/scores/reset', methods=['POST'])
 def reset_scores():
+    if session.get('role') != 'organiser':
+        return jsonify({'error': 'locked'}), 403
     with get_db() as conn:
         conn.execute('DELETE FROM scores')
         conn.commit()
@@ -1395,6 +1431,15 @@ def get_results():
             shared = min(15, max(0, flt(sc.get(f'fn_{cid}_{t}_shared'))))
             fn_scores[t][cid] = {'clin': clin, 'tw': tw, 'shared': shared, 'total': clin + tw + shared}
     fn_totals = {t: sum(fn_scores[t][c]['total'] for c in ['F1','F2']) for t in ['fin1','fin2']}
+    # Access tiers: organisers always; judges from 21 Aug IST; teams from 22 Aug IST.
+    # Everyone else (incl. the public /flow page) gets team names only — no scores.
+    role = session.get('role')
+    allowed = role == 'organiser' \
+        or (role == 'judge' and _ist_now() >= SCOREBOARD_OPENS['judge']) \
+        or (role == 'team' and _ist_now() >= SCOREBOARD_OPENS['team'])
+    if not allowed:
+        return jsonify({'all_teams': [{'team': t['team'], 'name': t['name']} for t in teams],
+                        'prelim': [], 'sf': {}, 'finals': {}, 'locked': True})
     return jsonify({
         'prelim': active,
         'all_teams': teams,
@@ -1406,6 +1451,110 @@ def get_results():
 @app.route('/cases')
 def list_cases():
     return jsonify([{'id': c['id'], 'title': c['title'], 'round': c['round']} for c in CASES])
+
+SCOREBOARD_TEMPLATE = """<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIM WARS 2026 · Score Board</title><style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,Segoe UI,sans-serif;background:#f4f1f7;color:#2a0a44;padding:0 0 3rem;}
+.bar{background:#2a0a44;color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;}
+.bar h1{font-size:1.15rem;font-weight:900;}
+.bar .role{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:.35rem .9rem;border-radius:8px;}
+.bar a{color:#f5a623;font-size:.82rem;font-weight:700;text-decoration:none;}
+.wrap{max-width:900px;margin:1.6rem auto 0;padding:0 1rem;}
+.card{background:#fff;border-radius:1.1rem;padding:1.4rem 1.5rem;box-shadow:0 4px 16px rgba(42,10,68,.06);margin-bottom:1.3rem;}
+.card h2{font-size:1rem;font-weight:800;margin-bottom:.9rem;color:#2a0a44;}
+table{width:100%;border-collapse:collapse;font-size:.9rem;}
+th{text-align:left;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#6a5a72;padding:.45rem .6rem;border-bottom:2px solid #eee0ea;}
+td{padding:.55rem .6rem;border-bottom:1px solid #f0e8f0;}
+tr.me td{background:#fdf1f6;font-weight:800;}
+.rank{font-weight:900;color:#d81b7a;width:2.4rem;}
+.muted{color:#6a5a72;font-size:.82rem;}
+.empty{padding:1.2rem;text-align:center;color:#6a5a72;font-size:.9rem;}
+</style></head><body>
+<div class="bar"><h1>🏆 SIM WARS 2026 — Team &amp; Score Board</h1><div style="display:flex;gap:.8rem;align-items:center;"><span class="role">{{ role }}{% if team_number %} · Team {{ team_number }}{% endif %}</span><a href="/register">← Site</a></div></div>
+<div class="wrap">
+<div class="card"><h2>Prelim Standings — combined /200</h2><div id="prelim" class="empty">Loading…</div></div>
+<div class="card"><h2>Semi-Finalists</h2><div id="sf" class="empty">—</div></div>
+<div class="card"><h2>Finals</h2><div id="fin" class="empty">—</div></div>
+<p class="muted">Scores appear as they are locked by the judges and organisers. Refreshes automatically every 30 seconds.</p>
+</div>
+<script>
+var MY_TEAM = {{ my_team_js }};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function load(){
+ fetch('/api/results').then(function(r){return r.json();}).then(function(d){
+  var rows=(d.prelim&&d.prelim.length?d.prelim:[]);
+  var el=document.getElementById('prelim');
+  if(!rows.length){el.className='empty';el.textContent='No scores locked yet — check back after the first prelim rounds.';}
+  else{
+   var h='<table><tr><th></th><th>Team</th><th>PALS</th><th>BLS</th><th>Combined</th></tr>';
+   rows.forEach(function(t,i){var me=MY_TEAM&&t.team==='T'+MY_TEAM;
+    h+='<tr'+(me?' class="me"':'')+'><td class="rank">'+(i+1)+'</td><td>'+esc(t.team)+' — '+esc(t.name)+'</td><td>'+t.pals+'</td><td>'+t.bls+'</td><td><b>'+t.combined+'</b></td></tr>';});
+   h+='</table>';el.className='';el.innerHTML=h;
+  }
+  var sf=d.sf||{};var sfv=Object.keys(sf).map(function(k){return sf[k];}).filter(function(v){return v&&!/^SF\\d$/i.test(v);});
+  var sfe=document.getElementById('sf');
+  if(sfv.length){sfe.className='';sfe.innerHTML=sfv.map(function(n){return '<span style="display:inline-block;background:#f0fbf9;color:#0d9488;font-weight:800;border-radius:8px;padding:.4rem .9rem;margin:.2rem;">'+esc(n)+'</span>';}).join('');}
+  else{sfe.className='empty';sfe.textContent='Semi-finalists announced after prelims conclude.';}
+  var fe=document.getElementById('fin');var f=d.finals||{};
+  var named=['fin1','fin2'].filter(function(k){return f[k]&&f[k].name&&!/^FIN\\d$/i.test(f[k].name);});
+  if(named.length){
+   var h2='<table><tr><th>Finalist</th><th>Total</th></tr>';
+   named.forEach(function(k){h2+='<tr><td>'+esc(f[k].name)+'</td><td><b>'+f[k].total+'</b></td></tr>';});
+   fe.className='';fe.innerHTML=h2+'</table>';
+  } else {fe.className='empty';fe.textContent='Finalists announced after the semi-finals.';}
+ }).catch(function(){});
+}
+load();setInterval(load,30000);
+</script></body></html>"""
+
+SCOREBOARD_GATE_TEMPLATE = """<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SIM WARS 2026 · Score Board</title>
+<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#2a0a44;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;}
+.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);padding:2.4rem 2.2rem;border-radius:18px;max-width:400px;width:90%;text-align:center;}
+h1{font-size:1.25rem;margin:0 0 .5rem;}p{font-size:.9rem;color:rgba(255,255,255,.75);margin:0 0 1.3rem;line-height:1.5;}
+input{width:100%;padding:.8rem 1rem;border-radius:10px;border:none;font-size:1rem;margin-bottom:1rem;box-sizing:border-box;}
+button{width:100%;background:#d81b7a;color:#fff;border:none;padding:.85rem;border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;}
+.err{background:rgba(216,27,122,.25);border:1px solid #d81b7a;border-radius:8px;padding:.6rem .8rem;font-size:.85rem;margin-bottom:1rem;}
+.note{margin-top:1.1rem;font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.5;}</style></head><body>
+<form class="card" method="post">
+<h1>🏆 Team &amp; Score Board</h1>
+<p>{{ message }}</p>
+{% if error %}<div class="err">{{ error }}</div>{% endif %}
+{% if show_form %}<input type="password" name="password" placeholder="Your access password" autofocus autocomplete="off"><button type="submit">View Score Board</button>{% endif %}
+<div class="note">Organisers: live now · Judges: from 21 Aug 2026 · Teams: on event day (22 Aug), password ends with your draw number</div>
+</form></body></html>"""
+
+@app.route('/scoreboard', methods=['GET', 'POST'])
+def scoreboard():
+    if request.method == 'POST':
+        pw = request.form.get('password', '')
+        if pw == ORGANISER_PASSWORD:
+            session['role'] = 'organiser'
+        elif pw == JUDGE_PASSWORD:
+            session['role'] = 'judge'
+        elif pw.startswith(TEAM_PASSWORD_PREFIX) and pw[len(TEAM_PASSWORD_PREFIX):].isdigit() \
+                and 1 <= int(pw[len(TEAM_PASSWORD_PREFIX):]) <= 16:
+            session['role'] = 'team'
+            session['team_number'] = int(pw[len(TEAM_PASSWORD_PREFIX):])
+        else:
+            return render_template_string(SCOREBOARD_GATE_TEMPLATE, show_form=True,
+                message='Enter your access password to view live standings.',
+                error='Incorrect password. Try again.')
+    role = session.get('role')
+    if role not in ('organiser', 'judge', 'team'):
+        return render_template_string(SCOREBOARD_GATE_TEMPLATE, show_form=True,
+            message='Enter your access password to view live standings.', error=None)
+    opens = SCOREBOARD_OPENS.get(role)
+    if opens and _ist_now() < opens:
+        return render_template_string(SCOREBOARD_GATE_TEMPLATE, show_form=False,
+            message=('The score board opens for %ss on %s IST. Come back then!'
+                     % (role, opens.strftime('%d %b %Y, %H:%M'))), error=None), 403
+    tn = session.get('team_number') if role == 'team' else None
+    return render_template_string(SCOREBOARD_TEMPLATE, role=role, team_number=tn,
+                                  my_team_js=(str(tn) if tn else 'null'))
+
 
 DISPLAY_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -1437,18 +1586,32 @@ html, body { height: 100%; background: #030712; color: #e2e8f0; font-family: 'Co
     </div>
 </div>
 <script>
-var _last = null;
-function poll() {
-    fetch('/api/scores').then(function(r){ return r.json(); }).then(function(data){
-        var html = data['proj_html'];
-        if (html && html !== _last) {
-            _last = html;
-            document.getElementById('content').innerHTML =
-                '<div style="font-family:\\'Courier New\\',monospace;color:#e2e8f0;padding:8px 0;">' + html + '</div>';
-        }
-    }).catch(function(){}).finally(function(){ setTimeout(poll, 1500); });
+var ROOM = (new URLSearchParams(location.search).get('room') || '').toLowerCase();
+if (ROOM !== 'a' && ROOM !== 'b' && ROOM !== 'main') {
+    document.getElementById('content').innerHTML =
+        '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:26px;">'
+        + '<div style="font-size:1.4rem;color:#64748b;letter-spacing:.08em;">SELECT THIS SCREEN\'S ROOM</div>'
+        + ['a','b','main'].map(function(r){
+            var lbl = r==='main' ? 'MAIN HALL · Semis & Finals' : 'ROOM ' + r.toUpperCase() + (r==='a' ? ' · PALS' : ' · BLS');
+            return '<a href="/display?room=' + r + '" style="display:block;background:#0f172a;border:2px solid #1e3a5f;border-radius:16px;padding:26px 60px;color:#e2e8f0;text-decoration:none;font-size:1.6rem;letter-spacing:.05em;">' + lbl + '</a>';
+          }).join('')
+        + '</div>';
+} else {
+    document.getElementById('placeholder-sub').textContent = 'SimWars 2026 — ' + (ROOM==='main' ? 'Main Hall' : 'Room ' + ROOM.toUpperCase()) + ' · Operator will project results here';
+    var _last = null;
+    var KEY = 'proj_html_' + ROOM;
+    function poll() {
+        fetch('/api/scores').then(function(r){ return r.json(); }).then(function(data){
+            var html = data[KEY] || data['proj_html'];
+            if (html && html !== _last) {
+                _last = html;
+                document.getElementById('content').innerHTML =
+                    '<div style="font-family:\\'Courier New\\',monospace;color:#e2e8f0;padding:8px 0;">' + html + '</div>';
+            }
+        }).catch(function(){}).finally(function(){ setTimeout(poll, 1500); });
+    }
+    poll();
 }
-poll();
 </script>
 </body>
 </html>"""

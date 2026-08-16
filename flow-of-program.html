@@ -255,7 +255,7 @@
         <div class="meta">Both finalists play Case F2 &middot; Scored directly /200</div>
         <div class="chip-row"><span class="chip">F2</span></div>
         <div class="case-pill"><span class="lock">&#128274;</span>Case sealed until round start &middot; 15:00</div>
-        <div style="font-size:11px; font-weight:700; letter-spacing:1px; color:var(--muted); margin:10px 0 4px;">CASE F2 &mdash; THE TENSE ABDOMEN (/200 TOTAL)</div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:1px; color:var(--muted); margin:10px 0 4px;">CASE F2 (/200 TOTAL)</div>
         <div class="domain-row"><span>Domain A — Clinical Management</span><b>/ 90</b></div>
         <div class="domain-row"><span>Domain B — Teamwork &amp; Followership</span><b>/ 80</b></div>
         <div class="domain-row"><span>Domain C — Shared Reasoning</span><b>/ 30</b></div>
@@ -382,6 +382,11 @@
   if (D.sf) {
     h += '<div class="schedule-round"><div class="schedule-round-label">Semi-Finals</div><div class="schedule-rooms">';
     Object.keys(D.sf).sort().forEach(function(k){ h += card('SF Round ' + k, D.sf[k], '#eafaf6', '#0d8a72'); });
+    h += '</div></div>';
+  }
+  if (D.final) {
+    h += '<div class="schedule-round"><div class="schedule-round-label">Finals</div><div class="schedule-rooms">';
+    h += card('Finals · Single Case', D.final, '#fdeef4', '#a3115c');
     h += '</div></div>';
   }
   s.innerHTML = h;
