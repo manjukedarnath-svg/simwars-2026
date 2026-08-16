@@ -1212,6 +1212,10 @@ FLOW_CASE_DETAIL = {
         "1": {"code": "SF1", "title": "The Quiet Head — Dual Paediatric Trauma",
               "patient": "Ananya Rao · 7 yr · 24 kg + Vihaan Rao · 18 mo · 10 kg",
               "pearl": "Lucid interval is a trap — read the CT report yourself (EDH), don’t accept the father’s ‘normal’; calibrated response to Vihaan’s trace FAST"},
+        "2": {"code": "SF2", "title": "The Loud Wound — Dual Paediatric Trauma",
+              "patient": "Meera Iyer · 8 yr · 26 kg + Diya Iyer · 3 yr · 14 kg",
+              "pearl": "Loud visible bleeding (Diya) is the distractor — positive FAST + shock (Meera) = theatre/IR not CT; activate MTP 1:1:1 + TXA"},
+    },
     "final": {
         "code": "F2", "title": "The Tense Abdomen — Severe Dengue with Abdominal Compartment Syndrome",
         "patient": "Rehan · 10 yr · 30 kg · Dengue day 5, critical phase, ~70mL/kg crystalloid pre-loaded",
@@ -1590,7 +1594,7 @@ var ROOM = (new URLSearchParams(location.search).get('room') || '').toLowerCase(
 if (ROOM !== 'a' && ROOM !== 'b' && ROOM !== 'main') {
     document.getElementById('content').innerHTML =
         '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:26px;">'
-        + '<div style="font-size:1.4rem;color:#64748b;letter-spacing:.08em;">SELECT THIS SCREEN\'S ROOM</div>'
+        + '<div style="font-size:1.4rem;color:#64748b;letter-spacing:.08em;">SELECT THIS ROOM</div>'
         + ['a','b','main'].map(function(r){
             var lbl = r==='main' ? 'MAIN HALL · Semis & Finals' : 'ROOM ' + r.toUpperCase() + (r==='a' ? ' · PALS' : ' · BLS');
             return '<a href="/display?room=' + r + '" style="display:block;background:#0f172a;border:2px solid #1e3a5f;border-radius:16px;padding:26px 60px;color:#e2e8f0;text-decoration:none;font-size:1.6rem;letter-spacing:.05em;">' + lbl + '</a>';
