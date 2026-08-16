@@ -966,19 +966,19 @@
                 <div class="settings-row">
                     <div class="setting-item">
                         <label for="judgePals1">PALS Judge 1</label>
-                        <input type="text" id="judgePals1" placeholder="Name" value="Dr. Smith" oninput="updateJudgeSheets()">
+                        <input type="text" id="judgePals1" placeholder="Name" value="Dr Ram Nair" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
                         <label for="judgePals2">PALS Judge 2</label>
-                        <input type="text" id="judgePals2" placeholder="Name" value="Dr. Jones" oninput="updateJudgeSheets()">
+                        <input type="text" id="judgePals2" placeholder="Name" value="Dr Aaron Calhoun" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
                         <label for="judgeBls1">BLS Judge 1</label>
-                        <input type="text" id="judgeBls1" placeholder="Name" value="Dr. Lee" oninput="updateJudgeSheets()">
+                        <input type="text" id="judgeBls1" placeholder="Name" value="Dr Durga Devi" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
                         <label for="judgeBls2">BLS Judge 2</label>
-                        <input type="text" id="judgeBls2" placeholder="Name" value="Dr. Patel" oninput="updateJudgeSheets()">
+                        <input type="text" id="judgeBls2" placeholder="Name" value="Dr Khang Gan" oninput="updateJudgeSheets()">
                     </div>
                 </div>
             </div>
@@ -1115,6 +1115,15 @@
                     <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:10px;">Score video and costume when teams are introduced at the start. Select the active team on Master Scoreboard first.</p>
                     <div id="introScorePalsContainer"></div>
                 </div>
+                <div style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+                    <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other domain's sheet so no one sees each other's marks)</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <button onclick="prelimSetMyRole('pals-cj')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Domain I · Clinical Judgement judge</button>
+                        <button onclick="prelimSetMyRole('pals-crm')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Domain II · CRM judge</button>
+                        <button class="prelimShowAllBtn" onclick="prelimSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
+                    </div>
+                    <div id="prelimRoleStatusPals" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
+                </div>
                 <div id="judgePalsSheetsContainer"></div>
             </div>
         </div>
@@ -1129,6 +1138,15 @@
                 <!-- Note: intro scoring is handled on the PALS judge sheet -->
                 <div style="margin-bottom:16px; padding:10px 16px; background:white; border-radius:10px; border:1px dashed var(--border-strong); font-size:0.83rem; color:var(--text-secondary);">
                     🎬 <strong>Best Video &amp; Best Uniform</strong> are scored at team introduction on the <strong>PALS Judge sheet</strong>. BLS judges focus on case scoring below.
+                </div>
+                <div style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+                    <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other domain's sheet so no one sees each other's marks)</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <button onclick="prelimSetMyRole('bls-cj')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Domain I · Clinical Judgement judge</button>
+                        <button onclick="prelimSetMyRole('bls-crm')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Domain II · CRM judge</button>
+                        <button class="prelimShowAllBtn" onclick="prelimSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
+                    </div>
+                    <div id="prelimRoleStatusBls" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
                 </div>
                 <div id="judgeBlsSheetsContainer"></div>
             </div>
@@ -1269,7 +1287,7 @@
                     Domain I: Clinical Judgement (40 pts) · Domain II: Crisis Resource Management (50 pts) · Domain III: Global Entrustment (10 pts) = <strong>100 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#0f766e;">
-                    ⚖️ <strong>Averaging rule:</strong> Two Clinical judges each score Domain I out of 40 independently. Domain mark = their <strong>mean</strong> (not sum). Same for Domain II. Never sum two sheets in a domain.
+                    ⚖️ <strong>Averaging rule:</strong> Three Clinical judges each score Domain I out of 40 independently — Domain I = the <strong>mean of all three</strong>. Two CRM judges score Domain II — Domain II = the <strong>mean of the two</strong>. Never sum. Never sum two sheets in a domain.
                 </div>
                 <!-- On-device judge role picker: hides the other 3 judges' sheets on THIS device,
                      regardless of which link was used to open the page. Persists via localStorage
@@ -1277,11 +1295,12 @@
                 <div id="sfMyRolePicker" style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
                     <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other judges' sheets so no one sees each other's marks)</div>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                        <button onclick="sfSetMyRole('cj1')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical Judge 1</button>
-                        <button onclick="sfSetMyRole('cj2')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical Judge 2</button>
-                        <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM Judge 1</button>
-                        <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM Judge 2</button>
-                        <button onclick="sfSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
+                        <button onclick="sfSetMyRole('cj1')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ1 · Dr Aruna Ramesh</button>
+                        <button onclick="sfSetMyRole('cj2')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ2 · Dr Kang Gan</button>
+                        <button onclick="sfSetMyRole('cj3')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ3 · Dr Rana Chami</button>
+                        <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM1 · Dr Dinakar Pai</button>
+                        <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM2 · Dr Kiran Hebbar</button>
+                        <button id="sfShowAllBtn" onclick="sfSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
                     </div>
                     <div id="sfMyRoleStatus" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
                 </div>
@@ -1289,25 +1308,31 @@
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px;">
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 1</div>
-                        <input id="sfJudgeCJ1" type="text" placeholder="Name" value=""
+                        <input id="sfJudgeCJ1" type="text" placeholder="Name" value="Dr Aruna Ramesh"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 2</div>
-                        <input id="sfJudgeCJ2" type="text" placeholder="Name" value=""
+                        <input id="sfJudgeCJ2" type="text" placeholder="Name" value="Dr Kang Gan"
+                            style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
+                            oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
+                    </div>
+                    <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
+                        <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 3</div>
+                        <input id="sfJudgeCJ3" type="text" placeholder="Name" value="Dr Rana Chami"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 1</div>
-                        <input id="sfJudgeCRM1" type="text" placeholder="Name" value=""
+                        <input id="sfJudgeCRM1" type="text" placeholder="Name" value="Dr Dinakar Pai"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 2</div>
-                        <input id="sfJudgeCRM2" type="text" placeholder="Name" value=""
+                        <input id="sfJudgeCRM2" type="text" placeholder="Name" value="Dr Kiran Hebbar"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
@@ -2522,7 +2547,7 @@
                         ${rosterHtml}
 
                         <!-- DOMAIN I — CLINICAL JUDGEMENT -->
-                        <div style="margin-bottom:10px;">
+                        <div class="prelim-dom1" style="margin-bottom:10px;">
                             <div style="font-weight:700; font-size:0.83rem; color:${accentColor}; margin-bottom:4px; display:flex; justify-content:space-between;">
                                 <span>🏥 Domain I — Clinical Judgement</span>
                                 <span style="color:var(--text-muted); font-weight:400;">Raw Subtotal: <strong id="ctot_${caseName}_${team}" style="color:${accentColor};">0</strong> / ${clinMax}</span>
@@ -2538,7 +2563,7 @@
                         </div>
 
                         <!-- DOMAIN II — CRISIS RESOURCE MANAGEMENT -->
-                        <div style="margin-bottom:10px;">
+                        <div class="prelim-dom2" style="margin-bottom:10px;">
                             <div style="font-weight:700; font-size:0.83rem; color:var(--purple); margin-bottom:4px; display:flex; justify-content:space-between;">
                                 <span>🧠 Domain II — Crisis Resource Management</span>
                                 <span style="color:var(--text-muted); font-weight:400;">Raw Subtotal: <strong id="nttot_${caseName}_${team}" style="color:var(--purple);">0</strong> / ${ntMax}</span>
@@ -3846,8 +3871,8 @@
             return document.getElementById('sfName_' + t)?.value?.trim() || t.toUpperCase();
         }
         function sfGetJudge(j) {
-            const map = {cj1:'sfJudgeCJ1', cj2:'sfJudgeCJ2', crm1:'sfJudgeCRM1', crm2:'sfJudgeCRM2'};
-            const fallback = {cj1:'Clinical J1', cj2:'Clinical J2', crm1:'CRM J1', crm2:'CRM J2'};
+            const map = {cj1:'sfJudgeCJ1', cj2:'sfJudgeCJ2', cj3:'sfJudgeCJ3', crm1:'sfJudgeCRM1', crm2:'sfJudgeCRM2'};
+            const fallback = {cj1:'Clinical J1', cj2:'Clinical J2', cj3:'Clinical J3', crm1:'CRM J1', crm2:'CRM J2'};
             return document.getElementById(map[j])?.value?.trim() || fallback[j];
         }
 
@@ -3932,14 +3957,15 @@
         function sfUpdateChiefTally(r, t) {
             const cj1 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj1_clinTotal')?.textContent) || 0;
             const cj2 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj2_clinTotal')?.textContent) || 0;
+            const cj3 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj3_clinTotal')?.textContent) || 0;
             const crm1 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm1_crmTotal')?.textContent) || 0;
             const crm2 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm2_crmTotal')?.textContent) || 0;
             const globalV = parseFloat(document.getElementById('sf_' + r + '_' + t + '_global')?.value) || 0;
-            const d1 = (cj1 + cj2) / 2;
+            const d1 = (cj1 + cj2 + cj3) / 3;
             const d2 = (crm1 + crm2) / 2;
             const d3 = globalV;
             const total = d1 + d2 + d3;
-            const spread1 = Math.abs(cj1 - cj2);
+            const spread1 = Math.max(cj1, cj2, cj3) - Math.min(cj1, cj2, cj3);
             const spread2 = Math.abs(crm1 - crm2);
             function se(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
             se('sf_' + r + '_' + t + '_tally_d1', d1.toFixed(1));
@@ -3960,7 +3986,7 @@
         }
 
         function sfSyncJudgeNames() {
-            ['cj1','cj2','crm1','crm2'].forEach(j => {
+            ['cj1','cj2','cj3','crm1','crm2'].forEach(j => {
                 const name = sfGetJudge(j);
                 document.querySelectorAll('.sfJName_' + j).forEach(el => el.textContent = name);
             });
@@ -4023,10 +4049,11 @@
             h += '</div>';
 
             // Domain I (two clinical judge sheets)
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + teal + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical Judgement (two judges, score averaged)</div>';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + teal + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical Judgement (three judges, score averaged)</div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
             h += '<div class="sf-judgeblock-cj1">' + sfBuildClinicalSheet(r, t, 'cj1') + '</div>';
             h += '<div class="sf-judgeblock-cj2">' + sfBuildClinicalSheet(r, t, 'cj2') + '</div>';
+            h += '<div class="sf-judgeblock-cj3">' + sfBuildClinicalSheet(r, t, 'cj3') + '</div>';
             h += '</div>';
 
             // Domain II (two CRM judge sheets)
@@ -4056,7 +4083,7 @@
             h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="sfLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical Judgement (mean of two judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + teal + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d1">0.0</span> / 40</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical Judgement (mean of three judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + teal + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d1">0.0</span> / 40</td></tr>';
             h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Crisis Resource Management (mean of two judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d2">0.0</span> / 50</td></tr>';
             h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Global Entrustment (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d3">0</span> / 10</td></tr>';
             h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_total">0.0</span> / 100</td></tr>';
@@ -4096,12 +4123,12 @@
             sfRestoreSubmittedForRound(r);
         }
 
-        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2' };
+        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', cj3: 'Clinical Judge 3', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2' };
 
         function sfApplyMyRoleHiding(j) {
             const existing = document.getElementById('sfMyRoleStyle');
             if (existing) existing.remove();
-            const allJudges = ['cj1', 'cj2', 'crm1', 'crm2'];
+            const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2'];
             if (j) {
                 const style = document.createElement('style');
                 style.id = 'sfMyRoleStyle';
@@ -4119,10 +4146,64 @@
             }
         }
 
+        // Claim a judge slot server-side. Judges authenticate the claim with their
+        // per-judge PIN (handed out by the MC); organiser sessions never need one.
+        function claimSlot(slot) {
+            let pin = '';
+            if (window.SIMWARS_ROLE === 'judge' && slot) {
+                pin = localStorage.getItem('simwars_slot_pin_' + slot)
+                    || prompt('Enter the 4-digit PIN for this judge role (ask the MC):') || '';
+                if (!pin) return;
+            }
+            try {
+                fetch('/api/judge-identity', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slot: slot || '', pin: pin }) })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res && res.ok) {
+                            if (pin && slot) localStorage.setItem('simwars_slot_pin_' + slot, pin);
+                            pollScores();
+                        } else if (window.SIMWARS_ROLE === 'judge' && slot) {
+                            localStorage.removeItem('simwars_slot_pin_' + slot);
+                            alert('Wrong PIN — role not claimed. Ask the MC for your PIN.');
+                        }
+                    });
+            } catch (e) {}
+        }
+
         function sfSetMyRole(j) {
             if (j) { localStorage.setItem('simwars_sf_my_role', j); }
             else { localStorage.removeItem('simwars_sf_my_role'); }
             sfApplyMyRoleHiding(j);
+            claimSlot(j);
+        }
+
+        function prelimApplyMyRoleHiding(slot) {
+            const ex = document.getElementById('prelimMyRoleStyle');
+            if (ex) ex.remove();
+            let msg = '';
+            if (slot) {
+                const hide = slot.endsWith('-cj') ? '.prelim-dom2' : (slot.endsWith('-crm') ? '.prelim-dom1' : '');
+                if (hide) {
+                    const st = document.createElement('style');
+                    st.id = 'prelimMyRoleStyle';
+                    st.textContent = hide + '{display:none !important;}';
+                    document.head.appendChild(st);
+                }
+                msg = slot.endsWith('-cj')
+                    ? '🔒 Locked to Domain I — Clinical Judgement on this device. Tap "Show All" to undo (MC only).'
+                    : '🔒 Locked to Domain II — Crisis Resource Management on this device. Tap "Show All" to undo (MC only).';
+            }
+            ['prelimRoleStatusPals', 'prelimRoleStatusBls'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = msg;
+            });
+        }
+
+        function prelimSetMyRole(slot) {
+            if (slot) { localStorage.setItem('simwars_prelim_my_role', slot); }
+            else { localStorage.removeItem('simwars_prelim_my_role'); }
+            prelimApplyMyRoleHiding(slot);
+            claimSlot(slot);
         }
 
         function buildSFScoreCards() {
@@ -4141,6 +4222,7 @@
                 teams.forEach(t => {
                     sfUpdateClinicalTotal(r, t, 'cj1');
                     sfUpdateClinicalTotal(r, t, 'cj2');
+                    sfUpdateClinicalTotal(r, t, 'cj3');
                     sfUpdateCRMTotal(r, t, 'crm1');
                     sfUpdateCRMTotal(r, t, 'crm2');
                     sfUpdateChiefTally(r, t);
@@ -4479,10 +4561,15 @@
         const viewMeta = {
             pals:      { label: '🫀 PALS Judges',    tab: 'tabJudgePals', color: '#B3273B', bg: '#FBE4E7', hint: 'Room A scoring sheet' },
             bls:       { label: '❤️ BLS Judges',     tab: 'tabJudgeBls',  color: '#006D8C', bg: '#E6F4F7', hint: 'Room B scoring sheet' },
+            'pals-cj':  { label: '🫀 PALS — Clinical judge',  tab: 'tabJudgePals', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I only', domOnly: 'pals-cj' },
+            'pals-crm': { label: '🫀 PALS — CRM judge',       tab: 'tabJudgePals', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II only', domOnly: 'pals-crm' },
+            'bls-cj':   { label: '❤️ BLS — Clinical judge',   tab: 'tabJudgeBls',  color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I only', domOnly: 'bls-cj' },
+            'bls-crm':  { label: '❤️ BLS — CRM judge',        tab: 'tabJudgeBls',  color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II only', domOnly: 'bls-crm' },
             debriefer: { label: '🎓 Debriefer',       tab: 'tabDebriefer', color: '#065f46', bg: '#f0fdf4', hint: 'Secret scoring & reveal' },
             prizes:    { label: '🏅 Special Prizes',  tab: 'tabPrizes',    color: '#92400e', bg: '#fffbeb', hint: 'Prize leaderboard' },
             'sf-cj1':  { label: '🏟️ Semi-Finals — Clinical Judge 1', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj1' },
             'sf-cj2':  { label: '🏟️ Semi-Finals — Clinical Judge 2', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj2' },
+            'sf-cj3':  { label: '🏟️ Semi-Finals — Clinical Judge 3', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj3' },
             'sf-crm1': { label: '🏟️ Semi-Finals — CRM Judge 1',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm1' },
             'sf-crm2': { label: '🏟️ Semi-Finals — CRM Judge 2',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm2' },
         };
@@ -4527,11 +4614,12 @@
             if (tabBar) tabBar.style.display = 'none';
             const banner = document.createElement('div');
             banner.style.cssText = `background:${meta.bg};border-bottom:2px solid ${meta.color};padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;`;
-            banner.innerHTML = `
-                <span style="font-weight:800;font-size:1rem;color:${meta.color};">${meta.label} — Live Sheet</span>
+            const mcLink = (window.SIMWARS_ROLE === 'judge') ? '' : `
                 <a href="${window.location.origin + window.location.pathname}" style="font-size:0.78rem;color:${meta.color};opacity:0.7;text-decoration:none;border:1px solid ${meta.color}40;border-radius:5px;padding:3px 10px;">
                     🔓 Full View (MC)
                 </a>`;
+            banner.innerHTML = `
+                <span style="font-weight:800;font-size:1rem;color:${meta.color};">${meta.label} — Live Sheet</span>` + mcLink;
             document.body.insertBefore(banner, document.body.firstChild);
             // Switch to the correct tab
             const target = document.querySelector(`[data-tab="${meta.tab}"]`);
@@ -4540,7 +4628,7 @@
             // entry blocks so no judge can see (or accidentally edit) a colleague's
             // marks — each judge only ever sees their own Domain I or Domain II sheet.
             if (meta.sfOnly) {
-                const allJudges = ['cj1', 'cj2', 'crm1', 'crm2'];
+                const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2'];
                 const style = document.createElement('style');
                 style.textContent = allJudges
                     .filter(j => j !== meta.sfOnly)
@@ -4548,6 +4636,17 @@
                     .join('\n');
                 document.head.appendChild(style);
             }
+            // Prelim per-domain views: hide the other domain's sheet entirely.
+            if (meta.domOnly) {
+                const hide = meta.domOnly.endsWith('-cj') ? '.prelim-dom2' : '.prelim-dom1';
+                const st = document.createElement('style');
+                st.textContent = hide + '{display:none !important;}';
+                document.head.appendChild(st);
+            }
+            // Claim this view's slot server-side so score filtering applies to this session.
+            const slotMap = { pals: 'pals', bls: 'bls', debriefer: 'debriefer' };
+            const viewSlot = meta.sfOnly || meta.domOnly || slotMap[view] || '';
+            if (viewSlot) claimSlot(viewSlot);
         }
 
         function applyJudgeRoleLock() {
@@ -4565,6 +4664,10 @@
             banner.style.cssText = 'background:#FEF3C7;border-bottom:2px solid #D97706;padding:8px 20px;font-weight:700;font-size:0.85rem;color:#92400E;';
             banner.textContent = '⚖️ Judge View — scoring tabs only';
             document.body.insertBefore(banner, document.body.firstChild);
+            // Judges cannot unlock the all-sheets view — that stays with the Chief/MC (organiser login).
+            const sa = document.getElementById('sfShowAllBtn');
+            if (sa) sa.style.display = 'none';
+            document.querySelectorAll('.prelimShowAllBtn').forEach(b => { b.style.display = 'none'; });
         }
 
         // ================================================================
@@ -4575,8 +4678,12 @@
             buildSFScoreCards();
             buildFNScoreCards();
             try {
-                const savedSFRole = localStorage.getItem('simwars_sf_my_role');
+                const serverSlot = ['cj1','cj2','cj3','crm1','crm2'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
+                const savedSFRole = localStorage.getItem('simwars_sf_my_role') || serverSlot;
                 if (savedSFRole) sfApplyMyRoleHiding(savedSFRole);
+                const serverPrelim = ['pals-cj','pals-crm','bls-cj','bls-crm'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
+                const savedPrelimRole = localStorage.getItem('simwars_prelim_my_role') || serverPrelim;
+                if (savedPrelimRole) prelimApplyMyRoleHiding(savedPrelimRole);
             } catch (e) {}
             renderScoreInputs();
             renderPalsJudgeSheets();
@@ -4604,7 +4711,7 @@
 
             // Apply Judge Mode role lock if ?role=judge param present
             const roleParam = new URLSearchParams(window.location.search).get('role');
-            if (roleParam === 'judge') applyJudgeRoleLock();
+            if (roleParam === 'judge' || window.SIMWARS_ROLE === 'judge') applyJudgeRoleLock();
 
             // Load saved scores from server on first load
             pollScores();

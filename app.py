@@ -1143,7 +1143,15 @@ def get_case(case_id):
 def scoring():
     locked = require_role()
     if locked: return locked
-    return send_file(os.path.join(os.path.dirname(__file__), 'scoring.html'))
+    # Inject the server-verified role + claimed judge slot so the page cannot be
+    # tricked into organiser view via a URL parameter.
+    path = os.path.join(os.path.dirname(__file__), 'scoring.html')
+    with open(path, 'r', encoding='utf-8') as f:
+        html = f.read()
+    inject = ('<script>window.SIMWARS_ROLE = %s; window.SIMWARS_JUDGE_SLOT = %s;</script>\n</head>'
+              % (_json.dumps(session.get('role')), _json.dumps(session.get('judge_slot') or '')))
+    html = html.replace('</head>', inject, 1)
+    return html, 200, {'Content-Type': 'text/html'}
 
 import json as _json
 
@@ -1153,8 +1161,8 @@ import json as _json
 # NOTE: BLS (Room B) order below follows the LIVE scoring.html schedule
 # (B1->Round1, B4->Round2, B3->Round3, B2->Round4). A separate reference file,
 # simwars-2026-judges-master-schedule.html, states a different BLS order (B1,B2,B4,B3) —
-# this discrepancy has not been resolved and should be confirmed with the organiser team
-# before round start.
+# RESOLVED 15 Aug 2026: the LIVE order above is canonical. Every live surface (scoring
+# engine, flow page, printable schedule) agrees on it; the reference file is outdated.
 FLOW_CASE_DETAIL = {
     "prelim": {
         "1": {"A": {"code": "P1", "title": "Cardiogenic Shock (Fulminant Myocarditis)",
@@ -1221,11 +1229,82 @@ def schedule_print():
 def register():
     return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-landing-page.html'))
 
+JUDGE_SLOTS = ('cj1', 'cj2', 'cj3', 'crm1', 'crm2')
+
+def _key_visible_to_judge(key, my_slot, deb_revealed):
+    """Judge-session score filtering. A judge only ever receives their own
+    sheet entries; debriefer entries stay secret until revealed; prelim marks
+    are split by room and domain. Organiser sessions are never filtered."""
+    if key.startswith('sf_'):
+        for s in JUDGE_SLOTS:
+            if ('_%s_' % s) in key and s != my_slot:
+                return False
+    if key.startswith('deb_') and my_slot != 'debriefer' and not deb_revealed:
+        return False
+    # Prelim sheets: c_<CASE>_<TEAM>_* = Domain I (clinical), nt_... = Domain II (CRM)
+    if key.startswith('c_') or key.startswith('nt_'):
+        if my_slot == 'debriefer':
+            return True
+        parts = key.split('_')
+        case = parts[1] if len(parts) > 1 else ''
+        room = 'pals' if case.startswith('P') else ('bls' if case.startswith('B') else '')
+        if my_slot in ('pals', 'bls'):
+            return room == my_slot
+        if my_slot.endswith('-cj'):
+            return room == my_slot[:-3] and key.startswith('c_')
+        if my_slot.endswith('-crm'):
+            return room == my_slot[:-4] and key.startswith('nt_')
+        return False
+    return True
+
 @app.route('/api/scores', methods=['GET'])
 def get_scores():
     with get_db() as conn:
         rows = conn.execute('SELECT key, value FROM scores').fetchall()
-    return jsonify({row['key']: row['value'] for row in rows})
+    data = {row['key']: row['value'] for row in rows}
+    if session.get('role') == 'judge':
+        my_slot = session.get('judge_slot') or ''
+        deb_revealed = data.get('debriefer_revealed') == 'true'
+        data = {k: v for k, v in data.items() if _key_visible_to_judge(k, my_slot, deb_revealed)}
+    return jsonify(data)
+
+# One PIN per judge slot — the MC hands each judge their PIN on paper on event day.
+# Change these before the event if they have been shared beyond the panel.
+JUDGE_PINS = {
+    'cj1': '7311', 'cj2': '7322', 'cj3': '7333', 'crm1': '7411', 'crm2': '7422',
+    'pals': '7100', 'pals-cj': '7101', 'pals-crm': '7102',
+    'bls': '7200', 'bls-cj': '7201', 'bls-crm': '7202',
+    'debriefer': '7500',
+}
+
+@app.route('/api/judge-identity', methods=['POST'])
+def set_judge_identity():
+    if session.get('role') not in ('judge', 'organiser'):
+        return jsonify({'ok': False, 'error': 'not authenticated'}), 403
+    data = request.get_json(silent=True) or {}
+    slot = data.get('slot', '')
+    if slot not in ('cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'pals', 'pals-cj', 'pals-crm',
+                    'bls', 'bls-cj', 'bls-crm', 'debriefer', ''):
+        return jsonify({'ok': False, 'error': 'unknown slot'}), 400
+    # Judges must present the slot's PIN; organiser sessions (the MC) never need one.
+    if slot and session.get('role') == 'judge':
+        if str(data.get('pin', '')) != JUDGE_PINS.get(slot):
+            return jsonify({'ok': False, 'error': 'bad pin'}), 403
+    session['judge_slot'] = slot
+    return jsonify({'ok': True, 'slot': slot})
+
+@app.route('/api/gate', methods=['POST'])
+def gate():
+    """Server-side password check for the landing page — keeps passwords out of
+    the public page source and signs the session in at the same time."""
+    pw = str((request.get_json(silent=True) or {}).get('password', ''))
+    if pw == ORGANISER_PASSWORD:
+        session['role'] = 'organiser'
+        return jsonify({'ok': True, 'role': 'organiser'})
+    if pw == JUDGE_PASSWORD:
+        session['role'] = 'judge'
+        return jsonify({'ok': True, 'role': 'judge'})
+    return jsonify({'ok': False}), 403
 
 @app.route('/api/score', methods=['POST'])
 def save_score():
@@ -2075,6 +2154,48 @@ def portal():
 @app.route('/simwars-2026-participant-info.html')
 def participant_info():
         return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-participant-info.html'))
+
+@app.route('/simwars-2026-questionnaire.html')
+def questionnaire():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-questionnaire.html'))
+
+def _ensure_questionnaire_table(conn):
+    conn.execute('CREATE TABLE IF NOT EXISTS questionnaire (id INTEGER PRIMARY KEY AUTOINCREMENT, team TEXT, payload TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
+
+@app.route('/api/questionnaire', methods=['POST'])
+def submit_questionnaire():
+    data = request.get_json(silent=True) or {}
+    if not data:
+        return jsonify({'ok': False, 'error': 'empty submission'}), 400
+    with get_db() as conn:
+        _ensure_questionnaire_table(conn)
+        conn.execute('INSERT INTO questionnaire (team, payload) VALUES (?, ?)',
+                     (str(data.get('teamNumber', 'unknown')), _json.dumps(data)))
+        conn.commit()
+    return jsonify({'ok': True})
+
+@app.route('/questionnaire-responses')
+def questionnaire_responses():
+    locked = require_organiser()
+    if locked: return locked
+    with get_db() as conn:
+        _ensure_questionnaire_table(conn)
+        rows = conn.execute('SELECT team, payload, created_at FROM questionnaire ORDER BY created_at').fetchall()
+    if request.args.get('format') == 'json':
+        return jsonify([{'team': r['team'], 'created_at': str(r['created_at']), 'payload': _json.loads(r['payload'])} for r in rows])
+    items = ''.join(
+        '<tr><td>%s</td><td>%s</td><td><details><summary>view</summary><pre>%s</pre></details></td></tr>'
+        % (r['team'], r['created_at'], _json.dumps(_json.loads(r['payload']), indent=1).replace('<', '&lt;'))
+        for r in rows)
+    return ('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Questionnaire Responses</title>'
+            '<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;padding:24px;color:#1b2430;}'
+            'table{border-collapse:collapse;width:100%%;}td,th{border:1px solid #e3e7ee;padding:8px 12px;font-size:14px;text-align:left;vertical-align:top;}'
+            'pre{white-space:pre-wrap;font-size:12px;max-height:300px;overflow:auto;background:#f7f8fb;padding:8px;border-radius:6px;}'
+            'h1{font-size:22px;}a{color:#d81b7a;font-weight:700;}</style></head><body>'
+            '<h1>Pre-Event Questionnaire — %d response(s)</h1>'
+            '<p><a href="/questionnaire-responses?format=json">Download all as JSON</a></p>'
+            '<table><tr><th>Team</th><th>Submitted</th><th>Responses</th></tr>%s</table></body></html>'
+            % (len(rows), items))
 
 
 if __name__ == '__main__':

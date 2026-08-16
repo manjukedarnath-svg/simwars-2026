@@ -350,5 +350,44 @@
     .catch(function(){ renderGrid({}); });
 })();
 </script>
+<script>
+(function(){
+  // Judge/organiser-only case detail. window.SIMWARS_CASE_DETAIL is injected
+  // SERVER-side for authenticated sessions only — participants' responses never
+  // contain this data, so there is nothing here for devtools to reveal.
+  var D = window.SIMWARS_CASE_DETAIL;
+  if (!D) return;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"\x27]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var wrap = document.querySelector('.wrap');
+  if (!wrap) return;
+  var b = document.createElement('div');
+  b.style.cssText = 'background:#fff3e6;border:1.5px solid #d9760b;border-radius:12px;padding:12px 18px;margin:0 0 20px;font-size:14px;font-weight:700;color:#9a3412;';
+  b.textContent = '\u2696\uFE0F Judge / Organiser view \u2014 full case allocations are shown below. Confidential: do not project or share this screen.';
+  wrap.insertBefore(b, wrap.firstChild);
+  var s = document.createElement('div');
+  s.className = 'schedule-section';
+  var h = '<h2 class="schedule-title">Case Allocations \u2014 Judges Only</h2><div class="schedule-sub">Visible only on authenticated judge / organiser sessions</div>';
+  function card(head, c, tint, tintText){
+    return '<div class="schedule-room"><div class="schedule-room-head"><span class="schedule-room-name">' + esc(head) + ' \u00B7 ' + esc(c.code) + '</span></div>'
+      + '<div style="font-weight:700;font-size:14px;margin-bottom:4px;">' + esc(c.title) + '</div>'
+      + '<div style="font-size:12.5px;color:#6b7686;margin-bottom:6px;">' + esc(c.patient) + '</div>'
+      + '<div style="font-size:12.5px;background:' + tint + ';border-radius:6px;padding:6px 9px;color:' + tintText + ';"><b>Pearl:</b> ' + esc(c.pearl) + '</div></div>';
+  }
+  Object.keys(D.prelim || {}).sort().forEach(function(r){
+    var rd = D.prelim[r];
+    h += '<div class="schedule-round"><div class="schedule-round-label">Round ' + esc(r) + '</div><div class="schedule-rooms">';
+    ['A', 'B'].forEach(function(room){ if (rd[room]) h += card('Room ' + room, rd[room], '#fff3e6', '#9a3412'); });
+    h += '</div></div>';
+  });
+  if (D.sf) {
+    h += '<div class="schedule-round"><div class="schedule-round-label">Semi-Finals</div><div class="schedule-rooms">';
+    Object.keys(D.sf).sort().forEach(function(k){ h += card('SF Round ' + k, D.sf[k], '#eafaf6', '#0d8a72'); });
+    h += '</div></div>';
+  }
+  s.innerHTML = h;
+  var legend = document.querySelector('.legend');
+  if (legend) { legend.parentNode.insertBefore(s, legend); } else { wrap.appendChild(s); }
+})();
+</script>
 </body>
 </html>

@@ -1045,19 +1045,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         dataObject.teamNumber = appState.teamNumber || 'unknown';
         dataObject.submittedAt = new Date().toISOString();
-        console.log('📋 Questionnaire Data:', JSON.stringify(dataObject, null, 2));
         appState.answers = dataObject;
-        // Uncomment to send to a real backend (Google Apps Script, etc.):
-        /*
-        fetch('YOUR_ENDPOINT_URL', {
+        // Submissions save to the SimWars server itself (organisers view them at /questionnaire-responses).
+        fetch('/api/questionnaire', {
             method: 'POST',
-            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataObject)
-        }).catch(err => console.error('Submission error:', err));
-        */
+        }).then(function(r){ return r.json(); }).then(function(res){
+            submissionDetail.textContent = res && res.ok
+                ? 'Your responses are saved with the organisers. You can also download a JSON copy below.'
+                : 'Saving to the server failed — please download the JSON copy below and email it to the coordinators.';
+        }).catch(function(){
+            submissionDetail.textContent = 'You appear to be offline — please download the JSON copy below and email it to the coordinators.';
+        });
         successMsg.classList.add('show');
-        submissionDetail.textContent = 'You can download a JSON copy of your responses below.';
+        submissionDetail.textContent = 'Saving…';
         successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
         const submitBtn = form.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
