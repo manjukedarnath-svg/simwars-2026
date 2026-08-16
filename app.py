@@ -2403,6 +2403,11 @@ def whats_new():
 def mentor_flyer():
     return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-mentor-flyer.html'))
 
+@app.route('/watch')
+@app.route('/simwars-2026-spectator-flyer.html')
+def spectator_flyer():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-spectator-flyer.html'))
+
 def _ensure_questionnaire_table(conn):
     conn.execute('CREATE TABLE IF NOT EXISTS questionnaire (id INTEGER PRIMARY KEY AUTOINCREMENT, team TEXT, payload TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
 
