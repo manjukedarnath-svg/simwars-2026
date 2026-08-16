@@ -1227,7 +1227,16 @@ def schedule_print():
 
 @app.route('/register')
 def register():
-    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-landing-page.html'))
+    # no-store: kills stale cached copies of the landing page on every device/QR link
+    resp = send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-landing-page.html'))
+    resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    resp.headers['Pragma'] = 'no-cache'
+    return resp
+
+@app.route('/version')
+def version_stamp():
+    # sanity check: open /version on the live site — must say BUILD-2026-08-16-C
+    return 'BUILD-2026-08-16-C', 200, {'Content-Type': 'text/plain', 'Cache-Control': 'no-store'}
 
 JUDGE_SLOTS = ('cj1', 'cj2', 'cj3', 'crm1', 'crm2')
 
