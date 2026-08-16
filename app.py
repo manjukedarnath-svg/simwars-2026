@@ -31,11 +31,15 @@ def _get_weasyprint():
 
 app = Flask(__name__)
 
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'simwars-2026-change-me')
+import secrets as _secrets
+# Secret key: use env var if set; otherwise random per boot. Random fallback means all
+# sessions log out on redeploy — safe default now that the repo is public. Set
+# FLASK_SECRET_KEY in Railway → Variables to keep sessions across deploys.
+app.secret_key = os.environ.get('FLASK_SECRET_KEY') or _secrets.token_hex(32)
 
 ORGANISER_PASSWORD = '@MSPtrio2023sim'
 JUDGE_PASSWORD = '@SIMblore2014'
-TEAM_PASSWORD_PREFIX = '@SIMwarsTEAM'  # full password = prefix + draw number, e.g. @SIMwarsTEAM7
+TEAM_PASSWORD_PREFIX = '@SIMwarsTEAM'  # full password = prefix + draw number, e.g. @SIMwarsTEAM7 — also used by that team's mentor/director
 
 def _ist_now():
     return datetime.utcnow() + timedelta(hours=5, minutes=30)
@@ -2383,6 +2387,21 @@ def participant_info():
 @app.route('/simwars-2026-questionnaire.html')
 def questionnaire():
     return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-questionnaire.html'))
+
+@app.route('/stay')
+@app.route('/simwars-2026-stay-brochure.html')
+def stay_brochure():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-stay-brochure.html'))
+
+@app.route('/whats-new')
+@app.route('/simwars-2026-whats-new.html')
+def whats_new():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-whats-new.html'))
+
+@app.route('/mentors')
+@app.route('/simwars-2026-mentor-flyer.html')
+def mentor_flyer():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-mentor-flyer.html'))
 
 def _ensure_questionnaire_table(conn):
     conn.execute('CREATE TABLE IF NOT EXISTS questionnaire (id INTEGER PRIMARY KEY AUTOINCREMENT, team TEXT, payload TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')

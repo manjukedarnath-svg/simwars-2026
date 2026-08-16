@@ -1807,9 +1807,8 @@
             const FB = { crit:'rgba(239,68,68,0.15)', high:'rgba(249,115,22,0.12)', low:'rgba(96,165,250,0.12)', norm:'rgba(74,222,128,0.07)' };
             const header = `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #1e3a5f;">
                 <div>
-                    <div style="font-size:0.7rem;color:#4ade80;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">CHOP Emergency · SimWars 2026</div>
-                    <div style="font-size:1.6rem;font-weight:900;color:#ffffff;line-height:1.2;">${caseName} — ${displayTitle}</div>
-                    <div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;">${displayPatient}</div>
+                    <div style="font-size:0.7rem;color:#4ade80;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;">SimWars 2026 · Investigation Result</div>
+                    <div style="font-size:1.6rem;font-weight:900;color:#ffffff;line-height:1.2;">${displayPatient || caseName}</div>
                 </div>
                 <div style="text-align:right;flex-shrink:0;padding-left:20px;">
                     <div style="font-size:2.5rem;">${r.icon}</div>
