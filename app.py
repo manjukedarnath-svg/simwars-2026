@@ -283,39 +283,22 @@ CASES = [
         "equipment": "Two multiparameter monitors. ONE ultrasound machine (contention deliberate). O-negative blood (2 units in fridge, available immediately). MTP cooler labelled 1:1:1. TXA vial. Fluid warmer + rapid infuser. Scalp wound tray (staples/tissue adhesive) and pressure dressings. Simulated haematemesis delivery for 5:30 (bowl, towels, technician). Warming blanket visible. Two large-bore IV/IO points on Meera. Paediatric femur splint. Crash cart."
     },
     {
-        "id": "F1",
-        "round": "FINALS",
-        "active": False,  # Finals now runs a single case (F2, scored /200) — F1 kept for reference only, hidden from the Case Library grid
-        "title": "Crashing on the Vent — Severe PARDS with Acute Cor Pulmonale",
-        "summary": "Leo (6y, 20kg), day 3 PICU with influenza A pneumonia, is deeply sedated, paralysed, and desaturating on injurious ventilator settings (Pplat 34, ΔP 20). The declared team leader is removed (family emergency) and a substitute arrives — status ambiguous, later asserting seniority at 4:30 with a sepsis anchor. RV failure triggers hard at 4:00. The team must diagnose obstructive/RV-failure shock, halt the fluid bolus through graded assertiveness, request POCUS (D-sign, TAPSE 8mm), unload the lung (reduce MAP/PEEP), start epinephrine, add iNO, and correctly hand over to the returning leader at 9:30 — who must correct the false handover and disclose any fluid given. ECMO mode and rationale demanded at 14:00.",
-        "background": "Leo is 6, 20kg, day 3 in PICU with influenza A pneumonia, intubated 24h. Deeply sedated and paralysed. Femoral CVL, right radial arterial line. Now desaturating. Your consultant has been called away — family emergency. The unit is sending someone to cover.",
-        "expanded_history": "Previously healthy. Influenza A pneumonia. Ventilator PC-AC: Rate 24, Vt 110mL (5.5mL/kg), PEEP 14, PIP 34, Pplat 34, ΔP 20, Ti 0.8s, MAP 21, FiO2 0.85. ABG (30 min old): pH 7.28, PaCO2 58, PaO2 55, OI 32 → severe PARDS (PALICC-2, 2023). Infusions: fentanyl 2 mcg/kg/h, midazolam 0.1 mg/kg/h, rocuronium 1 mg/kg/h. No vasoactives. Team composition: 4 competitors (1 nurse compulsory + 3 doctors). Declared leader pulled before start; substitute restores count to 4. Confederate second nurse also present.",
-        "stages": [
-            {"name": "Stage 1: Handover Under Fire (0:00–4:00)", "vitals": "HR 145, BP 88/50, SpO2 82%, CVP 8, Temp 38.1°C, PEEP 14, PIP 34, Pplat 34, ΔP 20, MAP 21, FiO2 0.85", "condition": "Leo desaturating despite high FiO2 and PEEP 14. Pplat 34 / ΔP 20 = injurious ventilation. OI 32 = severe PARDS.\n\nSubstitute arrives 0:30 — status unknown, requests handover. Confederate nurse and RT also present.", "expected": "Structured DOPE (all four elements verbalised) · Identify Pplat 34 / ΔP 20 as excessive — do NOT reflexively escalate PEEP · Declare prone position with safety checklist (ETT depth confirmed and secured, lines managed, roles assigned, who owns the head, eye and pressure protection) — only intervention that improves oxygenation without raising mean airway pressure · Upward handover to substitute: structured, states the problem not just numbers · Task the second nurse", "notes": "ΔP is displayed as components but never calculated aloud by staff — Stage 1 discriminator. Prone declared here with checklist → Tier A crash at 4:00 (recovers on 2 interventions). Holding settings → Tier B. Escalating PEEP ≥16 → Tier C (MAP must be reduced first; pharmacology alone will not rescue). RT prompt at 2:30 if prone not raised: 'He's still 85%. Do you want to think about proning him?'"},
-            {"name": "Stage 2: The Crash + Wrong Anchor (4:00–7:00)", "vitals": "Tier B: HR 175, BP 65/35, SpO2 84%, CVP 16, CRT 5s, Cool mottled extremities, Liver 4cm below costal margin", "condition": "RV failure triggers hard at 4:00 — severity per Stage 1 tier. At 4:30 substitute asserts seniority: 'I've been a consultant here five years. He's febrile, hypotensive, tachycardic — this is septic shock. Get fluid in and broaden the antibiotics.' At 5:30 directs confederate nurse: '20 per kilo of saline. Now.' Nurse physically starts the bolus.", "expected": "Branch A (Correct): Halt the fluid bolus with closed-loop confirmation · Name shock as obstructive/RV failure — NOT septic · Request POCUS (D-sign, dilated RV:LV >1, TAPSE 8mm, dilated IVC, small underfilled LV) · Reduce MAP (lower PEEP or Vt) · Epinephrine 0.05–0.1 mcg/kg/min · iNO 20ppm AFTER MAP reduced (no haemodynamic benefit before unloading the lung) · Avoid milrinone bolus (systolic −20).\nBranch B (Incorrect): Accept sepsis frame · Continue fluid → second bolus → PEA arrest", "notes": "Two-challenge rule: an unacknowledged safety concern must be restated. Level 2 (concern + reason) or higher required. The team nurse physically stopping the confederate nurse = highest-gradient act, top of scoring band. Chief Judge signals yield or harden at 7:00 based on challenge level. iNO conditional is the intellectual core: pharmacology cannot rescue mechanical overdistension — oxygenation improves, haemodynamics do not, until MAP is reduced first."},
-            {"name": "Stage 3: Resolution + Leader Returns (7:00–11:00)", "vitals": "Post-treatment: HR 158, BP 74/42 (improving with epinephrine), SpO2 87%, CVP 13, iNO running", "condition": "At 7:00: Chief Judge signals yield (if adequately challenged) or harden (one final escalation then holds). At 9:30: Declared leader re-enters cold. Substitute delivers FALSE handover in front of the team: 'He's septic — febrile, hypotensive, we've been resuscitating. I'd keep the fluid going.' Team must correct departing substitute in front of returning leader — and disclose any fluid given.", "expected": "Reduce MAP and accept permissive hypercapnia (pH >7.20) · Epinephrine 0.05–0.1 mcg/kg/min with dose stated aloud · iNO 20ppm · Avoid milrinone bolus · Re-entry handover: correct false version, transmit RV failure diagnosis, disclose any fluid given · Returning leader: ask rather than assume, request CVP trend, restate model back, do NOT restart differential from scratch", "notes": "Vasopressin 0.3–0.5 mU/kg/min: systolic +10, CVP unchanged — expert marker. Milrinone infusion without bolus + BP supported: systolic −5, CVP −2 (acceptable). POCUS delivered unsolicited at 8:00 if never requested. Safety valve: if by 8:00 team has disintegrated, Chief Judge signals early reversion to neutral — no team may score zero on cor pulmonale because they spent 9 minutes losing an argument."},
-            {"name": "Stage 4: Endgame — Mother + ECMO Call (11:00–15:00)", "vitals": "HR 155, BP 78/45 (on epinephrine), SpO2 89%, iNO running, Ventilating on reduced settings", "condition": "Substitute exits 11:00. Returning leader owns the room. Mother enters 13:00 — does not leave without an answer: 'Is my son dying?' ECMO team calls 14:00 demanding mode and rationale. Deliberate collision: family conversation and ECMO decision simultaneously. One person cannot cover both.", "expected": "ECMO mode with defensible rationale: V-V (correct hypoxaemia/hypercarbia → lower MAP → unload RV; RV function may recover) OR V-A (refractory shock or arrest) — both earn full credit if justified, unjustified scores 2/6 · Family communication: honest, no jargon, does not abandon patient to talk · Explicit delegation so both can be managed simultaneously", "notes": "Arrest cap: PEA runs 60 seconds only, scripted ROSC, −10. Penalties: fluid ≥10 mL/kg −8 · milrinone bolus at systolic <70 −5 · PEEP ≥18 −5 · prone attempted 4:00–9:00 −4 · PEA arrest −10. Tiebreaker: 'Defend your ECMO mode — V-V or V-A — and what would change your mind?'"}
-        ],
-        "patient": {"name": "Leo", "mrn": "F1-001", "gender": "Male", "age": "6 years", "dob": "Day 3 PICU — influenza A pneumonia", "height": "~110 cm", "weight": "20 kg", "cc": "Desaturating on mechanical ventilation — severe PARDS", "hpi": "Day 3 PICU. Influenza A pneumonia. Intubated 24h. Deeply sedated and paralysed. Now desaturating on injurious ventilator settings (Pplat 34, ΔP 20, FiO2 0.85).", "pmh": "Previously healthy.", "psh": "None.", "meds": "Fentanyl 2 mcg/kg/h · Midazolam 0.1 mg/kg/h · Rocuronium 1 mg/kg/h.", "allergies": "None.", "family": "Mother enters 13:00. Does not leave without an answer: 'Is my son dying?'"},
-        "actors": "Substitute leader (confederate — ambiguous rank, asserts seniority 4:30 with sepsis anchor). Confederate nurse (executes only — physically starts the saline bolus at 5:30; never rescues the team). Respiratory Therapist (scripted prompts only). Mother (13:00). ECMO caller — voice only, 14:00.",
-        "equipment": "Paediatric manikin. Ventilator screen showing PEEP, PIP, Pplat, Vt, rate, MAP (operator-editable). Three labelled infusions running. iNO cart with visible flowmeter. 500mL saline pre-spiked on pole (fluid trap must be physically startable). Code cart. Prone supplies visible (gel rolls, foam face support). Pre-recorded POCUS clips: PSAX D-shaped septum, apical 4-chamber dilated RV, M-mode TAPSE 8mm, dilated IVC. Monitor mirrored to main screen — audience must watch CVP climb as BP falls."
-    },
-    {
         "id": "F2",
         "round": "FINALS",
-        "title": "The Tense Abdomen — Severe Dengue with Abdominal Compartment Syndrome",
-        "summary": "Rehan (10y, 30kg), dengue day 5 after defervescence (critical phase), arrives after receiving ~70mL/kg crystalloid at a peripheral hospital. He has a tense grossly distended abdomen, anuria for 8 hours, thrombocytopenia (platelets 12), and active GI bleeding. CVP 18 is falsely reassuring — transmitted intra-abdominal pressure, not filling. The catheter is already in situ: IAP measurement (90 seconds, free) reads 26mmHg. The confederate substitute anchors on haemorrhagic shock and orders crystalloid + FFP at 5:30. The team must halt the crystalloid while accepting blood products, decompress the abdomen (therapeutic paracentesis → the only action that restores urine output), and hand over to the returning leader at 9:30.",
-        "background": "Rehan is 10, 30kg, day 5 of dengue — NS1 positive, fever settled yesterday. Arriving from a peripheral hospital where he received ~70mL/kg crystalloid over 6 hours for progressive hypotension. Femoral CVL and catheter already placed there. Shocked, abdomen distended, no urine for 8 hours. Father is at the bedside. Your consultant has been called away — family emergency.",
-        "expanded_history": "Dengue day 5, critical phase — defervescence yesterday. Peripheral hospital gave ~70mL/kg crystalloid. Femoral CVL, urinary catheter placed there. Vitals: HR 152, BP 78/62 (PP 16), RR 44, SpO2 91% on 6L mask, CRT 4s, CVP 18, Temp 36.6°C. Examination: cool mottled peripheries, grossly distended tense abdomen with pen girth mark from referring hospital, liver 4cm tender, reduced air entry both bases, drowsy but rousable, old melaena. Catheter dry for 8 hours. IAP via catheter: 26mmHg (Grade IV, ACS). Abdominal perfusion pressure = MAP − IAP = 67 − 26 = 41mmHg (target >60).",
+        "title": "The Tense Abdomen",
+        "summary": "Occult abdominal compartment syndrome behind a contested-authority, septic-shock anchor. Rehan (10y, 30kg), day 5 of an undifferentiated febrile illness — never named to the team; NS1 is genuinely negative on day 5 and only a dengue IgM (available Stage 3+) unlocks the diagnosis. ~70mL/kg crystalloid at referral, shocked, tense distended abdomen, anuric 8h. The team leader is pulled out at 0:00; Dr Sindhu arrives at 4:00 offering to lead and pushes a half-right plan (more fluid, pressors, meropenem, furosemide) whichever way the team decides. Single 20-minute finals clock.",
+        "background": "Rehan is 10, 30kg, day 5 of an undifferentiated febrile illness — fever settled yesterday. Arriving from a peripheral hospital where he received ~70mL/kg crystalloid over 6 hours for progressive hypotension. One peripheral IV and a urinary catheter already placed. Shocked, abdomen distended, no urine for 8 hours. Father at the bedside. At 0:00, before handover properly starts, the organisers call your team leader out of the room. The team must organise itself.",
+        "expanded_history": "If asked: day 5 of fever, defervesced yesterday. One peripheral IV in situ — difficult to draw back, second attempt at that site fails. Urinary catheter dry 8 hours. No central line, no CVP available (deliberately absent this revision). Vitals: HR 152, BP 78/62 (PP 16), RR 44, SpO2 91% on 6L mask, CRT 4s, Temp 36.6. Exam: cool mottled peripheries, grossly distended tense abdomen with pen girth mark, liver 4cm tender, reduced air entry both bases, drowsy but rousable. IAP via catheter if measured: 26mmHg (Grade IV ACS); APP = MAP - IAP = 41mmHg. Faculty: diagnosis never stated; NS1 negative in Stage 1 is real day-5 sensitivity, not a trick; dengue IgM positive from Stage 3.",
         "stages": [
-            {"name": "Stage 1: Handover Under Fire (0:00–4:00)", "vitals": "HR 152, BP 78/62, Pulse Pressure 16, RR 44, SpO2 91%, CVP 18, CRT 4s, Lactate 6.2, pH 7.18, Platelets 12", "condition": "Rehan: Decompensated dengue shock, critical phase. Narrow pulse pressure (PP 16) = earliest reliable marker. Grossly distended tense abdomen with pen girth mark from referring hospital. Catheter bag dry for 8 hours. CVP 18 = falsely reassuring (transmitted IAP, not filling). Old melaena. Father present throughout — silent unless addressed.\n\nSubstitute arrives 0:30, status unknown, requests handover.", "expected": "Recognise decompensated dengue shock in critical phase (narrow PP, defervescence, day 5) · Take fluid history: ~70mL/kg already in — register this critical point · Examine the abdomen: tense, note pen girth mark · MEASURE INTRA-ABDOMINAL PRESSURE via catheter already in situ → 26mmHg = Grade IV = Abdominal Compartment Syndrome · Send Hct, coagulation, renal bundle · Recognise AKI + hyperkalaemia (K+ 5.8) · Structured upward handover to substitute · Task the confederate nurse", "notes": "IAP measurement is the discriminating Stage 1 action — 90 seconds, no extra equipment needed. Measuring IAP → Tier A crash at 4:00 (recovers on 2 correct actions). Examining abdomen but no IAP → Tier B. Giving ≥20mL/kg crystalloid before 4:00 → Tier C (decompression required first; blood products alone will not restore BP or urine). Technician prompt at 2:30 if abdomen not examined: 'There's a pen line drawn on his tummy from the other hospital — he's well past it now.'"},
-            {"name": "Stage 2: Haematemesis + Half-Right Anchor (4:00–7:00)", "vitals": "Tier B: HR 168, BP 64/50, SpO2 85%, IAP 28, CRT 4s, Hct 48%→31% (repeat 6:00)", "condition": "400mL haematemesis at 4:00 — scripted and unpreventable. Substitute asserts seniority at 4:30: 'I've been a consultant here eight years. He's bleeding, shocked, haematocrit dropping — haemorrhagic shock. Run the fluids and activate massive transfusion.' At 5:30 directs nurse: '20/kg Ringer's wide open AND four units FFP.' Nurse physically starts both. The anchor is half-right: the child genuinely is bleeding and needs blood — what is wrong is the crystalloid, large-volume FFP, and failure to address the abdomen.", "expected": "Branch A (Correct): Halt crystalloid with closed-loop confirmation WHILE accepting blood · Name problem as mechanical — tense abdomen obstructing venous return, not simple hypovolaemia · Refuse large-volume FFP (IAP +2, MAP −5) · Request POCUS: gross ascites, small hyperdynamic LV, dilated non-collapsing IVC (IVC is the deliberate red herring — reads as fluid-replete but reflects compression; small hyperdynamic LV is the honest finding) · Packed cells 10mL/kg.\nBranch B (Incorrect): Accept crystalloid + FFP → MAP falls further, IAP rises, urine production zero → arrest", "notes": "Two-challenge rule applies. Team nurse physically stopping the confederate nurse = ceiling behaviour, top of scoring band. Chief Judge signals yield or harden at 7:00. Furosemide for anuria: no urine produced (renal vein compressed) + MAP −4 = penalty. Noradrenaline raises BP but produces no urine without decompression — vasopressors cannot substitute for mechanical decompression."},
-            {"name": "Stage 3: Resolution + Paracentesis + Leader Returns (7:00–11:00)", "vitals": "Post-paracentesis: IAP 26→14, MAP +12, SpO2 +5, Urine 20mL within 10 min, BP improving", "condition": "At 9:30: Declared leader re-enters cold. Substitute delivers FALSE handover: 'He's bleeding out — haemorrhagic shock, we've been filling him. I'd keep the fluid and FFP going.' Team must correct departing substitute in front of returning leader — disclose all crystalloid and FFP given.", "expected": "Packed cells 10mL/kg with dose stated aloud · Platelets for active bleeding with count of 12 (NOT large-volume FFP) · Decompression bundle: NG tube · analgesia + sedation to relax abdominal wall (head of bed ≤30° — raising >30° worsens IAP) · THERAPEUTIC PARACENTESIS (1.2L drained → IAP 26→14, MAP +12, SpO2 +5, urine appears within 10 min) · Re-entry handover: correct false version, transmit mechanical diagnosis, disclose crystalloid/FFP given", "notes": "Paracentesis is the ONLY action that restores urine output — vasopressors alone will not. Paracentesis without platelet/product cover: bleeding at site, −3 penalty, drainage still effective. NG decompression alone: IAP −2, MAP +3. Sedation/analgesia to relax abdominal wall: IAP −3, MAP +4. POCUS delivered unsolicited at 8:00 if never requested. Returning leader: asks rather than assumes, requests urine output and fluid totals, restates model back, does NOT restart differential from scratch."},
-            {"name": "Stage 4: Endgame — Father + PICU Call (11:00–15:00)", "vitals": "IAP 14, MAP improving, Urine draining, Platelets transfusing, SpO2 94%", "condition": "Substitute exits 11:00. Returning leader owns room. Father (silent since 0:00) demands answer at 13:00: 'You keep putting things into him and he's getting worse. Is my son going to die?' PICU/retrieval calls 14:00: 'We'll take him. Intubated before transfer or awake? Do you want the surgeons?' Deliberate collision: family conversation + disposition decision simultaneously.", "expected": "Airway decision with rationale: Intubate (rising WOB, splinted diaphragm, active haematemesis — specify ketamine induction + PEEP ≤5, OR decompression first) OR Transfer awake (positive pressure into undecompressed abdomen reduces preload further; decompression flips the decision) — both earn full credit if justified, unjustified scores 2/6 · Surgical/PICU escalation · Family communication: honest, no jargon, does not abandon patient to communicate", "notes": "Penalties: crystalloid ≥20mL/kg after 4:00 −8 · FFP ≥15mL/kg −5 · intubation as first move or PEEP ≥8 −5 · nephrotoxic given −4 · furosemide for anuria −3 · cardiac arrest −10. NSAID/nephrotoxic: creatinine rises on repeat. Arrest cap: 60 seconds, scripted ROSC, −10. Tiebreaker: 'Defend your airway decision — intubate before transfer, or not — and what would change your mind?'"}
+            {"name": "Stage 1: Alone (0:00-4:00)", "vitals": "HR 152, BP 78/62 (PP 16), RR 44, SpO2 91% on 6L, CRT 4s, Temp 36.6, no CVP. IAP if measured: 26mmHg (Grade IV ACS)", "condition": "Team leader pulled out at 0:00 before handover. Tense distended abdomen, pen girth mark, catheter dry 8h. Second IV attempt fails. NS1 sent returns negative.", "expected": "Self-organise a de facto leader. Escalate failed IV to EJ/IO. Send coagulation workup. Request central line (denied, still credited). Examine abdomen, note girth mark. MEASURE IAP via catheter — the discriminating Stage 1 action. Hold negative NS1 as non-diagnostic. Register ~70mL/kg fluid history."},
+            {"name": "Stage 2: Sindhu Arrives — Authority on the Table (4:00-8:00)", "vitals": "Trending as Stage 1; melaena becomes visible this stage", "condition": "Dr Sindhu enters ~4:00: offers to lead or support — a genuine fork. Whichever the team chooses she pushes the same wrong plan: 20mL/kg saline wide open, noradrenaline, meropenem + clindamycin for 'septic shock', furosemide for anuria.", "expected": "Engage the fork as a team decision. Apply the two-challenge rule to Sindhu's plan regardless of who leads. Keep the abdomen and IAP live in the differential. Recognise melaena as genuine bleeding. Resist further crystalloid."},
+            {"name": "Stage 3: Haematemesis, ACS Trigger, Fluid Intolerance (8:00-12:00)", "vitals": "Scripted haematemesis ~8:30. Pulse pressure narrows further after any bolus. Hct falling. Dengue IgM available from this stage (positive)", "condition": "Fluid-intolerant state: every crystalloid bolus worsens PP. Genuine haemorrhagic component alongside ACS.", "expected": "Limit/refuse crystalloid after the fluid-intolerance trigger. Targeted platelets/PRBC for bleeding — not large-volume product. Send and correctly interpret dengue IgM against the sepsis/DIC frame. Re-check and trend IAP."},
+            {"name": "Stage 4: The Drain Decision (12:00-17:00)", "vitals": "IAP 26-28. Post-paracentesis: IAP falls to ~14, MAP +12, SpO2 +5, urine within 10 min — after a frightening transient dip", "condition": "Sindhu opposes paracentesis. Outcome branches on drain / no-drain. Team leader returns ~15:00 and receives a false, self-serving handover from Sindhu.", "expected": "Perform therapeutic paracentesis with platelet/product cover. Hold the decision through the transient post-drain deterioration. Continue targeted blood products alongside ACS management. Correct the false re-entry handover with specific evidence (IAP trend, urine, drain result)."},
+            {"name": "Stage 5: Endgame — Father + PICU Call (17:00-20:00)", "vitals": "Outcome-conditional on Stage 4. If drained: IAP 14, urine draining, SpO2 94%, BP improving", "condition": "Father question ~18:00 and PICU/retrieval call ~19:00 — a deliberate collision under fatigue.", "expected": "Honest, jargon-free conversation with the father without abandoning the patient. Airway/transfer decision with stated rationale. Structured escalation call."}
         ],
-        "patient": {"name": "Rehan", "mrn": "F2-001", "gender": "Male", "age": "10 years", "dob": "Dengue Day 5 — critical phase after defervescence", "height": "~138 cm", "weight": "30 kg", "cc": "Dengue shock — distended abdomen, anuria 8h, active GI bleed", "hpi": "Day 5 dengue. NS1+. Fever settled yesterday (defervescence = critical phase entry). Peripheral hospital gave ~70mL/kg crystalloid over 6h for progressive hypotension. Femoral CVL + catheter placed there. Grossly distended tense abdomen with referring hospital's girth mark. No urine for 8 hours. Old melaena. Now haematemesis.", "pmh": "Previously healthy.", "psh": "None.", "meds": "Nil.", "allergies": "None.", "family": "Father present in room from 0:00 — silent until 13:00 unless addressed. 'You keep putting things into him and he's getting worse. Is my son going to die?'"},
-        "actors": "Substitute leader (confederate — ambiguous rank, asserts seniority 4:30 with haemorrhagic shock anchor). Confederate nurse (physically starts crystalloid + FFP at 5:30; never rescues). ED Technician (girth prompt 2:30, IAP reading on request). Father (present 0:00, speaks 13:00). PICU/retrieval caller — voice only, 14:00.",
-        "equipment": "Paediatric manikin with distended abdomen prop (drainable reservoir — paracentesis payoff must be visible). Pen girth mark on abdomen. Urinary catheter with IAP manometry setup. Femoral CVL + peripheral cannula. Crystalloid bag pre-spiked and hanging (fluid trap physically present and startable). Blood product boxes labelled. Paracentesis kit staged. Simulated haematemesis for 4:00 (bowl, towels, technician). Pre-recorded POCUS clips: gross ascites, thickened GB wall, bilateral pleural effusions, dilated non-collapsing IVC, small hyperdynamic LV. Catheter bag visible on camera — urine appearing is the reward signal."
+        "patient": {"name": "Rehan", "mrn": "F2-001", "gender": "Male", "age": "10 years", "dob": "Day 5 undifferentiated febrile illness — defervesced yesterday", "height": "~138 cm", "weight": "30 kg", "cc": "Shock, tense distended abdomen, anuric 8 hours", "hpi": "Referred after ~70mL/kg crystalloid over 6h for progressive hypotension. NS1 negative (day-5 effect). True diagnosis — severe dengue, critical phase — never stated to the team."},
+        "actors": "Dr Sindhu (confederate — arrives 4:00, asks to lead, pushes the half-right septic plan in order or advice register). Confederate nurse (second IV fails; offers EJ/IO). Technician (girth-mark prompt at 2:30 if abdomen unexamined). Father at bedside throughout. Team leader pulled out at 0:00, returns ~15:00 to a false handover.",
+        "equipment": "Paediatric manikin with distended-abdomen prop (drainable reservoir — paracentesis payoff visible), pen girth mark, urinary catheter with IAP manometry, one difficult peripheral IV (EJ/IO kits on request), NO femoral CVL or CVP transducer, pre-spiked hanging crystalloid (fluid trap), NS1 + dengue IgM kits (IgM gated to Stage 3+), PRBC/platelet boxes, noradrenaline/furosemide/meropenem/clindamycin labels, staged paracentesis kit, simulated melaena and haematemesis, POCUS clips (gross ascites, GB wall thickening, effusions, dilated IVC, small hyperdynamic LV), catheter bag on camera."
     }
 ]
 
@@ -1117,10 +1100,12 @@ def get_case(case_id):
 
     elif fmt == 'pdf':
         WeasyHTML = _get_weasyprint()
-        if WeasyHTML is None:
-            return ("PDF export requires WeasyPrint system dependencies (Pango/GLib). "
-                    "Install via: brew install pango gobject-introspection && pip install weasyprint", 503)
         html = render_template_string(CASE_TEMPLATE, case=case, colors=colors, prev_case=None, next_case=None)
+        if WeasyHTML is None:
+            # No PDF engine on the server: serve a print-ready page that opens the
+            # browser's own Save-as-PDF dialog instead of failing with a 503.
+            html = html.replace('</body>', '<script>window.addEventListener("load",function(){setTimeout(function(){window.print();},400);});</scr' + 'ipt></body>')
+            return html, 200, {'Content-Type': 'text/html'}
         pdf = WeasyHTML(string=html).write_pdf()
         return send_file(io.BytesIO(pdf), mimetype='application/pdf', as_attachment=True,
                          download_name=f'{case_id}_{case["title"][:40].replace(" ", "_")}.pdf')
@@ -1414,25 +1399,24 @@ def get_results():
             'pals': pals, 'bls': bls, 'combined': combined,
             'pals_d3': pals_d3, 'bls_d3': bls_d3,
         })
-    teams.sort(key=lambda t: (-t['combined'], -t['pals'], -(t['pals_d3'] + t['bls_d3'])))
+    # Tie-breaker (locked): equal combined totals are split by the interprofessional/CRM
+    # domain (Domain 3) summed across both prelim cases, then by the PALS score.
+    teams.sort(key=lambda t: (-t['combined'], -(t['pals_d3'] + t['bls_d3']), -t['pals']))
     active = [t for t in teams if t['pals'] > 0 or t['bls'] > 0]
     sf = {t: (sc.get(f'sfName_{t}') or '').strip() or t.upper() for t in ['sf1','sf2','sf3','sf4']}
     fn_names = {t: (sc.get(f'fnName_{t}') or '').strip() or t.upper() for t in ['fin1','fin2']}
     FN_STAGES = {
-        'F1': {'stages': [
-            [('s1i0',3),('s1i1',4),('s1i2',2),('s1i3',3)],
-            [('s2i0',6),('s2i1',5),('s2i2',4)],
-            [('s3i0',4),('s3i1',4),('s3i2',2),('s3i3',2)],
-            [('s4i0',6)],
-        ], 'penalties': [('p0',-8),('p1',-5),('p2',-5),('p3',-4),('p4',-10)],
-           'tw': [('tw0',6),('tw1',8),('tw2',8),('tw3',6),('tw4',5),('tw5',7)]},
+        # Finals = single case F2 (revised). Judges score directly /200: Domain I Clinical 90,
+        # Domain II Human Factors 80 (five 0-16 anchors), Domain III Shared Reasoning 30,
+        # minus penalties. F1 is out of the competition.
         'F2': {'stages': [
-            [('s1i0',3),('s1i1',3),('s1i2',4),('s1i3',2)],
-            [('s2i0',6),('s2i1',5),('s2i2',4)],
-            [('s3i0',4),('s3i1',3),('s3i2',2),('s3i3',3)],
-            [('s4i0',6)],
-        ], 'penalties': [('p0',-8),('p1',-5),('p2',-5),('p3',-4),('p4',-3),('p5',-10)],
-           'tw': [('tw0',6),('tw1',8),('tw2',8),('tw3',6),('tw4',5),('tw5',7)]},
+            [('s1i0',2),('s1i1',2),('s1i2',4),('s1i3',2),('s1i4',4),('s1i5',10),('s1i6',2)],
+            [('s2i0',4)],
+            [('s3i0',10),('s3i1',8),('s3i2',8),('s3i3',2)],
+            [('s4i0',12),('s4i1',6),('s4i2',6)],
+            [('s5i0',2),('s5i1',6)],
+        ], 'penalties': [('p0',-16),('p1',-10),('p2',-10),('p3',-8),('p4',-6),('p5',-6),('p6',-20)],
+           'tw': [('tw0',16),('tw1',16),('tw2',16),('tw3',16),('tw4',16)]},
     }
     fn_scores = {}
     for t in ['fin1','fin2']:
@@ -1447,9 +1431,9 @@ def get_results():
                     clin += pts
             clin = max(0, clin)
             tw = sum(min(mx, max(0, flt(sc.get(f'fn_{cid}_{t}_tw_{k}')))) for k, mx in cd['tw'])
-            shared = min(15, max(0, flt(sc.get(f'fn_{cid}_{t}_shared'))))
+            shared = min(30, max(0, flt(sc.get(f'fn_{cid}_{t}_shared'))))
             fn_scores[t][cid] = {'clin': clin, 'tw': tw, 'shared': shared, 'total': clin + tw + shared}
-    fn_totals = {t: sum(fn_scores[t][c]['total'] for c in ['F1','F2']) for t in ['fin1','fin2']}
+    fn_totals = {t: fn_scores[t]['F2']['total'] for t in ['fin1','fin2']}  # judges score directly /200
     # Access tiers: organisers always; judges from 21 Aug IST; teams from 22 Aug IST.
     # Everyone else (incl. the public /flow page) gets team names only — no scores.
     role = session.get('role')
@@ -1464,7 +1448,7 @@ def get_results():
         'all_teams': teams,
         'sf': sf,
         'finals': {t: {'name': fn_names[t], 'scores': fn_scores[t], 'total': fn_totals[t]} for t in ['fin1','fin2']},
-        'weights': {'policy': 'BLS Domain I x1.25 / Domain II x0.8; PALS unweighted. Fixed — see scoring.html.'},
+        'weights': {'policy': 'BLS Domain I x1.25 / Domain II x0.8; PALS unweighted. Fixed — see scoring.html.', 'tiebreak': 'Ties on combined /200 broken by interprofessional (Domain 3) total across both cases, then PALS score.'},
     })
 
 @app.route('/cases')
@@ -2204,7 +2188,7 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
 
         <!-- CASE PACKETS — full width -->
         <div class="cases-section">
-            <div class="section-head"><i class="fas fa-folder-open"></i> Case Packets <span style="font-size:0.75rem;font-weight:400;color:#6a8aaa;margin-left:6px">Local files · open on this Mac only</span></div>
+            <div class="section-head"><i class="fas fa-folder-open"></i> Case Packets <span style="font-size:0.75rem;font-weight:400;color:#6a8aaa;margin-left:6px">Live server copies</span></div>
 
             <!-- BLS -->
             <div class="round-group round-bls">
@@ -2213,37 +2197,37 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
                     <div class="case-card">
                         <div class="case-id">B1</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B1/B1_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B1/B1_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B1/B1_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B1/B1_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/B1" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/B1?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/B1_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">B2</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B2/B2_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B2/B2_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B2/B2_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B2/B2_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/B2" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/B2?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/B2_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">B3</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B3/B3_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B3/B3_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B3/B3_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B3/B3_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/B3" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/B3?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/B3_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">B4</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B4/B4_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B4/B4_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B4/B4_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/B4/B4_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/B4" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/B4?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/B4_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                 </div>
@@ -2256,38 +2240,38 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
                     <div class="case-card">
                         <div class="case-id">P1</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P1/P1_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P1/P1_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P1/P1_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P1/P1_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/P1" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/P1?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/P1_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">P2</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P2/P2_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P2/P2_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P2/P2_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P2/P2_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/P2" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/P2?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/P2_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">P3</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P3/P3_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P3/P3_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P3/P3_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P3/P3_Actor_Script.pdf" target="_blank">🎭 Actor Script</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P3/P3_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/P3" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/P3?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/library" target="_blank">🎭 Actor Script</a>
+                            <a class="doc-link" href="/static/decks/P3_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">P4</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P4/P4_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P4/P4_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P4/P4_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/P4/P4_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/P4" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/P4?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/P4_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                 </div>
@@ -2300,37 +2284,37 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
                     <div class="case-card">
                         <div class="case-id">R1a</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1a/R1a_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1a/R1a_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1a/R1a_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1a/R1a_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/library" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/library" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/library" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/library" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">R1b</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1b/R1b_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1b/R1b_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1b/R1b_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R1b/R1b_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/library" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/library" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/library" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/library" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">R2a</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2a/R2a_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2a/R2a_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2a/R2a_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2a/R2a_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/library" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/library" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/library" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/library" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">R2b</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2b/R2b_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2b/R2b_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2b/R2b_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/R2b/R2b_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/library" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/library" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/library" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/library" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                 </div>
@@ -2343,19 +2327,19 @@ PORTAL_TEMPLATE = """<!DOCTYPE html>
                     <div class="case-card">
                         <div class="case-id">F1 — PICU: Crashing on the Vent</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F1/F1_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F1/F1_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F1/F1_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F1/F1_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/F1" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/F1?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/F1_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                     <div class="case-card">
                         <div class="case-id">F2 — PEM: Tense Abdomen</div>
                         <div class="doc-links">
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F2/F2_Scenario.pdf" target="_blank">📄 Scenario</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F2/F2_Cheat_Sheet.pdf" target="_blank">📋 Cheat Sheet</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F2/F2_Judge_Scoring.pdf" target="_blank">⚖️ Judge Scoring</a>
-                            <a class="doc-link" href="file:///Users/manjukedarnath/Library/CloudStorage/Dropbox/AAA%20Pedistars/Simwars/simwars%202026/Scenarios/files/simwars/dist/SimWars_2026/F2/F2_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
+                            <a class="doc-link" href="/case/F2" target="_blank">📄 Case Page</a>
+                            <a class="doc-link" href="/case/F2?format=pdf" target="_blank">📋 Case PDF</a>
+                            <a class="doc-link" href="/scoring" target="_blank">⚖️ Judge Scoring</a>
+                            <a class="doc-link" href="/static/decks/F2_Slide_Deck.pptx" target="_blank">📊 Slide Deck</a>
                         </div>
                     </div>
                 </div>
@@ -2457,7 +2441,15 @@ fetch(INTAKE).then(function(r){return r.json();}).then(function(d){
 
 @app.route('/simwars-2026-questionnaire.html')
 def questionnaire():
-    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-questionnaire.html'))
+    import re as _re
+    with open(os.path.join(os.path.dirname(__file__), 'simwars-2026-questionnaire.html'), encoding='utf-8') as _f:
+        _html = _f.read()
+    # Gate is open to ALL teams 1-16 regardless of which HTML copy is deployed
+    _html = _re.sub(r'const allowedTeams = \[[^\]]*\];',
+                    'const allowedTeams = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];', _html)
+    _resp = app.response_class(_html, mimetype='text/html')
+    _resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return _resp
 
 @app.route('/stay')
 @app.route('/simwars-2026-stay-brochure.html')
