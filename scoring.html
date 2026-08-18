@@ -1039,9 +1039,6 @@
                         <div style="margin-top:6px; font-size:0.8rem; color: var(--warning);"><span class="buffer-tag">HARD STOP</span> 15 min max per team</div>
                     </div>
                 </div>
-                <div style="margin-top:16px; background: var(--surface-2); padding:12px 18px; border-radius:8px; font-size:0.85rem;">
-                    <strong>🎲 Double-blind draw:</strong> Teams draw PALS and BLS lots separately. Enter results in the Team Roster above, then click <em>Apply Draw &amp; Group Teams</em> to assign teams to cases.
-                </div>
             </div>
             <!-- Rubrics -->
             <div class="rubric-grid">
@@ -1387,10 +1384,10 @@
             <div class="card" style="border-left-color:#d97706; background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);">
                 <h2><span class="emoji">🏆</span> Finals Scoring Pack</h2>
                 <p style="color:#92400e; margin-bottom:12px; font-size:0.88rem;">
-                    Single case (F2 &mdash; &ldquo;The Tense Abdomen&rdquo;), scored directly out of 200: Domain A: Clinical Management (90 pts) · Domain B: Teamwork &amp; Followership (80 pts) · Domain C: Shared Reasoning (30 pts) = <strong>200 pts total</strong>
+                    Single case (F2 &mdash; &ldquo;The Tense Abdomen&rdquo;), scored directly out of 200: Domain I — Clinical (90 pts) · Domain II — Human Factors (80 pts, five 0–16 anchors) · Domain III — Shared Reasoning with the Confederate (30 pts), minus penalties · single 20:00 clock <strong>200 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#92400e;">
-                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain A independently (45 pts). Teamwork Judge scores Domain B independently (40 pts). Both judges agree Domain C collectively (15 pts) after private notes — before domain totals are calculated.
+                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain I — Clinical independently (90 pts). Teamwork Judge scores Domain II — Human Factors independently (40 pts, five 0–16 anchors). Both judges agree Domain III — Shared Reasoning collectively (15 pts) after private notes — before domain totals are calculated.
                 </div>
                 <!-- Judge names -->
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px;">
@@ -2104,18 +2101,20 @@
             const importBox = document.createElement('div');
             importBox.style.cssText = 'margin-top:14px; padding:12px 14px; background:var(--surface-1); border-radius:8px; border:1px dashed var(--border);';
             importBox.innerHTML = `
-                <div style="font-size:0.78rem; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">📥 Import Roster from Team Intake Sheet</div>
-                <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:8px;">Paste the same Apps Script Web App URL used on the landing page's "Enter SIM WARS" form. Assign Draw Numbers (1–16) in the Google Sheet first — those become T1–T16 here. Re-run any time to refresh.</div>
+                <div style="font-size:0.78rem; font-weight:700; color:var(--text-secondary); margin-bottom:6px;">📥 Team Roster — from the registration sheet</div>
+                <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:8px;">Teams are already registered and grouped. Refresh any time to pull the latest names, members and intro-video links.</div>
                 <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-                    <input type="text" id="intakeSheetUrl" placeholder="https://script.google.com/macros/s/.../exec"
-                        oninput="saveToServer('intakeSheetUrl', this.value)"
-                        style="flex:1; min-width:260px; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:0.82rem;">
                     <button onclick="importTeamRoster()"
                         style="background:var(--secondary); color:white; border:none; border-radius:8px; padding:8px 18px; font-size:0.85rem; font-weight:700; cursor:pointer;">
-                        🔄 Import Roster
+                        🔄 Refresh Roster
                     </button>
+                    <a href="/scoreboard" target="_blank"
+                        style="background:var(--purple); color:white; text-decoration:none; border-radius:8px; padding:8px 18px; font-size:0.85rem; font-weight:700; display:inline-block;">
+                        🏆 Team Board
+                    </a>
                 </div>
                 <div id="intakeImportStatus" style="font-size:0.76rem; color:var(--text-muted); margin-top:6px;"></div>
+                <div id="intakeVideoLinks" style="margin-top:8px;"></div>
             `;
             container.appendChild(importBox);
 
@@ -2125,7 +2124,7 @@
             footer.innerHTML = `
                 <button onclick="rebuildCaseTeams()"
                     style="background:var(--purple);color:white;border:none;border-radius:8px;padding:10px 22px;font-size:0.9rem;font-weight:700;cursor:pointer;">
-                    🎯 Apply Draw &amp; Group Teams
+                    🎲 Optional — Draw Sequence of Teams in the Group
                 </button>
                 <div id="drawScheduleOutput" style="flex:1; min-width:260px;"></div>
             `;
@@ -2197,11 +2196,7 @@
         // ================================================================
         async function importTeamRoster() {
             const statusEl = document.getElementById('intakeImportStatus');
-            const url = document.getElementById('intakeSheetUrl')?.value?.trim();
-            if (!url) {
-                if (statusEl) { statusEl.textContent = '⚠️ Paste the Apps Script Web App URL first.'; statusEl.style.color = '#b45309'; }
-                return;
-            }
+            const url = 'https://script.google.com/macros/s/AKfycbwyhhMFVFHo1IQCQw97Hzfv8PSWgXWgChtmbvqnXDtTA7pKExHsvBM3hL5rL279EjOM/exec'; // registration sheet — hardwired, no setup needed
             if (statusEl) { statusEl.textContent = '⏳ Importing…'; statusEl.style.color = 'var(--text-muted)'; }
             try {
                 const res = await fetch(url);
@@ -2209,6 +2204,7 @@
                 const data = await res.json();
                 const teams = data.teams || [];
                 let imported = 0, skipped = 0;
+                const videos = [];
                 for (const t of teams) {
                     const n = parseInt(t.drawNumber, 10);
                     if (!n || n < 1 || n > 16) { skipped++; continue; }
@@ -2226,11 +2222,20 @@
                      .map(([nm, dsg]) => dsg && dsg.trim() ? `${nm} (${dsg})` : nm)
                      .join(', ');
                     if (membersInput) { membersInput.value = members; saveToServer(`team_members_${teamId}`, members); }
+                    if (t.introVideo) videos.push({ n: n, name: t.teamName || teamId, url: t.introVideo });
                     imported++;
                 }
                 if (statusEl) {
                     statusEl.style.color = '#065f46';
                     statusEl.textContent = `✓ Imported ${imported} team${imported === 1 ? '' : 's'}` + (skipped ? ` · ${skipped} skipped (no Draw Number assigned yet)` : '') + '.';
+                }
+                const vEl = document.getElementById('intakeVideoLinks');
+                if (vEl) {
+                    videos.sort((a, b) => a.n - b.n);
+                    vEl.innerHTML = videos.length
+                        ? '<div style="font-size:0.74rem;font-weight:700;color:var(--text-secondary);margin-bottom:4px;">🎬 Intro videos — tap to open</div>'
+                          + videos.map(v => '<a href="' + v.url.replace(/"/g, '&quot;') + '" target="_blank" style="display:inline-block;margin:2px 6px 2px 0;font-size:0.76rem;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:3px 9px;text-decoration:none;font-weight:600;">T' + v.n + ' · ' + String(v.name).replace(/</g, '&lt;') + '</a>').join('')
+                        : '<div style="font-size:0.74rem;color:var(--text-muted);">No intro-video links submitted yet.</div>';
                 }
                 calculateChampions();
                 calculateSpecialPrizes();
@@ -4237,107 +4242,64 @@
         // 16b. FINALS SCORING
         // ================================================================
         const FN_CASES = {
-            F1: {
-                label: '"Crashing on the Vent" — Severe PARDS with Acute Cor Pulmonale',
-                patient: 'Leo · 6 y · 20 kg · Day 3 PICU, influenza A pneumonia · 15:00 hard stop',
-                summary: 'A ventilated child with severe lung disease deteriorates further, and the team must reassess the ventilator strategy and identify a secondary cardiovascular complication — with a mid-scenario leadership handover.',
-                tiebreaker: 'Defend your ECMO mode. Why V-V rather than V-A, or the reverse — and what would change your mind?',
-                stages: [
-                    { label:'Stage 1 (0:00–4:00)', max:12, items:[
-                        { k:'s1i0', label:'Structured DOPE, all four elements verbalised', max:3 },
-                        { k:'s1i1', label:'Names ΔP 20 / Pplat 34 as excessive', max:4 },
-                        { k:'s1i2', label:'No reflexive PEEP escalation without assessing recruitability', max:2 },
-                        { k:'s1i3', label:'Proning declared with safety checklist', max:3 }
-                    ]},
-                    { label:'Stage 2 (4:00–7:00)', max:15, items:[
-                        { k:'s2i0', label:'Bolus halted with closed-loop confirmation', max:6 },
-                        { k:'s2i1', label:'Shock named as obstructive / RV failure, not septic', max:5 },
-                        { k:'s2i2', label:'POCUS requested, D-sign + TAPSE interpreted', max:4 }
-                    ]},
-                    { label:'Stage 3 (7:00–11:00)', max:12, items:[
-                        { k:'s3i0', label:'MAP reduced and/or permissive hypercapnia accepted', max:4 },
-                        { k:'s3i1', label:'Epinephrine started, dose stated aloud in range (0.05–0.1 mcg/kg/min)', max:4 },
-                        { k:'s3i2', label:'iNO 20 ppm initiated', max:2 },
-                        { k:'s3i3', label:'Milrinone bolus avoided', max:2 }
-                    ]},
-                    { label:'Stage 4 (11:00–15:00)', max:6, items:[
-                        { k:'s4i0', label:'ECMO activated with defensible mode rationale (V-V or V-A both earn full credit if justified; unjustified = 2/6)', max:6 }
-                    ]}
-                ],
-                penalties:[
-                    { k:'p0', label:'Fluid ≥10 mL/kg', pts:-8 },
-                    { k:'p1', label:'Milrinone bolus at systolic <70', pts:-5 },
-                    { k:'p2', label:'PEEP ≥18', pts:-5 },
-                    { k:'p3', label:'Prone attempted 4:00–9:00', pts:-4 },
-                    { k:'p4', label:'PEA arrest', pts:-10 }
-                ],
-                twItems:[
-                    { k:'tw0', label:'Upward handover to the newcomer — structured, prioritised, states the problem not just numbers', max:6 },
-                    { k:'tw1', label:'Speaking up under authority (see ladder below)', max:8 },
-                    { k:'tw2', label:'Re-entry handover — corrects the false version, transmits RV failure diagnosis, discloses fluid given', max:8 },
-                    { k:'tw3', label:'Delegation and resource use — including whether the confederate nurse is tasked', max:6 },
-                    { k:'tw4', label:'Closed-loop communication throughout', max:5 },
-                    { k:'tw5', label:'Family communication — honesty, pacing, no jargon, does not abandon the patient to talk', max:7 }
-                ],
-                twNote:'The returning leader is scored on the re-entry handover and Stage 4: did they ask rather than assume, request the CVP trend, restate the model back, and avoid restarting the differential from scratch.',
-                sharedPrompt:'Was the physiologic model audible to the room? Naming the PEEP→PVR→RV afterload chain aloud, stating why fluid is harmful here, declaring explicit targets (SpO₂ 88–92%, pH >7.20). Silent competence scores mid-range. Silent luck scores low.',
-                sharedAnchors:[
-                    { range:'0–3',   label:'Model never stated; team appeared to act on instinct or luck' },
-                    { range:'4–7',   label:'Fragments of the model stated, not connected into a chain' },
-                    { range:'8–11',  label:'PEEP→PVR→RV afterload chain named, but targets not stated' },
-                    { range:'12–15', label:'Full model audible — chain named, fluid harm explained, explicit targets declared' }
-                ]
-            },
+            // F1 ("Crashing on the Vent") is OUT of the competition — finals is single-case F2.
             F2: {
-                label: '"The Tense Abdomen" — Severe Dengue, Capillary Leak, Abdominal Compartment Syndrome',
-                patient: 'Rehan · 10 y · 30 kg · Dengue day 5, critical phase after defervescence · 15:00 hard stop',
-                summary: 'A child with severe dengue and a tense, distended abdomen has had significant prior fluid resuscitation — the team must recognise a misleading haemodynamic picture and correctly identify the abdominal complication.',
-                tiebreaker: 'Defend your airway decision. Why intubate before transfer, or why not — and what would change your mind?',
+                label: '"The Tense Abdomen" — Occult ACS behind a Contested-Authority, Septic-Shock Anchor',
+                patient: 'Rehan · 10 y · 30 kg · Day 5 undifferentiated febrile illness · 20:00 hard stop',
+                summary: 'Single-patient finals, 20-minute clock. Team leader pulled out at 0:00; Dr Sindhu arrives at 4:00 offering to lead and pushes a half-right septic plan throughout. Diagnosis (severe dengue) is never named — NS1 is genuinely negative, dengue IgM unlocks it from Stage 3. Scored /200: Domain I Clinical 90 · Domain II Human Factors 80 (five 0–16 anchors) · Domain III Shared Reasoning with the confederate 30 · minus penalties.',
+                tiebreaker: 'Defend your airway/transfer decision — why intubate before transfer, or why not, and what would change your mind?',
                 stages: [
-                    { label:'Stage 1 (0:00–4:00)', max:24, items:[
-                        { k:'s1i0', label:'Recognises decompensated dengue shock in critical phase — narrow pulse pressure, defervescence, day 5', max:6 },
-                        { k:'s1i1', label:'Takes the fluid history and registers ~70 mL/kg already given', max:6 },
-                        { k:'s1i2', label:'Measures intra-abdominal pressure via the urinary catheter (→ 26 mmHg, Grade IV ACS)', max:8 },
-                        { k:'s1i3', label:'Sends Hct / coagulation / renal bundle; recognises AKI with hyperkalaemia', max:4 }
+                    { label:'Stage 1 (0:00–4:00) — Alone', max:26, items:[
+                        { k:'s1i0', label:'Self-organise leadership in Stage 1 without prompting', max:2 },
+                        { k:'s1i1', label:'Escalate failed IV access to EJ/IO appropriately', max:2 },
+                        { k:'s1i2', label:'Send coagulation workup in Stage 1', max:4 },
+                        { k:'s1i3', label:'Request central line (even though denied)', max:2 },
+                        { k:'s1i4', label:'Examine abdomen, note pen girth mark', max:4 },
+                        { k:'s1i5', label:'MEASURE INTRA-ABDOMINAL PRESSURE (Stage 1)', max:10 },
+                        { k:'s1i6', label:'Send NS1 and correctly hold it as non-diagnostic when negative', max:2 }
                     ]},
-                    { label:'Stage 2 (4:00–7:00)', max:30, items:[
-                        { k:'s2i0', label:'Crystalloid halted with closed-loop confirmation, while blood is accepted', max:12 },
-                        { k:'s2i1', label:'Problem named as mechanical — tense abdomen obstructing venous return, not simple hypovolaemia', max:10 },
-                        { k:'s2i2', label:'POCUS requested; ascites, effusions and small hyperdynamic LV interpreted', max:8 }
+                    { label:'Stage 2 (4:00–8:00) — Sindhu Arrives', max:4, items:[
+                        { k:'s2i0', label:'Recognise melaena as a genuine bleeding sign', max:4 }
                     ]},
-                    { label:'Stage 3 (7:00–11:00)', max:24, items:[
-                        { k:'s3i0', label:'Packed cells 10 mL/kg for active bleeding and falling Hct, dose stated aloud', max:8 },
-                        { k:'s3i1', label:'Large-volume FFP refused; platelets given appropriately for bleeding with count of 12', max:6 },
-                        { k:'s3i2', label:'Decompression bundle — NG tube, analgesia/sedation, head of bed ≤30°', max:4 },
-                        { k:'s3i3', label:'Therapeutic paracentesis performed or formally requested (only action that restores urine output)', max:6 }
+                    { label:'Stage 3 (8:00–12:00) — Haematemesis & Fluid Intolerance', max:28, items:[
+                        { k:'s3i0', label:'Limit/refuse further crystalloid after the fluid-intolerance trigger', max:10 },
+                        { k:'s3i1', label:'Recognise haemorrhagic component → targeted platelets/PRBC, not large-volume product', max:8 },
+                        { k:'s3i2', label:'Send and clinically interpret dengue IgM (recognition, not the persuasion use)', max:8 },
+                        { k:'s3i3', label:'Re-check/trend IAP through Stages 3–4', max:2 }
                     ]},
-                    { label:'Stage 4 (11:00–15:00)', max:12, items:[
-                        { k:'s4i0', label:'Disposition with defensible airway rationale and surgical/PICU escalation (intubate OR awake transfer — both earn full credit if justified; unjustified = 4/12)', max:12 }
+                    { label:'Stage 4 (12:00–17:00) — The Drain Decision', max:24, items:[
+                        { k:'s4i0', label:'Perform therapeutic paracentesis', max:12 },
+                        { k:'s4i1', label:'Hold the decision through the transient post-drain deterioration', max:6 },
+                        { k:'s4i2', label:'Give targeted blood products for ongoing haemorrhage alongside ACS management', max:6 }
+                    ]},
+                    { label:'Stage 5 (17:00–20:00) — Endgame', max:8, items:[
+                        { k:'s5i0', label:'Deliver a re-entry handover to the returning leader (completeness, not evidence quality)', max:2 },
+                        { k:'s5i1', label:'Airway decision with stated rationale', max:6 }
                     ]}
                 ],
                 penalties:[
-                    { k:'p0', label:'Crystalloid ≥20 mL/kg after 4:00', pts:-16 },
-                    { k:'p1', label:'FFP ≥15 mL/kg', pts:-10 },
-                    { k:'p2', label:'Intubation as first move or PEEP ≥8', pts:-10 },
-                    { k:'p3', label:'Nephrotoxic given', pts:-8 },
-                    { k:'p4', label:'Furosemide for anuria', pts:-6 },
-                    { k:'p5', label:'Cardiac arrest', pts:-20 }
+                    { k:'p0', label:'Crystalloid ≥20 mL/kg given after the Stage 3 fluid-intolerance trigger (8:00)', pts:-16 },
+                    { k:'p1', label:'Large-volume product given without indication', pts:-10 },
+                    { k:'p2', label:'Intubation as first move, or PEEP ≥8', pts:-10 },
+                    { k:'p3', label:'Nephrotoxic agent given', pts:-8 },
+                    { k:'p4', label:'Furosemide given for anuria', pts:-6 },
+                    { k:'p5', label:'Paracentesis performed with no platelet/product cover', pts:-6 },
+                    { k:'p6', label:'Cardiac arrest (60s cap, scripted ROSC)', pts:-20 }
                 ],
                 twItems:[
-                    { k:'tw0', label:'Upward handover to the newcomer — structured, prioritised, states the problem not just numbers', max:12 },
-                    { k:'tw1', label:'Speaking up under authority (see ladder below) — Note: anchor is half-right; score accepting blood while refusing crystalloid', max:16 },
-                    { k:'tw2', label:'Re-entry handover — corrects the false version, transmits the mechanical diagnosis, discloses crystalloid and FFP given', max:16 },
-                    { k:'tw3', label:'Delegation and resource use — including whether the confederate nurse is tasked', max:12 },
-                    { k:'tw4', label:'Closed-loop communication throughout', max:10 },
-                    { k:'tw5', label:'Family communication with the father, present throughout — honesty, pacing, no jargon, does not abandon the patient to talk', max:14 }
+                    { k:'tw0', label:'Leadership & Self-Organisation — self-organises cleanly with no leader present; ownership of the room never ambiguous across every transition', max:16 },
+                    { k:'tw1', label:'Closed-Loop Communication & Delegation — named, closed-loop instructions to nurse and technician throughout', max:16 },
+                    { k:'tw2', label:'Engaging the Authority Fork — pushes back on Sindhu\'s plan at least twice with escalating clarity, regardless of who leads (mechanics of challenge, not content quality)', max:8 },
+                    { k:'tw3', label:'Situational Awareness & Composure — does not lock onto the sepsis/DIC frame; composed reassessment through the drain decision', max:16 },
+                    { k:'tw4', label:'Family Communication & Disposition — honest, jargon-free talk with the father; timely escalation; never abandons the patient to communicate', max:16 }
                 ],
-                twNote:'The returning leader is scored on the re-entry handover and Stage 4: did they ask rather than assume, request the urine output and fluid totals, restate the model back, and avoid restarting the differential from scratch.',
-                sharedPrompt:'Was the physiologic model audible to the room? Naming the leak → ascites → raised IAP → obstructed venous return chain aloud, stating why more crystalloid worsens it, declaring the target as perfusion and urine output rather than blood pressure alone.',
+                twNote:'Domain II is five holistic 0–16 anchors, a gestalt judgement, not a checklist: 0 = absent · 4 = minimal/prompted · 8 = inconsistent · 12 = mostly consistent · 16 = exemplary, unprompted, sustained.',
+                sharedPrompt:'Domain III — Shared Reasoning with the Confederate (30): scores the clinical SUBSTANCE of the pushback, not whether they challenge (that is Domain II). Three 10-point lenses: (1) distinguishes genuine haemorrhagic need from Sindhu\'s incorrect volume plan — engages the half-right content rather than blanket accept/reject; (2) uses specific evidence — IAP trend, urine output, drain result — to challenge her frame and persuade the returning leader; (3) correctly integrates the dengue IgM clue against her sepsis/DIC frame.',
                 sharedAnchors:[
-                    { range:'0–6',   label:'Model never stated; team appeared to act on instinct or luck' },
-                    { range:'8–14',   label:'Fragments of the model stated, not connected into a chain' },
-                    { range:'16–22',  label:'The leak → ascites → raised IAP chain named, but targets not stated' },
-                    { range:'24–30', label:'Full model audible — chain named, crystalloid harm explained, explicit perfusion/urine-output target declared' }
+                    { range:'0–8',   label:'Blanket accept/reject of Sindhu — no clinical substance in the challenge' },
+                    { range:'9–18',  label:'Some specific evidence used; half-right content only partially engaged' },
+                    { range:'19–26', label:'Evidence-based challenge on most fronts; IgM integrated into team reasoning' },
+                    { range:'27–30', label:'All three lenses fully met — half-right engaged, evidence cited, IgM integrated' }
                 ]
             }
         };
@@ -4388,11 +4350,15 @@
             const shared = parseFloat(document.getElementById('fn_' + caseId + '_' + t + '_shared')?.value) || 0;
             const dispEl = document.getElementById('fn_' + caseId + '_' + t + '_sharedDisp');
             if (dispEl) dispEl.textContent = shared;
+            const dClin = document.getElementById('fn_' + caseId + '_' + t + '_clinTotal_disp');
+            if (dClin) dClin.textContent = clin.toFixed(0);
+            const dTW = document.getElementById('fn_' + caseId + '_' + t + '_twTotal_disp');
+            if (dTW) dTW.textContent = tw.toFixed(0);
             const total  = clin + tw + shared;
             const gtEl   = document.getElementById('fn_' + caseId + '_' + t + '_grandTotal');
             if (gtEl) {
                 gtEl.textContent = total.toFixed(0);
-                gtEl.style.color = total >= 80 ? '#065f46' : total >= 60 ? '#d97706' : '#374151';
+                gtEl.style.color = total >= 160 ? '#065f46' : total >= 120 ? '#d97706' : '#374151';
             }
         }
 
@@ -4413,7 +4379,7 @@
             const cd = FN_CASES[caseId];
             const amber = '#d97706';
             let h = '<div style="background:white;border:1.5px solid ' + amber + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN A — CLINICAL MANAGEMENT &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 45</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN I — CLINICAL &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 90</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#92400e;margin-bottom:8px;" class="fnJName_phys">' + fnGetJudge('phys') + '</div>';
             h += '<div style="font-size:0.72rem;color:#6b7280;background:#fffbeb;border-radius:5px;padding:5px 8px;margin-bottom:10px;">Score each item 0 up to its maximum. Partial/delayed performance earns a proportional mark.</div>';
             cd.stages.forEach(stage => {
@@ -4443,7 +4409,7 @@
             const cd = FN_CASES[caseId];
             const blue = '#1d4ed8';
             let h = '<div style="background:white;border:1.5px solid ' + blue + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN B — TEAMWORK &amp; FOLLOWERSHIP &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 40</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN II — HUMAN FACTORS (five 0–16 anchors) &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 80</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#1e40af;margin-bottom:8px;" class="fnJName_tw">' + fnGetJudge('tw') + '</div>';
             h += '<table style="width:100%;border-collapse:collapse;">';
             cd.twItems.forEach(item => {
@@ -4454,10 +4420,7 @@
                 h += '<td style="width:58px;text-align:center;padding:3px;"><input type="number" id="' + id + '" min="0" max="' + item.max + '" value="0" style="width:50px;border:1.5px solid ' + blue + '40;border-radius:4px;padding:3px;text-align:center;font-size:0.88rem;font-weight:700;" oninput="this.value=Math.min(' + item.max + ',Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateTWTotal(\'' + caseId + '\',\'' + t + '\');"></td></tr>';
             });
             h += '</table>';
-            // Speaking-up ladder
-            h += '<div style="background:#eff6ff;border-radius:7px;padding:9px 11px;margin-top:8px;font-size:0.73rem;color:#1e40af;">';
-            h += '<strong>Speaking-up ladder (8 pts):</strong> 0–1 = silent compliance · 2–3 = hints only (Level 1) · 4–5 = one challenger with reason, persists · 6–7 = two challenge with reasons, bolus halted · <strong>8 = two+ at Level 2+, one restates after override, bolus/crystalloid physically halted, alternative named aloud</strong>. Content over tone. Do not double-count with the 6-point clinical halting item.';
-            h += '</div>';
+            
             h += '<div style="font-size:0.72rem;color:#6b7280;margin-top:6px;font-style:italic;">' + cd.twNote + '</div>';
             h += '</div>';
             return h;
@@ -4467,7 +4430,7 @@
             const cd = FN_CASES[caseId];
             const purple = '#7c3aed';
             let h = '<div style="background:white;border:1.5px solid ' + purple + '40;border-radius:10px;padding:14px;margin-bottom:12px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🧩 DOMAIN C — SHARED REASONING &nbsp;·&nbsp; Collective / 15</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🧩 DOMAIN III — SHARED REASONING WITH CONFEDERATE &nbsp;·&nbsp; Collective / 30</div>';
             h += '<p style="font-size:0.8rem;color:#374151;margin-bottom:8px;font-style:italic;">' + cd.sharedPrompt + '</p>';
             h += '<div style="margin-bottom:10px;">';
             cd.sharedAnchors.forEach(a => {
@@ -4478,8 +4441,8 @@
             const id = 'fn_' + caseId + '_' + t + '_shared';
             h += '<div style="display:flex;align-items:center;gap:10px;">';
             h += '<label style="font-size:0.85rem;font-weight:700;color:#374151;">Agreed mark:</label>';
-            h += '<input type="number" id="' + id + '" min="0" max="15" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(15,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
-            h += '<span style="font-size:0.82rem;color:#6b7280;">/ 15</span>';
+            h += '<input type="number" id="' + id + '" min="0" max="30" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(30,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
+            h += '<span style="font-size:0.82rem;color:#6b7280;">/ 30</span>';
             h += '</div></div>';
             return h;
         }
@@ -4489,19 +4452,23 @@
             const name = fnGetName(t);
             let h = '<div style="border:2px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:20px;">';
             h += '<div style="font-size:1.05rem;font-weight:800;color:#111827;margin-bottom:14px;" class="fnLabel_' + t + '">' + name + '</div>';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain A — Clinical Management (Physiology Judge only)</div>';
+            h += '<div class="fn-judgeblock-phys">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical (Physiology Judge only)</div>';
             h += fnBuildClinSheet(caseId, t);
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain B — Teamwork &amp; Followership (Teamwork Judge only)</div>';
+            h += '</div>';
+            h += '<div class="fn-judgeblock-tw">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Human Factors (Teamwork Judge only)</div>';
             h += fnBuildTWSheet(caseId, t);
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + purple + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain C — Shared Reasoning (Physiology + Teamwork judges, collectively)</div>';
+            h += '</div>';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + purple + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain III — Shared Reasoning with Confederate (Physiology + Teamwork judges, collectively)</div>';
             h += fnBuildSharedSheet(caseId, t);
             // Chief's Tally
             h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="fnLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain A — Clinical Management (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 45</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain B — Teamwork &amp; Followership (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 40</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain C — Shared Reasoning (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 15</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 90</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Human Factors (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 80</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Shared Reasoning with Confederate (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 30</td></tr>';
             h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0</span> / 200</td></tr>';
             h += '</table></div>';
             h += '</div>';
@@ -4524,8 +4491,7 @@
         }
 
         function buildFNScoreCards() {
-            // Finals now plays a single case (F2), scored directly out of 200 — F1 is retained
-            // in FN_CASES as unused/legacy data but is not rendered or scored.
+            // Finals = single case F2, scored out of 100 (45+40+15, minus penalties). F1 is out.
             buildFNCaseCard('F2');
             fnUpdateAllLabels();
             fnSyncJudgeNames();
@@ -4571,6 +4537,8 @@
             'sf-cj3':  { label: '🏟️ Semi-Finals — Clinical Judge 3', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj3' },
             'sf-crm1': { label: '🏟️ Semi-Finals — CRM Judge 1',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm1' },
             'sf-crm2': { label: '🏟️ Semi-Finals — CRM Judge 2',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm2' },
+            'fn-phys': { label: '🏆 Finals — Physiology Judge', tab: 'tabFinals', color: '#d97706', bg: '#fffbeb', hint: 'Domain I sheet only (+ collective Domain III)', fnOnly: 'phys' },
+            'fn-tw':   { label: '🏆 Finals — Teamwork Judge',   tab: 'tabFinals', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only (+ collective Domain III)', fnOnly: 'tw' },
         };
 
         function buildShareLinks() {
@@ -4635,6 +4603,13 @@
                     .join('\n');
                 document.head.appendChild(style);
             }
+            // Finals judge-specific views: hide the other judge's domain sheet.
+            if (meta.fnOnly) {
+                const other = meta.fnOnly === 'phys' ? 'tw' : 'phys';
+                const st = document.createElement('style');
+                st.textContent = '.fn-judgeblock-' + other + '{display:none !important;}';
+                document.head.appendChild(st);
+            }
             // Prelim per-domain views: hide the other domain's sheet entirely.
             if (meta.domOnly) {
                 const hide = meta.domOnly.endsWith('-cj') ? '.prelim-dom2' : '.prelim-dom1';
@@ -4644,7 +4619,7 @@
             }
             // Claim this view's slot server-side so score filtering applies to this session.
             const slotMap = { pals: 'pals', bls: 'bls', debriefer: 'debriefer' };
-            const viewSlot = meta.sfOnly || meta.domOnly || slotMap[view] || '';
+            const viewSlot = meta.sfOnly || (meta.fnOnly ? 'fn-' + meta.fnOnly : '') || meta.domOnly || slotMap[view] || '';
             if (viewSlot) claimSlot(viewSlot);
         }
 

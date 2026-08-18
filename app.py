@@ -1204,7 +1204,7 @@ FLOW_CASE_DETAIL = {
         "4": {"A": {"code": "P4", "title": "Refractory Septic Shock (Physiologically Difficult Airway)",
                     "patient": "Maya · 3 yr · 15 kg · Zero physiologic reserve",
                     "pearl": "Resuscitate BEFORE intubating — Ketamine + Rocuronium only, push-dose Epi ready for the post-intubation crash"},
-              "B": {"code": "B2", "title": "PEA Arrest — Torsades (K⁺ 2.5, iCa 0.8)",
+              "B": {"code": "B2", "title": "Shockable Rhythm in a Child with Dilated Cardiomyopathy",
                     "patient": "Varsha · 11 yr · 30 kg · Known Dilated Cardiomyopathy",
                     "pearl": "Magnesium sulfate 50 mg/kg IV + continue CPR — correct K⁺/Ca²⁺ before/with any shock"}},
     },
@@ -1217,9 +1217,9 @@ FLOW_CASE_DETAIL = {
               "pearl": "Loud visible bleeding (Diya) is the distractor — positive FAST + shock (Meera) = theatre/IR not CT; activate MTP 1:1:1 + TXA"},
     },
     "final": {
-        "code": "F2", "title": "The Tense Abdomen — Severe Dengue with Abdominal Compartment Syndrome",
-        "patient": "Rehan · 10 yr · 30 kg · Dengue day 5, critical phase, ~70mL/kg crystalloid pre-loaded",
-        "pearl": "Recognize abdominal compartment syndrome (IAP 28) — STOP fluids, drain the abdomen (paracentesis), don’t anchor on haemorrhagic shock despite haematemesis",
+        "code": "F2", "title": "The Tense Abdomen — Occult ACS behind a Contested-Authority, Septic-Shock Anchor",
+        "patient": "Rehan · 10 yr · 30 kg · Day 5 undifferentiated febrile illness · ~70mL/kg crystalloid pre-loaded",
+        "pearl": "Measure IAP (26 — Grade IV ACS): STOP fluids, therapeutic paracentesis, hold through the post-drain dip. Challenge Dr Sindhu’s half-right septic plan with evidence (IAP trend, urine output, dengue IgM) — diagnosis is never named; NS1 is genuinely negative",
     },
 }
 
@@ -1271,6 +1271,15 @@ def _key_visible_to_judge(key, my_slot, deb_revealed):
         for s in JUDGE_SLOTS:
             if ('_%s_' % s) in key and s != my_slot:
                 return False
+    if key.startswith('fn_'):
+        # Finals: Physiology judge = Domain I (clin items + penalties), Teamwork judge =
+        # Domain II (tw anchors). Collective Domain III + name/config keys visible to both.
+        last = key.split('_')[-1]
+        is_pen = len(last) >= 2 and last[0] == 'p' and last[1:].isdigit()
+        if my_slot == 'fn-phys':
+            return '_tw_' not in key
+        if my_slot == 'fn-tw':
+            return '_clin_' not in key and not is_pen
     if key.startswith('deb_') and my_slot != 'debriefer' and not deb_revealed:
         return False
     # Prelim sheets: c_<CASE>_<TEAM>_* = Domain I (clinical), nt_... = Domain II (CRM)
@@ -1311,6 +1320,7 @@ def get_scores():
 # Change these before the event if they have been shared beyond the panel.
 JUDGE_PINS = {
     'cj1': '7311', 'cj2': '7322', 'cj3': '7333', 'crm1': '7411', 'crm2': '7422',
+    'fn-phys': '7511', 'fn-tw': '7522',
     'pals': '7100', 'pals-cj': '7101', 'pals-crm': '7102',
     'bls': '7200', 'bls-cj': '7201', 'bls-crm': '7202',
     'debriefer': '7500',
@@ -1323,7 +1333,7 @@ def set_judge_identity():
     data = request.get_json(silent=True) or {}
     slot = data.get('slot', '')
     if slot not in ('cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'pals', 'pals-cj', 'pals-crm',
-                    'bls', 'bls-cj', 'bls-crm', 'debriefer', ''):
+                    'bls', 'bls-cj', 'bls-crm', 'debriefer', 'fn-phys', 'fn-tw', ''):
         return jsonify({'ok': False, 'error': 'unknown slot'}), 400
     # Judges must present the slot's PIN; organiser sessions (the MC) never need one.
     if slot and session.get('role') == 'judge':
@@ -1475,7 +1485,7 @@ tr.me td{background:#fdf1f6;font-weight:800;}
 .muted{color:#6a5a72;font-size:.82rem;}
 .empty{padding:1.2rem;text-align:center;color:#6a5a72;font-size:.9rem;}
 </style></head><body>
-<div class="bar"><h1>🏆 SIM WARS 2026 — Team &amp; Score Board</h1><div style="display:flex;gap:.8rem;align-items:center;"><span class="role">{{ role }}{% if team_number %} · Team {{ team_number }}{% endif %}</span><a href="/register">← Site</a></div></div>
+<div class="bar"><h1>🏆 SIM WARS 2026 — Team &amp; Score Board</h1><div style="display:flex;gap:.8rem;align-items:center;"><span class="role">{{ role }}{% if team_number %} · Team {{ team_number }}{% endif %}</span><a href="/logout" style="color:#fff;opacity:.85;">Log out</a><a href="/register">← Site</a></div></div>
 <div class="wrap">
 <div class="card"><h2>Team Board — Colour Groups (from the draw)</h2><div id="groups" class="empty">Loading teams…</div></div>
 <div class="card"><h2>Prelim Standings — combined /200</h2><div id="prelim" class="empty">Loading…</div></div>
@@ -1595,6 +1605,14 @@ def scoreboard():
     return render_template_string(SCOREBOARD_TEMPLATE, role=role, team_number=tn,
                                   my_team_js=(str(tn) if tn else 'null'),
                                   is_org_js=('true' if role == 'organiser' else 'false'))
+
+
+@app.route('/logout')
+def logout():
+    # Full sign-out for every role (organiser, judge, team): clear the session
+    # cookie and land on the neutral passcode gate.
+    session.clear()
+    return redirect('/scoreboard')
 
 
 DISPLAY_TEMPLATE = """<!DOCTYPE html>
@@ -2372,6 +2390,13 @@ def participant_info():
 def draw_sheet():
     locked = require_role()
     if locked: return locked
+    # Judges see the official draw only on event-day morning (22 Aug, 06:00 IST).
+    # Organisers always have access.
+    if session.get('role') == 'judge' and _ist_now() < datetime(2026, 8, 22, 6, 0):
+        return ("<div style='font-family:sans-serif;max-width:420px;margin:20vh auto;text-align:center;"
+                "color:#2a0a44;'><h2>\U0001F3B2 Official Draw Sheet</h2>"
+                "<p>The draw is revealed to judges on the morning of the event "
+                "&mdash; <b>22 Aug 2026, 06:00 IST</b>. Come back then!</p></div>"), 403
     return DRAW_SHEET_TEMPLATE
 
 DRAW_SHEET_TEMPLATE = r"""<!DOCTYPE html>
