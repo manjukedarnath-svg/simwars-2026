@@ -877,9 +877,9 @@
                     style="width:100%; padding:9px 14px; border-radius:8px; border:2px solid #B3273B; font-size:0.9rem; font-weight:700; color:#6B1622; background:white; cursor:pointer; margin-bottom:10px;">
                     <option value="">— No active PALS case —</option>
                     <option value="P1">P1 · Cardiogenic Shock  (Round 1)</option>
-                    <option value="P3">P3 · Asthma + Pneumothorax  (Round 2)</option>
-                    <option value="P2">P2 · Septic Shock Post-Cardiac Surgery  (Round 3)</option>
-                    <option value="P4">P4 · Refractory Septic Shock  (Round 4)</option>
+                    <option value="P3">P3 · Asthma + Tension Pneumothorax  (Round 2)</option>
+                    <option value="P4">P4 · Refractory Septic Shock  (Round 3)</option>
+                    <option value="P2">P2 · Septic Shock — Post-Cardiac Surgery  (Round 4)</option>
                 </select>
                 <div id="liveTeamsPalsDisplay" style="font-size:0.82rem; color:#6B1622; font-weight:600; margin-bottom:8px;"></div>
                 <div id="activeTeamPalsControl" style="display:none;">
@@ -898,10 +898,10 @@
                 <select id="activeCaseBlsSelect" onchange="setActiveCaseBls(this.value)"
                     style="width:100%; padding:9px 14px; border-radius:8px; border:2px solid var(--primary); font-size:0.9rem; font-weight:700; color:var(--bls-text); background:white; cursor:pointer; margin-bottom:10px;">
                     <option value="">— No active BLS case —</option>
-                    <option value="B1">B1 · Near Drowning / VT Arrest  (Round 1)</option>
+                    <option value="B2">B2 · Torsades / Long QT Arrest  (Round 1)</option>
                     <option value="B4">B4 · Refractory Status Epilepticus  (Round 2)</option>
-                    <option value="B3">B3 · Electrocution with VT Arrest  (Round 3)</option>
-                    <option value="B2">B2 · PEA — Dilated Cardiomyopathy  (Round 4)</option>
+                    <option value="B3">B3 · Electrocution — VF + Hyperkalaemia  (Round 3)</option>
+                    <option value="B1">B1 · Near Drowning / VF Arrest — Hypothermia  (Round 4)</option>
                 </select>
                 <div id="liveTeamsBlsDisplay" style="font-size:0.82rem; color:var(--bls-text); font-weight:600; margin-bottom:8px;"></div>
                 <div id="activeTeamBlsControl" style="display:none;">
@@ -925,14 +925,14 @@
                     <option value="">— Select a case —</option>
                     <optgroup label="PALS Cases">
                         <option value="P1">P1 · Cardiogenic Shock</option>
-                        <option value="P2">P2 · Scorpion Sting Envenomation</option>
-                        <option value="P3">P3 · Asthma + Pneumothorax</option>
+                        <option value="P2">P2 · Septic Shock — Post-Cardiac Surgery</option>
+                        <option value="P3">P3 · Asthma + Tension Pneumothorax</option>
                         <option value="P4">P4 · Refractory Septic Shock</option>
                     </optgroup>
                     <optgroup label="BLS Cases">
-                        <option value="B1">B1 · Near Drowning / VT Arrest</option>
+                        <option value="B1">B1 · Near Drowning / VF Arrest — Hypothermia</option>
                         <option value="B2">B2 · Torsades / Long QT Arrest</option>
-                        <option value="B3">B3 · Electrocution with VT Arrest</option>
+                        <option value="B3">B3 · Electrocution — VF + Hyperkalaemia</option>
                         <option value="B4">B4 · Refractory Status Epilepticus</option>
                     </optgroup>
                     <optgroup label="Semi-Finals">
@@ -965,20 +965,28 @@
                 <p style="color: var(--text-secondary); margin-bottom:8px;">Assign which judges will score PALS cases and which will score BLS cases.</p>
                 <div class="settings-row">
                     <div class="setting-item">
-                        <label for="judgePals1">PALS Judge 1</label>
-                        <input type="text" id="judgePals1" placeholder="Name" value="Dr Ram Nair" oninput="updateJudgeSheets()">
+                        <label for="judgePals1">Room A (PALS) — Clinical Judge</label>
+                        <input type="text" id="judgePals1" placeholder="Name" value="Dr Aaron Calhoun" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
-                        <label for="judgePals2">PALS Judge 2</label>
-                        <input type="text" id="judgePals2" placeholder="Name" value="Dr Aaron Calhoun" oninput="updateJudgeSheets()">
+                        <label for="judgePals2">Room A (PALS) — CRM Judge</label>
+                        <input type="text" id="judgePals2" placeholder="Name" value="Dr Ram K Nair" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
-                        <label for="judgeBls1">BLS Judge 1</label>
+                        <label for="judgeBls1">Room B (BLS) — Clinical Judge</label>
                         <input type="text" id="judgeBls1" placeholder="Name" value="Dr Durga Devi" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
-                        <label for="judgeBls2">BLS Judge 2</label>
+                        <label for="judgeBls2">Room B (BLS) — CRM Judge</label>
                         <input type="text" id="judgeBls2" placeholder="Name" value="Dr Khang Gan" oninput="updateJudgeSheets()">
+                    </div>
+                    <div class="setting-item">
+                        <label for="debrieferPals">Room A — Debriefer</label>
+                        <input type="text" id="debrieferPals" placeholder="Name" value="Dr Mike Sheperd" oninput="updateJudgeSheets()">
+                    </div>
+                    <div class="setting-item">
+                        <label for="debrieferBls">Room B — Debriefer</label>
+                        <input type="text" id="debrieferBls" placeholder="Name" value="Dr Mohan" oninput="updateJudgeSheets()">
                     </div>
                 </div>
             </div>
@@ -1284,7 +1292,15 @@
                     Domain I: Clinical Judgement (40 pts) · Domain II: Crisis Resource Management (50 pts) · Domain III: Global Entrustment (10 pts) = <strong>100 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#0f766e;">
-                    ⚖️ <strong>Averaging rule:</strong> Three Clinical judges each score Domain I out of 40 independently — Domain I = the <strong>mean of all three</strong>. Two CRM judges score Domain II — Domain II = the <strong>mean of the two</strong>. Never sum. Never sum two sheets in a domain.
+                    ⚖️ <strong>Averaging rule:</strong> Three Clinical judges each score Domain I out of 40 independently — Domain I = the <strong>mean of all three</strong>. Three CRM judges score Domain II — Domain II = the <strong>mean of all three</strong>. Never sum. Never sum two sheets in a domain.
+                </div>
+                <div style="background:#fff;border:1.5px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span style="font-size:0.75rem;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.4px;">🔴 Live Scenario</span>
+                    <select id="sfLiveRoundSelect" onchange="setActiveSFRound(this.value)" style="border:1.5px solid #99f6e4;border-radius:6px;padding:5px 10px;font-size:0.85rem;font-weight:700;">
+                        <option value="">— Not set (show both rounds) —</option>
+                        <option value="R1">Round 1 — "The Quiet Head"</option>
+                        <option value="R2">Round 2 — "The Loud Wound"</option>
+                    </select>
                 </div>
                 <!-- On-device judge role picker: hides the other 3 judges' sheets on THIS device,
                      regardless of which link was used to open the page. Persists via localStorage
@@ -1297,6 +1313,7 @@
                         <button onclick="sfSetMyRole('cj3')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ3 · Dr Rana Chami</button>
                         <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM1 · Dr Dinakar Pai</button>
                         <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM2 · Dr Kiran Hebbar</button>
+                        <button onclick="sfSetMyRole('crm3')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM3 · Dr Durga Devi</button>
                         <button id="sfShowAllBtn" onclick="sfSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
                     </div>
                     <div id="sfMyRoleStatus" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
@@ -1311,13 +1328,13 @@
                     </div>
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 2</div>
-                        <input id="sfJudgeCJ2" type="text" placeholder="Name" value="Dr Kang Gan"
+                        <input id="sfJudgeCJ2" type="text" placeholder="Name" value="Dr Khang Gan"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 3</div>
-                        <input id="sfJudgeCJ3" type="text" placeholder="Name" value="Dr Rana Chami"
+                        <input id="sfJudgeCJ3" type="text" placeholder="Name" value="Dr Kiran Hebbar"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
@@ -1329,7 +1346,13 @@
                     </div>
                     <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 2</div>
-                        <input id="sfJudgeCRM2" type="text" placeholder="Name" value="Dr Kiran Hebbar"
+                        <input id="sfJudgeCRM2" type="text" placeholder="Name" value="Dr Durga Devi"
+                            style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
+                            oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
+                    </div>
+                    <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
+                        <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 3</div>
+                        <input id="sfJudgeCRM3" type="text" placeholder="Name" value="Dr Rana Chami"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
@@ -1387,22 +1410,7 @@
                     Single case (F2 &mdash; &ldquo;The Tense Abdomen&rdquo;), scored directly out of 200: Domain I — Clinical (90 pts) · Domain II — Human Factors (80 pts, five 0–16 anchors) · Domain III — Shared Reasoning with the Confederate (30 pts), minus penalties · single 20:00 clock <strong>200 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#92400e;">
-                    ⚖️ <strong>Panel:</strong> Physiology Judge scores Domain I — Clinical independently (90 pts). Teamwork Judge scores Domain II — Human Factors independently (40 pts, five 0–16 anchors). Both judges agree Domain III — Shared Reasoning collectively (15 pts) after private notes — before domain totals are calculated.
-                </div>
-                <!-- Judge names -->
-                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px;">
-                    <div style="background:white;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;">
-                        <div style="font-size:0.68rem;font-weight:700;color:#d97706;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Physiology Judge</div>
-                        <input id="fnJudgePhys" type="text" placeholder="Name" value=""
-                            style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
-                            oninput="saveToServer(this.id,this.value); fnSyncJudgeNames();">
-                    </div>
-                    <div style="background:white;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;">
-                        <div style="font-size:0.68rem;font-weight:700;color:#d97706;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Teamwork Judge</div>
-                        <input id="fnJudgeTW" type="text" placeholder="Name" value=""
-                            style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
-                            oninput="saveToServer(this.id,this.value); fnSyncJudgeNames();">
-                    </div>
+                    ⚖️ <strong>Panel — the same six judges as the Semi-Finals</strong> (names are taken from the Semi-Finals panel). Three Clinical judges score Domain I independently — Domain I = the <strong>mean of the three</strong>, then penalties (recorded once by the Chief/MC). Three CRM judges score Domain II (five 0–16 anchors) — Domain II = the <strong>mean of the three</strong>. All six agree Domain III — Shared Reasoning (30) collectively after private notes. Never sum sheets within a domain.
                 </div>
                 <!-- Team names -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -1472,100 +1480,100 @@
         // Case metadata loaded from SimWars Case Library
         const caseData = {
             'P1': {
-                title: 'Cardiogenic Shock (Fulminant Myocarditis)',
+                title: 'Cardiogenic Shock — Fulminant Myocarditis',
                 round: 'PALS Round', patient: 'Sita · 1 yr · Female · 10 kg',
-                summary: '1-year-old with rapidly progressive breathing difficulty and shock after a minor viral illness — the team must recognise cardiogenic (not hypovolaemic) shock and manage it accordingly.',
-                keyDrugs: 'Adrenaline, Frusemide, Ketamine + Rocuronium (RSI)',
-                criticalDecision: 'Synchronized cardioversion 0.5J/kg (NOT unsynchronized)',
-                keyChallenge: 'Fluid overload trap — giving fluids worsens cardiogenic shock. Must recognise VT and perform synchronized cardioversion, not unsynchronized shock.',
-                criticalSkills: 'Recognise cardiogenic shock, Inotrope initiation (Adrenaline), Avoid fluid bolus, RSI (Ketamine + Rocuronium), Synchronized cardioversion 0.5J/kg.',
-                branchingLogic: 'Correct inotrope + Synchronized cardioversion → ROSC. Fluid bolus given → Flash pulmonary oedema → Deterioration → Arrest.',
-                salientFeatures: 'Avoid fluids, VT on ECG, Synchronized cardioversion at 0.5J/kg, Fulminant myocarditis presentation.',
-                keyLabs: 'Troponin ↑↑, BNP ↑, Na 138, K 4.1, iCa 1.1, Lactate 4.2, CXR: cardiomegaly + pulmonary oedema, Echo: EF 15%.'
+                summary: '1-year-old with 3 days of flu-like illness, now pale, breathless and cool with a gallop rhythm and hepatomegaly — the team must recognise cardiogenic (not septic or hypovolaemic) shock, withhold the fluid bolus, and manage the scripted pulseless VT correctly.',
+                keyDrugs: 'Adrenaline infusion 0.05–0.1 mcg/kg/min, Ketamine + Rocuronium (RSI)',
+                criticalDecision: 'Inotrope, not fluid. When VT becomes pulseless at ~5:30 it STILL requires SYNCHRONISED cardioversion 0.5 J/kg — the rhythm is organised — not unsynchronised 2 J/kg.',
+                keyChallenge: 'The fluid trap — a reflexive 20 mL/kg bolus worsens pulmonary oedema and accelerates deterioration. Nurse offers the bolus at 0:30.',
+                criticalSkills: 'Distinguish cardiogenic from septic/hypovolaemic shock on exam, Adrenaline inotrope first, avoid/halt fluid boluses, Ketamine-only RSI, synchronised cardioversion 0.5 J/kg, resume CPR without prolonged pause.',
+                branchingLogic: 'Inotrope-first strategy → enters the scripted VT event in better condition. Fluid bolus given → pulmonary oedema worsens, deterioration compounds. Stage 5 rescue: capped 45 s, −10 penalty.',
+                salientFeatures: 'Cold peripheries, gallop, hepatomegaly, crackles. Echo EF ~15%. Organised wide-complex VT at 220 becoming pulseless at ~5:30 (scripted, branch-neutral).',
+                keyLabs: 'VBG pH 7.22, Lactate 5, HCO3 16. Troponin and BNP markedly elevated. CXR cardiomegaly + pulmonary oedema. 12-lead: sinus tach, low-voltage QRS, diffuse T-inversion.'
             },
             'P2': {
-                title: 'Scorpion Sting Envenomation — Acute RV Strain and Diastolic Failure',
-                round: 'PALS Round', patient: 'Arjun · 10 yr · Male · 30 kg',
-                summary: '10-year-old with a scorpion sting develops a catecholamine storm with cold shock — the team must distinguish this from septic/hypovolaemic shock and manage cardiovascular support accordingly.',
-                keyDrugs: 'Prazosin 30mcg/kg (~1mg for 30kg) oral/NG, Dobutamine 5–10mcg/kg/min or Milrinone (NOT Noradrenaline)',
-                criticalDecision: 'Recognise catecholamine-storm RV strain — cold shock with clear lungs and a raised JVP, NOT septic or hypovolaemic shock. Avoid a large fluid bolus and noradrenaline; give Prazosin plus an inodilator to unload the RV.',
-                keyChallenge: 'Envenomation gestalt (sting history + diaphoresis + priapism + hypersalivation + pinpoint pupils) mistaken for sepsis. A large fluid bolus or noradrenaline both worsen RV strain.',
-                criticalSkills: 'Recognise scorpion envenomation catecholamine storm, Avoid large fluid bolus, Start Dobutamine/Milrinone (not noradrenaline), Prazosin 30mcg/kg oral/NG, Request POCUS to confirm RV strain, Cautious RSI avoiding ketamine push if arrest threatens.',
-                branchingLogic: 'Early Prazosin + inodilator → isolated RV strain resolves (Stage 4A). Fluid bolus / noradrenaline / delayed Prazosin → bradycardic arrest → CPR/ROSC → combined biventricular failure (Stage 4B).',
-                salientFeatures: 'Red scorpion (Mesobuthus tamulus) sting, priapism, hypersalivation, pinpoint pupils, clear lungs with raised JVP (not a septic pattern), RV dilation + D-sign on POCUS.',
-                keyLabs: 'ECG: sinus tach, right-axis deviation, incomplete RBBB, T-inversions V1–V3. POCUS: RV/LV ratio >1.5, D-shaped septum, plethoric IVC, LV EF ~60%. No fever/CRP rise expected (non-infectious).'
+                title: 'Septic Shock — Post-Open Heart Surgery',
+                round: 'PALS Round', patient: 'Manoj · 2 yr · Male · 8 kg',
+                summary: '2-year-old, 3 weeks post-ASD repair, drowsy and floppy — septic shock from an infected sternotomy wound with critical hypoglycaemia (28) and hyponatraemia (122). The wide-QRS tachycardia on the monitor is a trap: sinus tachycardia with rate-related aberrancy, NOT VT.',
+                keyDrugs: 'Dextrose 10% 2 mL/kg, Meropenem + Vancomycin (after cultures), Noradrenaline/Adrenaline, 3% NaCl 2 mL/kg, Midazolam 0.15 mg/kg for the seizure',
+                criticalDecision: 'Treat glucose 28 within ~60 seconds. Do NOT cardiovert the wide-QRS rhythm — it is sinus tachycardia from hyponatraemia; cardioversion is a critical, avoidable error.',
+                keyChallenge: 'Treating the monitor instead of the child. Missing the surgical wound as the source — the dressing is soggy and red if examined. Scripted seizure at ~5:30, severity set by prior glucose/Na correction.',
+                criticalSkills: 'Immediate bedside glucose and dextrose, wide-QRS-that-is-not-VT recognition, cultures then broad-spectrum antibiotics, wound examination for source, vasopressor initiation, safe sodium correction (max 8 mEq/L per 24 h).',
+                branchingLogic: 'Dextrose + antibiotics + restraint from cardioversion → stabilising trajectory. Mistaken cardioversion or delayed correction → arrives at the seizure event in worse condition. Stage 5 rescue: capped 45 s, −10.',
+                salientFeatures: 'Post-sternotomy child, wound erythema and discharge, glucose 28, Na 122, wide-QRS sinus tachycardia narrowing as rate/electrolytes correct.',
+                keyLabs: 'Glucose 28 → 110 post-treatment. VBG pH 7.24, Lactate 4.5, HCO3 17. Na 122, K 3.6. Leukocytosis with left shift, CRP markedly elevated. CXR: post-sternotomy changes, no acute infiltrate.'
             },
             'P3': {
-                title: 'Acute Severe Asthma with Pneumothorax',
-                round: 'PALS Round', patient: 'Arun · 3 yr · Male · 10 kg',
-                summary: 'A known asthmatic child in acute severe asthma requires intubation, then deteriorates further — the team must reassess and identify the post-intubation complication.',
-                keyDrugs: 'Salbutamol nebulised, Ipratropium, Methylprednisolone, Magnesium 50mg/kg IV, Ketamine + Rocuronium',
-                criticalDecision: 'Recognise right pneumothorax post-intubation → Needle decompression 2nd ICS MCL → Chest tube.',
-                keyChallenge: 'Steroid-phobic parents refusing steroids. Post-intubation right pneumothorax not immediately recognised — team must detect and decompress.',
-                criticalSkills: 'Nebulised Salbutamol + Ipratropium, IV Magnesium 50 mg/kg, Manage parental refusal diplomatically, Recognise and decompress tension pneumothorax.',
-                branchingLogic: 'Steroids + Mg + Needle decompression → Stabilisation. Steroids refused + pneumothorax missed → Tension pneumothorax → Cardiac arrest.',
-                salientFeatures: 'Steroid-phobic family, right pneumothorax on CXR post-intubation, needle decompression at 2nd ICS MCL.',
-                keyLabs: 'pH 7.08, PCO2 82, HCO3 24, BE −8, SpO2 72%→94%, CXR: right pneumothorax, Peak airway pressure ↑↑.'
+                title: 'Acute Severe Asthma with Tension Pneumothorax',
+                round: 'PALS Round', patient: 'Arun · 3 yr · Male · 14 kg',
+                summary: 'Known asthmatic in near-fatal asthma despite home nebulisers — quietening chest, rising CO2, steroid-hesitant mother. After Ketamine RSI, a scripted right tension pneumothorax fires immediately post-intubation.',
+                keyDrugs: 'IV Magnesium sulphate 50 mg/kg over 20 min (0.7 g for 14 kg), Ketamine + Rocuronium (RSI), steroids once negotiated',
+                criticalDecision: 'Post-intubation: rising airway pressure + falling SpO2 + silent right chest = tension pneumothorax — needle decompression 2nd ICS MCL right side BEFORE any chest X-ray, then chest drain.',
+                keyChallenge: 'Steroid-hesitant mother needs empathy, not confrontation — explain short-course life-saving use, document if still refused. Propofol for RSI is the drug trap (bronchoconstriction).',
+                criticalSkills: 'Recognise near-fatal asthma (silent chest, exhaustion, rising pCO2), early IV Magnesium, empathetic refusal navigation, Ketamine-only RSI, needle decompression before imaging, asthma ventilation (long expiratory time, reduced PEEP).',
+                branchingLogic: 'Empathetic negotiation + early Magnesium + correct RSI → enters the pneumothorax event in better shape. Propofol or delayed intubation → deterioration compounds. Stage 5 rescue: capped 45 s, −10.',
+                salientFeatures: 'Tripod positioning, single words, chest becoming quiet, SpO2 87→82% despite therapy. Scripted right tension pneumothorax at ~5:30 post-intubation.',
+                keyLabs: 'VBG pre-intubation pH 7.22, pCO2 68 (rising — ominous in asthma), HCO3 22, Lactate 3. Post-decompression pH 7.30, pCO2 52. Mild eosinophilia. CXR post-decompression: drain in situ, lung re-expanded.'
             },
             'P4': {
-                title: 'Refractory Septic Shock (Physiologically Difficult Airway)',
+                title: 'Refractory Septic Shock — Physiologically Difficult Airway',
                 round: 'PALS Round', patient: 'Maya · 3 yr · Female · 15 kg',
-                summary: 'A child with refractory septic shock and minimal physiologic reserve needs intubation — the team must sequence resuscitation and airway management safely.',
-                keyDrugs: 'Ketamine 1–2 mg/kg + Rocuronium (NOT Propofol/Midazolam/Fentanyl), Push-dose Epinephrine',
-                criticalDecision: 'Resuscitate BEFORE intubating. Post-intubation crash → Push-dose Epi + Reduce PEEP + Fluid bolus.',
-                keyChallenge: 'Zero physiologic reserve — intubating before resuscitation causes arrest. Propofol / Midazolam are lethal in this context.',
-                criticalSkills: 'Recognise physiologically difficult airway, Resuscitate first (fluids + vasopressors), RSI with Ketamine only, Push-dose Epinephrine for post-intubation hypotension, Reduce PEEP.',
-                branchingLogic: 'Resuscitate first + Ketamine RSI → Stabilisation. Early intubation / Propofol → Peri-intubation cardiac arrest → Death.',
-                salientFeatures: 'Zero reserve septic shock, physiologically difficult airway concept, Ketamine-only RSI, push-dose Epi 10 mcg/kg.',
-                keyLabs: 'pH 7.05, PCO2 52, HCO3 14, BE −14, Lactate 9.2, Na 132, K 5.1, WBC 28, Procalcitonin 88.'
+                summary: 'Meningococcal septicaemia — sudden fever, spreading non-blanching purpuric rash, BP 50/30, lactate 9.2, essentially peri-arrest. Sequencing is the case: resuscitate before you intubate, with a scripted peri-intubation crash at ~5:30.',
+                keyDrugs: 'Ceftriaxone (after cultures), Noradrenaline/Adrenaline infusion, Ketamine ONLY for RSI, Push-dose Epinephrine 10 mcg/kg, Hydrocortisone 2 mg/kg',
+                criticalDecision: 'RESUSCITATE FIRST — vasopressor running and push-dose Epinephrine drawn up at the bedside BEFORE any induction agent. At the crash: push-dose Epi within 30 seconds.',
+                keyChallenge: 'Zero physiologic reserve — any RSI attempt before a vasopressor is running is a critical safety flag. Propofol/Midazolam/Fentanyl are lethal here. Father asks about family contagion mid-resuscitation.',
+                criticalSkills: 'Recognise purpuric rash as meningococcal septicaemia, resuscitate-before-intubate sequencing, Ketamine-only RSI, push-dose Epinephrine preparation and use, hydrocortisone for adrenal insufficiency, contact notification (public health duty).',
+                branchingLogic: 'All four Stage-2 measures ready → crash is survivable and brief. Missing push-dose Epi → the 5:30 crash is severe. Stage 5 rescue: capped 45 s, −10.',
+                salientFeatures: 'Non-blanching purpuric spreading rash, BP 50/30, CRT 5 s, GCS 9, scripted peri-intubation crash to 30/15 at induction.',
+                keyLabs: 'VBG pH 7.05, HCO3 9, Lactate 9.2, K 4.8; repeat post-resus pH 7.15, Lactate 6.5. Thrombocytopenia, deranged coagulation (early DIC), CRP markedly elevated, AKI. CXR normal or mild oedema.'
             },
             'B1': {
-                title: 'Near Drowning / Submersion with VT Arrest',
+                title: 'Near Drowning — Submersion Arrest with Severe Hypothermia',
                 round: 'BLS Round', patient: 'Vaibhavi · 12 yr · Female · 30 kg',
-                summary: 'A submersion victim arrives unresponsive and hypothermic in a shockable rhythm — the team must run high-quality CPR with correct rhythm management and address hypothermia.',
-                keyDrugs: 'Defibrillate 2J/kg (first), Adrenaline 0.01 mg/kg, Fluid bolus 20 ml/kg, Warming measures',
-                criticalDecision: 'Defibrillate FIRST — not Adrenaline first. Then resume CPR immediately.',
-                keyChallenge: 'Pulseless VT — team may give Adrenaline first instead of immediate defibrillation. Hypothermia management often missed.',
-                criticalSkills: 'High-quality CPR, Immediate defibrillation 2J/kg, Identify and treat hypothermia, Fluid resuscitation, Post-ROSC care.',
-                branchingLogic: 'Defibrillate first + CPR → ROSC (Stage 4A). Adrenaline first / no defib → Prolonged arrest → Asystole → Death.',
-                salientFeatures: 'Seawater submersion, Hypothermia 35°C, Pulseless VT on monitor, Hyperkalemia K 4.5 from muscle breakdown.',
-                keyLabs: 'pH 7.18, PCO2 48, HCO3 18, K 4.5, Temp 35°C, Glucose 140, Lactate 8.0, Na 148.'
+                summary: '~10 min lake submersion, ~15 min total CPR, T 33°C, fine VF — and EMS have already given TWO rounds of Adrenaline without a shock. Defibrillate first, rewarm actively, and never call it on fixed pupils: not dead until warm and dead.',
+                keyDrugs: 'Defibrillation 2 J/kg → 4 J/kg, Amiodarone 5 mg/kg after 3rd shock, warm IV fluids, Ketamine + Rocuronium post-ROSC',
+                criticalDecision: 'Defibrillate FIRST — do not repeat Adrenaline before shocking. Do not stop CPR for fixed, dilated pupils; they do not indicate death at 33°C. State ECMO criteria for refractory VF (witnessed arrest, hypothermia, K <12).',
+                keyChallenge: 'The Adrenaline-first reflex (EMS already gave two rounds), and the temptation to prognosticate on pupils in a hypothermic child. Rewarming must be active and multi-modal — 0.2–0.3°C/min.',
+                criticalSkills: 'High-quality uninterrupted CPR, immediate defibrillation 2 J/kg escalating to 4 J/kg, active rewarming (warm fluids, warm humidified O2, forced-air), ECMO referral criteria, TTM with explicit target post-ROSC.',
+                branchingLogic: 'Shock within 60 s + active rewarming + good CPR → ROSC ~5:30. Adrenaline repeated instead, or CPR paused for pupils → nurse escalates at 3:00, routes toward Stage 5 (capped 45 s, −10).',
+                salientFeatures: 'Fine VF, T 33°C, fixed dilated pupils (hypothermia — not death), Osborn (J) waves on the post-ROSC 12-lead, refractory VF as expected hypothermic physiology.',
+                keyLabs: 'VBG on arrival pH 7.05, pCO2 60, HCO3 12, BE −16, Lactate 9, K 4.5; post-ROSC pH 7.18, Lactate 6. Na 138, iCa 1.15, Mg 0.9. Coag mildly deranged (hypothermia). CXR diffuse bilateral infiltrates (aspiration).'
             },
             'B2': {
-                title: 'Torsades Arrest in Child with Congenital Long QT Syndrome',
+                title: 'Torsades Arrest — Congenital Long QT Syndrome',
                 round: 'BLS Round', patient: 'Varsha · 11 yr · Female · 30 kg',
-                summary: 'A child with a known cardiac history develops a polymorphic arrest rhythm — the team must recognise the rhythm correctly and treat with the full, correct therapy bundle.',
-                keyDrugs: 'Magnesium sulphate 50 mg/kg IV, Unsynchronized defibrillation 2 J/kg, Calcium gluconate, Potassium correction',
-                criticalDecision: 'Give Magnesium sulphate 50 mg/kg IV AND defibrillate — both are required. Magnesium is the critical and often-missed therapy; defibrillation alone will not terminate Torsades.',
-                keyChallenge: 'Torsades de Pointes misdiagnosed as regular VT. Both Magnesium AND defibrillation are required — neither alone is sufficient. The critical error is omitting Magnesium.',
-                criticalSkills: 'CPR, Rhythm recognition (Torsades vs VT), Magnesium sulphate 50 mg/kg, Unsynchronized defibrillation, Electrolyte correction.',
-                branchingLogic: 'Mg + defibrillation + CPR → ROSC. Defibrillation alone (no Mg) → persistent Torsades → Asystole.',
-                salientFeatures: 'Torsades recognition · Magnesium therapy · Hypokalemia K 2.5 · Hypocalcemia iCa 0.8 · Congenital LQTS (QTc >500 ms).',
-                keyLabs: 'pH 7.10, PCO2 72, HCO3 18, BE −10, Lactate 5, SO2 68%. Na 135, K 2.5, Cl 89, iCa 0.8. Urea 34, Creat 0.7. Glucose 86→98.'
+                summary: 'Known LQTS off beta-blockers for a month, sudden collapse in class — pulseless Torsades de Pointes. Naming the rhythm matters: Magnesium plus unsynchronised shock are BOTH required, and Amiodarone makes it worse.',
+                keyDrugs: 'Magnesium sulphate 50 mg/kg IV (1.5 g) — the critical missed drug, unsynchronised defibrillation 2 J/kg, KCl 0.5 mmol/kg IV, Ketamine + Rocuronium post-ROSC',
+                criticalDecision: 'Magnesium 50 mg/kg alongside unsynchronised defibrillation — neither alone terminates Torsades. Explicitly AVOID Amiodarone: it prolongs QT and sustains the arrhythmia.',
+                keyChallenge: 'Calling it \'VT\' and reaching for Amiodarone (nurse offers it at 3:00 — correct answer is no). Post-ROSC: excluding QT-prolonging drugs (Ondansetron, Metoclopramide) and remembering family screening.',
+                criticalSkills: 'Torsades recognition (twisting morphology), Magnesium + shock + potassium correction, Amiodarone avoidance, QTc monitoring post-ROSC, cardiology/ICD referral, LQTS family screening conversation.',
+                branchingLogic: 'Magnesium early alongside shocking → ROSC ~5:30. Magnesium omitted or Amiodarone given → refractory Torsades, routes to Stage 5 (capped 45 s, −10).',
+                salientFeatures: 'Sinusoidal twisting polymorphic VT, K 2.5, iCa 0.8, Mg 0.5, prior ECG QTc 480 ms, guilt-ridden mother (missed tablets), maternal uncle died suddenly at 19.',
+                keyLabs: 'VBG on arrival pH 7.12, K 2.5, iCa 0.8, Lactate 6; post Mg/K correction pH 7.28, K 3.8, iCa 1.1. Mg 0.5 mmol/L. Prior ECG QTc 480 ms; post-ROSC QTc 460 ms. Glucose 92.'
             },
             'B3': {
-                title: 'Electrocution with VT Arrest',
+                title: 'Electrocution — VF Arrest with Hyperkalaemia',
                 round: 'BLS Round', patient: 'Arush · 13 yr · Male · 30 kg',
-                summary: 'An electrical-injury victim is found unconscious in a shockable rhythm with visible burns — the team must run CPR, correct the underlying metabolic derangement, and manage the burn injury.',
-                keyDrugs: 'Defibrillate 2J/kg, Calcium gluconate, Insulin + Dextrose, Bicarbonate',
-                criticalDecision: 'Defibrillate + Calcium gluconate for hyperkalemia — Calcium is the critical and often-missed step. Adrenaline follows per PALS algorithm after the first shock.',
-                keyChallenge: 'Hyperkalemia (K 7.5) from rhabdomyolysis — Calcium gluconate is critical before/alongside defibrillation. Burns and fluid management often overlooked.',
-                criticalSkills: 'High-quality CPR, Defibrillation 2J/kg, Calcium gluconate for hyperkalemia, Insulin + Dextrose, Bicarbonate, Burns fluid resuscitation.',
-                branchingLogic: 'Defib + Calcium gluconate + K correction → ROSC. No calcium + repeated shocks without electrolyte correction → Refractory VT → Death.',
-                salientFeatures: 'Electrical injury at construction site, Burns right hand/left leg (entry/exit), Hyperkalemia K 7.5, Rhabdomyolysis (CK 12,000).',
-                keyLabs: 'pH 7.12, PCO2 45, HCO3 14, K 7.5, CK 12,000, Myoglobin ↑↑, Lactate 6.0, Creatinine 1.8.'
+                summary: 'Kite string touched an overhead power line — coarse VF arrest with entry/exit burns. VF stays refractory until the rhabdomyolysis-driven K of 7.5 is treated: Calcium gluconate is the critical, often-missed step.',
+                keyDrugs: 'Defibrillation 2 J/kg, Calcium gluconate 50 mg/kg IV, Sodium bicarbonate 1 mEq/kg, Insulin 0.1 U/kg + Dextrose 10% 2 mL/kg, Ketamine + Rocuronium (NO succinylcholine)',
+                criticalDecision: 'Immediate defibrillation, then Calcium gluconate for K 7.5 — defibrillation alone will not terminate VF while potassium stays at 7.5. Succinylcholine is contraindicated for RSI.',
+                keyChallenge: 'Hyperkalaemia hidden behind the electrical mechanism — must be requested. Post-ROSC workload: Parkland burns fluids, catheter for cola-coloured urine, three referrals (burns, surgery, nephrology) in parallel.',
+                criticalSkills: 'Immediate defibrillation, Calcium-first hyperkalaemia bundle (Ca → bicarb → insulin/dextrose), succinylcholine avoidance, Parkland formula initiation, rhabdomyolysis fluid strategy with alkalinised urine target.',
+                branchingLogic: 'Calcium early → ROSC ~5:30 with reasonable trajectory. Calcium omitted → refractory VF, routes to Stage 5 (capped 45 s, −10).',
+                salientFeatures: 'Coarse VF, entry wound right hand / exit left foot, K 7.5, CK ~45,000, peaked T waves resolving after Calcium, cola-coloured urine.',
+                keyLabs: 'VBG on arrival pH 7.02, K 7.5, HCO3 10, Lactate 8; post Ca/bicarb pH 7.15, K 5.8. CK ~45,000 U/L. Creatinine rising. 12-lead: peaked T waves pre-Calcium, resolving post. CXR normal.'
             },
             'B4': {
-                title: 'Refractory Status Epilepticus with Respiratory Arrest',
+                title: 'Refractory Status Epilepticus with Raised ICP',
                 round: 'BLS Round', patient: 'Sita · 12 yr · Female · 30 kg',
-                summary: 'A febrile child with ongoing seizures despite first-line anticonvulsants progresses to respiratory arrest — the team must escalate seizure management and watch for a neurological complication.',
-                keyDrugs: '3% NaCl / Mannitol, Phenobarbitone / Valproate, Ketamine + Rocuronium (RSI)',
-                criticalDecision: 'Recognise raised ICP (unequal pupils) → 3% NaCl / Mannitol + Head elevation 30°.',
-                keyChallenge: 'Unequal pupils indicating raised ICP missed or misinterpreted. Propofol used for RSI instead of Ketamine. ICP treatment delayed.',
-                criticalSkills: 'Recognise raised ICP (unequal pupils), 3% NaCl or Mannitol, Head elevation 30°, 2nd-line AEDs (Phenobarb/Valproate), RSI with Ketamine + Rocuronium.',
-                branchingLogic: 'ICP treatment + Mannitol/3% NaCl + correct RSI → Seizure control. ICP missed + Propofol RSI → Herniation → Death.',
-                salientFeatures: 'Active seizures >1 hr, Failed Lorazepam + Levetiracetam, Unequal pupils = raised ICP, avoid Propofol, Ketamine is safe here.',
-                keyLabs: 'pH 7.28, PCO2 52, HCO3 24, Na 148, Glucose 180, WBC 12, CT head: diffuse cerebral oedema + tonsillar herniation risk.'
+                summary: 'Seizing 25 minutes despite Lorazepam + Levetiracetam, with two days of headache and vomiting behind it. Unequal pupils and hypertension are hiding inside the seizure — raised ICP, with a scripted herniation event at 5:30.',
+                keyDrugs: 'Phenobarbitone 20 mg/kg or Valproate 40 mg/kg (NOT a third benzodiazepine), 3% NaCl 3 mL/kg or Mannitol 0.5 g/kg (escalating at herniation), Ketamine + Rocuronium (RSI)',
+                criticalDecision: 'Unequal pupils in status epilepticus are raised ICP until proven otherwise — osmotherapy + head-up 30° + Ketamine RSI. Propofol is contraindicated (drops MAP, worsens CPP).',
+                keyChallenge: 'Raised-ICP signs (R 5 mm > L 3 mm pupils, BP 148/90, relative bradycardia) easy to miss mid-seizure. Nurse offers more Lorazepam at 3:00 — correct answer is a 2nd-line non-benzodiazepine AED.',
+                criticalSkills: 'BVM for inadequate breathing, pupil examination during seizure, Cushing-triad recognition, correct 2nd-line AED, osmotherapy dosing (initial and escalated), brief bridging hyperventilation (PCO2 30–35), early neurosurgery activation.',
+                branchingLogic: 'Osmotherapy + positioning + Ketamine RSI + early neurosurgery → enters the herniation event (fires for every team at 5:30) in a stronger position. Omissions compound severity. Stage 5 rescue: capped 45 s, −10.',
+                salientFeatures: 'No prior epilepsy, 2 days headache + vomiting, unequal pupils, hypertension with relative bradycardia, scripted herniation (bilateral fixed pupils, HR 60, BP 160/100, GCS 3).',
+                keyLabs: 'Glucose 96 (excludes hypoglycaemic seizure). VBG pH 7.18, pCO2 58 (hypoventilation), HCO3 20, Lactate 4. Na 138, K 4.0. CT head deferred — unsafe to move until stabilised.'
             }
         };
         // ================================================================
@@ -1573,113 +1581,168 @@
         // ================================================================
         const CASE_RESULTS = {
             'B1': { results: [
-                { id:'vbg', icon:'🔬', label:'VBG / ABG', type:'lab', rows:[
-                    ['pH','7.18','7.35–7.45','crit'],['PaCO₂','48 mmHg','35–45','high'],
-                    ['HCO₃⁻','18 mEq/L','22–26','low'],['BE','−8 mmol/L','−2 to +2','low'],
-                    ['SpO₂','54%','95–100%','crit'],['Temp','35.0 °C','36.5–37.5','low']
+                { id:'bedside', icon:'🌡️', label:'Bedside — Core Temp / Glucose / Hb', type:'lab', rows:[
+                    ['Core temperature','33.0 °C (rising 0.2–0.3 °C/min once active rewarming under way)','36.5–37.5','crit'],
+                    ['Bedside glucose','98 mg/dL','70–110','norm'],['Point-of-care Hb','12.9 g/dL','11.5–15.5','norm']
                 ]},
-                { id:'bmp', icon:'🔬', label:'Electrolytes / Metabolic', type:'lab', rows:[
-                    ['Na⁺','148 mEq/L','135–145','high'],['K⁺','4.5 mEq/L','3.5–5.0','norm'],
-                    ['Glucose','140 mg/dL','70–110','high'],['Lactate','8.0 mmol/L','< 2.2','crit']
+                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
+                    ['pH','7.05','7.35–7.45','crit'],['pCO₂','60 mmHg','35–45','crit'],
+                    ['HCO₃⁻','12 mEq/L','22–26','crit'],['BE','−16 mmol/L','−2 to +2','crit'],
+                    ['Lactate','9 mmol/L','< 2.2','crit'],['K⁺','4.5 mEq/L','3.5–5.0','norm']
                 ]},
-                { id:'ecg', icon:'📈', label:'Cardiac Monitor / ECG', type:'rhythm',
-                  rhythm:'Pulseless Ventricular Tachycardia', rate:'187 /min',
-                  action:'⚡ SHOCKABLE — Defibrillate 2 J/kg FIRST', flag:'crit' }
-            ]},
-            'B2': { results: [
-                { id:'vbg', icon:'🔬', label:'VBG', type:'lab', rows:[
-                    ['pH','7.10','7.35–7.45','crit'],['PCO₂','72 mmHg','35–45','crit'],
-                    ['HCO₃⁻','18 mEq/L','22–26','low'],['BE','−10 mmol/L','−2 to +2','low'],
-                    ['Lactate','5 mmol/L','< 2.2','high'],['SpO₂','68%','95–100%','crit']
+                { id:'vbg2', icon:'🔬', label:'VBG — Repeat Post-ROSC', type:'lab', rows:[
+                    ['pH','7.18','7.35–7.45','low'],['pCO₂','48 mmHg','35–45','high'],
+                    ['HCO₃⁻','16 mEq/L','22–26','low'],['BE','−10 mmol/L','−2 to +2','low'],
+                    ['Lactate','6 mmol/L','< 2.2','high'],['K⁺','4.1 mEq/L','3.5–5.0','norm']
                 ]},
-                { id:'bmp', icon:'🔬', label:'Electrolytes / Metabolic', type:'lab', rows:[
-                    ['Na⁺','135 mEq/L','135–145','norm'],['K⁺','2.5 mEq/L','3.5–5.0','crit'],
-                    ['Cl⁻','89 mEq/L','98–106','low'],['iCa','0.8 mmol/L','1.1–1.3','crit'],
-                    ['Mg²⁺','0.5 mmol/L','0.7–1.0','low'],['Glucose','86 mg/dL','70–110','norm']
-                ]},
-                { id:'ecg', icon:'📈', label:'Cardiac Monitor / ECG', type:'rhythm',
-                  rhythm:'Torsades de Pointes', rate:'Polymorphic VT — twisting peaks · QTc >500 ms',
-                  action:'⚡ SHOCKABLE + Magnesium 50 mg/kg IV — BOTH required', flag:'crit' }
-            ]},
-            'B3': { results: [
-                { id:'vbg', icon:'🔬', label:'VBG', type:'lab', rows:[
-                    ['pH','7.12','7.35–7.45','crit'],['PCO₂','45 mmHg','35–45','norm'],
-                    ['HCO₃⁻','14 mEq/L','22–26','crit'],['BE','−14 mmol/L','−2 to +2','crit'],
-                    ['Lactate','6.0 mmol/L','< 2.2','crit']
-                ]},
-                { id:'bmp', icon:'🔬', label:'Electrolytes / CK / Renal', type:'lab', rows:[
-                    ['Na⁺','140 mEq/L','135–145','norm'],['K⁺','7.5 mEq/L','3.5–5.0','crit'],
-                    ['Creatinine','1.8 mg/dL','0.3–0.7','high'],
-                    ['CK','12,000 U/L','< 200','crit'],['Myoglobin','↑↑ markedly elevated','< 90 μg/L','crit']
-                ]},
-                { id:'ecg', icon:'📈', label:'Cardiac Monitor / ECG', type:'rhythm',
-                  rhythm:'Pulseless Ventricular Tachycardia', rate:'190 /min',
-                  action:'⚡ SHOCKABLE + Calcium gluconate IV for K⁺ 7.5 immediately', flag:'crit' }
-            ]},
-            'B4': { results: [
-                { id:'vbg', icon:'🔬', label:'VBG', type:'lab', rows:[
-                    ['pH','7.28','7.35–7.45','low'],['PCO₂','52 mmHg','35–45','high'],
-                    ['HCO₃⁻','24 mEq/L','22–26','norm'],['Lactate','6 mmol/L','< 2.2','crit']
-                ]},
-                { id:'bmp', icon:'🔬', label:'Electrolytes / Metabolic', type:'lab', rows:[
-                    ['Na⁺','148 mEq/L','135–145','high'],['Glucose','180 mg/dL','70–110','high'],
-                    ['WBC','12 ×10³/μL','4.5–11','high']
-                ]},
-                { id:'ct', icon:'🖥️', label:'CT Head', type:'imaging',
-                  findings:'Diffuse cerebral oedema. Sulcal effacement bilaterally. Early tonsillar herniation risk. No focal contusion. Midline intact.',
-                  flag:'crit', note:'⚠️ Raised ICP confirmed — unequal pupils. 3% NaCl or Mannitol + Head elevation 30°.' }
-            ]},
-            'P1': { results: [
-                { id:'cardiac', icon:'🔬', label:'Cardiac Biomarkers', type:'lab', rows:[
-                    ['Troponin T','2.8 ng/mL','< 0.05','crit'],['BNP','1,200 pg/mL','< 100','crit'],
-                    ['Lactate','4.2 mmol/L','< 2.2','high'],['Na⁺','138 mEq/L','135–145','norm'],
-                    ['K⁺','4.1 mEq/L','3.5–5.0','norm'],['iCa','1.1 mmol/L','1.1–1.3','norm']
+                { id:'labs', icon:'🔬', label:'Labs — FBC / Electrolytes / Coag', type:'lab', rows:[
+                    ['Na⁺','138 mEq/L','135–145','norm'],['iCa','1.15 mmol/L','1.1–1.3','norm'],['Mg²⁺','0.9 mmol/L','0.7–1.0','norm'],
+                    ['Hb / WCC / Plt','12.9 · 14.2 · 260','—','norm'],['PT / APTT / INR','15.8 s · 38 s · 1.3 — mildly deranged (hypothermia)','—','high'],
+                    ['Troponin','Mildly elevated — from the arrest, not a primary cardiac event','—','high'],['Urea / Creatinine','4.2 mmol/L · 38 μmol/L — normal for age','—','norm']
                 ]},
                 { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
-                  findings:'Cardiomegaly (CTR > 0.65). Bilateral pulmonary oedema. Kerley B lines at bases. Small bilateral pleural effusions. No pneumothorax.',
-                  flag:'high', note:'Do NOT give fluid bolus — cardiogenic pulmonary oedema. Start Adrenaline infusion.' },
-                { id:'echo', icon:'🫀', label:'Echo / POCUS', type:'imaging',
-                  findings:'EF 15% (severely reduced, ref 55–70%). Global hypokinesia. Dilated LA and LV. Small pericardial effusion. Moderate mitral regurgitation.',
-                  flag:'crit', note:'⚡ EF 15% — Cardiogenic shock confirmed. Inotrope + Synchronized cardioversion 0.5 J/kg.' }
+                  findings:'Diffuse bilateral infiltrates, consistent with aspiration.',
+                  flag:'high', note:'CT head deferred until haemodynamically stable for transfer — Chief states it is not safe to move her for a scan right now.' },
+                { id:'ecg', icon:'📈', label:'Cardiac Monitor / 12-Lead', type:'rhythm',
+                  rhythm:'Fine VF → organised rhythm at ROSC (~5:30). Post-ROSC 12-lead: sinus with Osborn (J) waves — classic hypothermia', rate:'—',
+                  action:'⚡ SHOCKABLE — Defibrillate 2 J/kg FIRST (EMS already gave Adrenaline ×2). Not dead until warm and dead.', flag:'crit' }
+            ]},
+            'B2': { results: [
+                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
+                    ['pH','7.12','7.35–7.45','crit'],['K⁺','2.5 mEq/L','3.5–5.0','crit'],
+                    ['iCa','0.8 mmol/L','1.1–1.3','crit'],['Lactate','6 mmol/L','< 2.2','crit'],['Bedside glucose','92 mg/dL','70–110','norm']
+                ]},
+                { id:'vbg2', icon:'🔬', label:'VBG — Post Mg/K Correction', type:'lab', rows:[
+                    ['pH','7.28','7.35–7.45','low'],['K⁺','3.8 mEq/L','3.5–5.0','norm'],
+                    ['iCa','1.1 mmol/L','1.1–1.3','norm'],['Lactate','3 mmol/L','< 2.2','high']
+                ]},
+                { id:'labs', icon:'🔬', label:'Labs — Mg / FBC / Renal / Troponin', type:'lab', rows:[
+                    ['Magnesium','0.5 mmol/L — low, a contributing cause','0.7–1.0','crit'],['Full blood count','Unremarkable','—','norm'],
+                    ['Renal function','Normal','—','norm'],['Troponin','Mildly elevated post-arrest','—','high']
+                ]},
+                { id:'priorecg', icon:'📄', label:'Prior ECG (old records, on request)', type:'imaging',
+                  findings:'QTc 480 ms — known prolonged QT. Post-ROSC 12-lead: sinus rhythm, QTc still prolonged at 460 ms.',
+                  flag:'high', note:'Chest X-ray normal. CT head not indicated.' },
+                { id:'ecg', icon:'📈', label:'Cardiac Monitor', type:'rhythm',
+                  rhythm:'Torsades de Pointes — sinusoidal twisting polymorphic VT → organised sinus at ROSC', rate:'Polymorphic',
+                  action:'⚡ SHOCKABLE (unsynchronised 2 J/kg) + Magnesium 50 mg/kg IV — BOTH required. AVOID Amiodarone (prolongs QT).', flag:'crit' }
+            ]},
+            'B3': { results: [
+                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
+                    ['pH','7.02','7.35–7.45','crit'],['K⁺','7.5 mEq/L','3.5–5.0','crit'],
+                    ['HCO₃⁻','10 mEq/L','22–26','crit'],['Lactate','8 mmol/L','< 2.2','crit'],
+                    ['Bedside glucose','105 mg/dL','70–110','norm'],['POC Hb','13.5 g/dL','11.5–15.5','norm']
+                ]},
+                { id:'vbg2', icon:'🔬', label:'VBG — Post Ca/Bicarb', type:'lab', rows:[
+                    ['pH','7.15','7.35–7.45','crit'],['K⁺','5.8 mEq/L','3.5–5.0','high'],
+                    ['HCO₃⁻','14 mEq/L','22–26','low'],['Lactate','5 mmol/L','< 2.2','high']
+                ]},
+                { id:'labs', icon:'🔬', label:'Labs — CK / Renal / Coag / Troponin', type:'lab', rows:[
+                    ['Creatine kinase','~45,000 U/L — rhabdomyolysis','< 200','crit'],['Renal function','Creatinine rising','—','high'],
+                    ['Coagulation','Normal','—','norm'],['Troponin','Mildly elevated — electrical injury, not a primary cardiac event','—','high']
+                ]},
+                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
+                  findings:'Normal — no associated thoracic trauma.',
+                  flag:'norm', note:'CT head not indicated unless trauma signs present.' },
+                { id:'ecg', icon:'📈', label:'Cardiac Monitor / 12-Lead', type:'rhythm',
+                  rhythm:'Coarse VF → sinus at ROSC. 12-lead: peaked T waves pre-Calcium, resolving post-Calcium', rate:'—',
+                  action:'⚡ SHOCKABLE — Defibrillate 2 J/kg immediately + Calcium gluconate 50 mg/kg for K⁺ 7.5. No succinylcholine for RSI.', flag:'crit' }
+            ]},
+            'B4': { results: [
+                { id:'bedside', icon:'🌡️', label:'Bedside Glucose', type:'lab', rows:[
+                    ['Glucose','96 mg/dL — excludes hypoglycaemic seizure','70–110','norm']
+                ]},
+                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
+                    ['pH','7.18','7.35–7.45','low'],['pCO₂','58 mmHg (hypoventilation)','35–45','high'],
+                    ['HCO₃⁻','20 mEq/L','22–26','low'],['Lactate','4 mmol/L','< 2.2','high']
+                ]},
+                { id:'labs', icon:'🔬', label:'Labs — FBC / Electrolytes / Coag', type:'lab', rows:[
+                    ['Na⁺','138 mEq/L','135–145','norm'],['K⁺','4.0 mEq/L','3.5–5.0','norm'],
+                    ['Full blood count','Mild leukocytosis','—','high'],['Renal / liver / coagulation','Normal','—','norm']
+                ]},
+                { id:'ct', icon:'🖥️', label:'CT Head — If Requested', type:'imaging',
+                  findings:'Not yet performed — deferred until stabilised for transfer. Chief states it is unsafe to move her for a scan currently.',
+                  flag:'crit', note:'⚠️ Unequal pupils (R 5 mm > L 3 mm) + hypertension with relative bradycardia = raised ICP until proven otherwise. Osmotherapy + head up 30° + Ketamine RSI (never Propofol).' },
+                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
+                  rhythm:'Sinus rhythm throughout — rate changes reflect the Cushing response (bradycardia at the herniation event)', rate:'130 → 60 at herniation',
+                  action:'Chest X-ray normal. Herniation event at 5:30 is scripted — fires for every team.', flag:'high' }
+            ]},
+            'P1': { results: [
+                { id:'vbg', icon:'🔬', label:'VBG / Bedside', type:'lab', rows:[
+                    ['pH','7.22','7.35–7.45','low'],['Lactate','5 mmol/L','< 2.2','crit'],
+                    ['HCO₃⁻','16 mEq/L','22–26','low'],['Bedside glucose','88 mg/dL','70–110','norm']
+                ]},
+                { id:'cardiac', icon:'🔬', label:'Cardiac Biomarkers / Labs', type:'lab', rows:[
+                    ['Troponin','Markedly elevated','< 0.05','crit'],['BNP','Markedly elevated','< 100','crit'],
+                    ['FBC','Mild leukocytosis, viral picture','—','high'],['CRP','Mildly raised','< 5','high'],
+                    ['Renal function','Mildly impaired — poor perfusion','—','high'],['Coagulation','Normal','—','norm']
+                ]},
+                { id:'echo', icon:'🫀', label:'Point-of-Care Echo', type:'imaging',
+                  findings:'Severely impaired LV function, EF ~15%. No pericardial effusion.',
+                  flag:'crit', note:'⚡ Cardiogenic shock confirmed — Adrenaline inotrope 0.05–0.1 mcg/kg/min, NOT a fluid bolus.' },
+                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
+                  findings:'Cardiomegaly with pulmonary oedema.',
+                  flag:'high', note:'Do NOT give a fluid bolus — cardiogenic pulmonary oedema. CT not indicated.' },
+                { id:'ecg', icon:'📈', label:'12-Lead / Monitor', type:'rhythm',
+                  rhythm:'Initial: sinus tachycardia, low-voltage QRS, diffuse T-wave inversion. Later: wide-complex VT at 220 → pulseless at ~5:30 (scripted)', rate:'170 → 220',
+                  action:'⚡ Pulseless VT here is ORGANISED — SYNCHRONISED cardioversion 0.5 J/kg, NOT unsynchronised 2 J/kg.', flag:'crit' }
             ]},
             'P2': { results: [
-                { id:'bmp', icon:'🔬', label:'BMP / Glucose / Electrolytes', type:'lab', rows:[
-                    ['Glucose','28 mg/dL','70–110','crit'],['Na⁺','122 mEq/L','135–145','crit'],
-                    ['K⁺','3.8 mEq/L','3.5–5.0','norm'],['Urea','22 mg/dL','7–20','high'],
-                    ['Creatinine','0.9 mg/dL','0.3–0.7','high']
+                { id:'bedside', icon:'🩸', label:'Bedside Glucose', type:'lab', rows:[
+                    ['Glucose — initial','28 mg/dL (CRITICAL)','70–110','crit'],['Glucose — repeat post-treatment','110 mg/dL','70–110','norm']
                 ]},
-                { id:'inflam', icon:'🔬', label:'Inflammatory Markers', type:'lab', rows:[
-                    ['WBC','22 ×10³/μL','4.5–11','crit'],['CRP','180 mg/L','< 5','crit'],
-                    ['Procalcitonin','42 μg/L','< 0.25','crit'],['Lactate','6.1 mmol/L','< 2.2','crit']
+                { id:'vbg', icon:'🔬', label:'VBG / Sodium', type:'lab', rows:[
+                    ['pH','7.24','7.35–7.45','low'],['Lactate','4.5 mmol/L','< 2.2','high'],
+                    ['HCO₃⁻','17 mEq/L','22–26','low'],['Na⁺','122 mmol/L','135–145','crit'],['K⁺','3.6 mEq/L','3.5–5.0','norm']
                 ]},
-                { id:'cx', icon:'🔬', label:'Blood Culture', type:'other',
-                  findings:'Pending. Clinical picture: gram-positive cocci in clusters — likely Staphylococcus aureus (post-cardiac surgery wound infection). Broad-spectrum empirical cover required.',
-                  flag:'high', note:'⚠️ Start Meropenem + Vancomycin NOW — do NOT wait for culture result.' }
+                { id:'inflam', icon:'🔬', label:'Infection Workup', type:'lab', rows:[
+                    ['Full blood count','Leukocytosis with left shift','—','crit'],['CRP','Markedly elevated','< 5','crit'],
+                    ['Blood cultures','Sent, pending','—','high'],['Wound swab (if taken)','Pending','—','high'],['Renal function','Mildly impaired','—','high']
+                ]},
+                { id:'wound', icon:'🩹', label:'Surgical Site — On Examination', type:'imaging',
+                  findings:'Erythema and discharge consistent with wound infection. CXR: post-sternotomy changes, no acute infiltrate.',
+                  flag:'crit', note:'⚠️ Source identified — cultures THEN Meropenem + Vancomycin. CT not indicated acutely.' },
+                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
+                  rhythm:'Wide-QRS tachycardia — rate-related aberrancy on sinus tachycardia, narrowing as rate/electrolytes correct', rate:'165',
+                  action:'🚫 NOT VT — do NOT cardiovert. Treat glucose 28 and Na 122; the rhythm narrows as they correct.', flag:'crit' }
             ]},
             'P3': { results: [
-                { id:'abg', icon:'🔬', label:'ABG (Pre-Intubation)', type:'lab', rows:[
-                    ['pH','7.08','7.35–7.45','crit'],['PaCO₂','82 mmHg','35–45','crit'],
-                    ['PaO₂','55 mmHg','80–100','crit'],['HCO₃⁻','24 mEq/L','22–26','norm'],
-                    ['BE','−8 mmol/L','−2 to +2','low'],['SpO₂','72%','95–100%','crit']
+                { id:'vbg1', icon:'🔬', label:'VBG — Pre-Intubation', type:'lab', rows:[
+                    ['pH','7.22','7.35–7.45','low'],['pCO₂','68 mmHg — rising, ominous in asthma','35–45','crit'],
+                    ['HCO₃⁻','22 mEq/L','22–26','norm'],['Lactate','3 mmol/L','< 2.2','high'],['Bedside glucose','98 mg/dL','70–110','norm']
                 ]},
-                { id:'cxr', icon:'🩻', label:'CXR (Post-Intubation)', type:'imaging',
-                  findings:'RIGHT-sided pneumothorax — absent lung markings right lower zone. Tracheal deviation to LEFT. Mediastinal shift confirmed. LEFT lung hyperinflated. ETT midline (no endobronchial intubation).',
-                  flag:'crit', note:'⚠️ TENSION PNEUMOTHORAX — Needle decompression 2nd ICS MCL right side IMMEDIATELY, then chest drain.' }
+                { id:'vbg2', icon:'🔬', label:'VBG — Post-Decompression', type:'lab', rows:[
+                    ['pH','7.30','7.35–7.45','low'],['pCO₂','52 mmHg','35–45','high']
+                ]},
+                { id:'labs', icon:'🔬', label:'Labs', type:'lab', rows:[
+                    ['Full blood count','Mild eosinophilia','—','high'],['Electrolytes','Normal','—','norm']
+                ]},
+                { id:'cxr', icon:'🩻', label:'Chest X-Ray — Post-Decompression', type:'imaging',
+                  findings:'Right chest drain in situ, lung re-expanded, bilateral hyperinflation consistent with asthma.',
+                  flag:'high', note:'⚠️ At the 5:30 event: decompress BEFORE imaging — needle 2nd ICS MCL right side, then drain. CT not indicated.' },
+                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
+                  rhythm:'Sinus tachycardia throughout, no arrhythmia. SpO₂ trend shows pre/post-decompression recovery', rate:'150',
+                  action:'Rising airway pressure + falling SpO₂ + silent right chest post-intubation = tension pneumothorax until proven otherwise.', flag:'crit' }
             ]},
             'P4': { results: [
-                { id:'abg', icon:'🔬', label:'ABG', type:'lab', rows:[
-                    ['pH','7.05','7.35–7.45','crit'],['PaCO₂','52 mmHg','35–45','high'],
-                    ['PaO₂','88 mmHg','80–100','norm'],['HCO₃⁻','11 mEq/L','22–26','crit'],
-                    ['BE','−17 mmol/L','−2 to +2','crit'],['Lactate','9.2 mmol/L','< 2.2','crit']
+                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
+                    ['pH','7.05','7.35–7.45','crit'],['HCO₃⁻','9 mEq/L','22–26','crit'],
+                    ['Lactate','9.2 mmol/L','< 2.2','crit'],['K⁺','4.8 mEq/L','3.5–5.0','norm'],['Bedside glucose','105 mg/dL','70–110','norm']
                 ]},
-                { id:'bmp', icon:'🔬', label:'BMP / Electrolytes / Renal', type:'lab', rows:[
-                    ['Na⁺','132 mEq/L','135–145','low'],['K⁺','5.1 mEq/L','3.5–5.0','high'],
-                    ['Urea','35 mg/dL','7–20','crit'],['Creatinine','1.4 mg/dL','0.3–0.7','crit']
+                { id:'vbg2', icon:'🔬', label:'VBG — Repeat Post-Resuscitation', type:'lab', rows:[
+                    ['pH','7.15','7.35–7.45','crit'],['Lactate','6.5 mmol/L','< 2.2','crit']
                 ]},
-                { id:'inflam', icon:'🔬', label:'Inflammatory Markers', type:'lab', rows:[
-                    ['WBC','28 ×10³/μL','4.5–11','crit'],['CRP','240 mg/L','< 5','crit'],
-                    ['Procalcitonin','88 μg/L','< 0.25','crit']
-                ]}
+                { id:'labs', icon:'🔬', label:'Labs — Sepsis Panel', type:'lab', rows:[
+                    ['Full blood count','Leukocytosis or leukopenia with left shift; thrombocytopenia','—','crit'],
+                    ['CRP','Markedly elevated','< 5','crit'],['Coagulation','Deranged — early DIC picture','—','crit'],
+                    ['Blood cultures','Sent','—','high'],['Renal function','Impaired — AKI from shock','—','high'],['Liver function','Mildly deranged','—','high']
+                ]},
+                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
+                  findings:'Normal, or mild pulmonary oedema from fluid resuscitation.',
+                  flag:'norm', note:'CT not indicated acutely. The rash IS the diagnosis: non-blanching purpura = meningococcal septicaemia — Ceftriaxone after cultures.' },
+                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
+                  rhythm:'Sinus tachycardia throughout; brief hypotensive dip at induction (peri-intubation crash, scripted ~5:30)', rate:'175',
+                  action:'⚠️ Push-dose Epinephrine 10 mcg/kg at the bedside BEFORE induction — administer within 30 s of the crash.', flag:'crit' }
             ]},
             // ── SEMI-FINALS ─────────────────────────────────
             'R1': { results: [
@@ -1689,12 +1752,12 @@
                     ['Glucose','90 mg/dL','70–110','norm'],['Group','O Rh+','—','norm']
                 ]},
                 { id:'ananya_ct', icon:'🖥️', label:'Ananya — Outside CT Head Report', type:'imaging',
-                  findings:'Right temporal extradural haematoma — small, 7 mm maximum thickness, biconvex hyperdense collection. No midline shift. Temporal bone fracture identified. Right temporal scalp haematoma. Recommend repeat imaging or neurosurgical review if neurological deterioration.',
-                  flag:'crit', note:'⚠️ Father says "they said it was normal." READ THE REPORT. Small EDH confirmed — acts quickly once decompensation starts.' },
-                { id:'vihaan_fast', icon:'🫀', label:'Vihaan — FAST Ultrasound', type:'imaging',
+                  findings:'Reported NORMAL — no extra-axial collection, no midline shift, no fracture identified. Timed 90 minutes post-injury. Right temporal scalp haematoma noted clinically.',
+                  flag:'crit', note:'⚠️ The report is genuinely normal — an EDH imaged this early may not yet be visible. Do not let the "normal scan" anchor the team: the GCS and pupil TREND is the diagnosis. Reveal in debrief.' },
+                { id:'vihaan_fast', icon:'🫀', label:'Vihaana — FAST Ultrasound', type:'imaging',
                   findings:'Trace free fluid in right perihepatic (Morrison\'s pouch). No pericardial effusion. No left upper quadrant fluid. No pelvic fluid. Haemodynamically stable (HR 168, BP 96/60 consistent with pain/distress, not shock).',
                   flag:'high', note:'Calibrated response required — NOT theatre. Surgical consult + serial exam + repeat FAST in 30 min.' },
-                { id:'vihaan_bloods', icon:'🔬', label:'Vihaan — Trauma Bloods', type:'lab', rows:[
+                { id:'vihaan_bloods', icon:'🔬', label:'Vihaana — Trauma Bloods', type:'lab', rows:[
                     ['Hb','10.2 g/dL','10.5–14.5','low'],['Hct','29%','33–43','low'],
                     ['Platelets','210 ×10³/μL','150–400','norm'],['Glucose','82 mg/dL','70–110','norm'],
                     ['Na⁺','138 mEq/L','135–145','norm'],['Group','O Rh+','—','norm']
@@ -1713,8 +1776,8 @@
                   findings:'O-negative blood: 2 units available immediately in fridge. MTP cooler (1:1:1 — PRBC:FFP:Platelets) activated on request. TXA 15 mg/kg IV over 10 min.',
                   flag:'high', note:'Activate MTP early. TXA within 3 hours of injury. No further crystalloid — blood products only.' },
                 { id:'diya_assess', icon:'🟢', label:'Diya — Clinical Assessment', type:'imaging',
-                  findings:'GCS 15 throughout. HR 130→116, BP 98/62, SpO2 99%. Alert, moving all limbs. Scalp laceration with subgaleal haematoma — no skull fracture, no LOC. No abdominal mechanism — FAST not indicated.',
-                  flag:'norm', note:'Low-risk head injury. No neuroimaging indicated clinically. Scalp wound: direct pressure then staples/tissue adhesive.' }
+                  findings:'One vomit and brief drowsiness at 4:30, resolving — GCS 15 on reassessment. HR 130→116, BP 98/62, SpO2 99%. Moving all limbs. Scalp laceration with boggy subgaleal haematoma, stable in size — no skull fracture, no LOC. No abdominal mechanism — FAST not indicated. If imaging is obtained: normal.',
+                  flag:'norm', note:'Apply a paediatric head-injury decision rule ALOUD after the 4:30 vomit — reflex CT and unreasoned dismissal are both failure modes. Scalp wound: direct pressure then staples/tissue adhesive.' }
             ]},
             // ── FINALS ──────────────────────────────────────
             'F1': { results: [
@@ -1891,6 +1954,19 @@
             }
         }
 
+        function buildInvViewer(caseName) {
+            const cr = CASE_RESULTS[caseName];
+            if (!cr) return '';
+            const items = cr.results.map(r => '<div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;">'
+                + '<div style="padding:7px 12px;background:var(--surface-2);font-size:0.82rem;font-weight:700;color:var(--text-primary);">' + r.icon + ' ' + r.label + '</div>'
+                + '<div style="padding:8px 10px;">' + buildResultPreview(r) + '</div>'
+                + '</div>').join('');
+            return '<details style="margin-bottom:12px;border:1px solid #64748b;border-radius:10px;overflow:hidden;">'
+                + '<summary style="padding:8px 14px;background:var(--surface-2);color:var(--text-primary);font-size:0.82rem;font-weight:700;cursor:pointer;">🔬 Investigations — review results for this case (view-only · the organisers control what reaches the projector)</summary>'
+                + '<div style="padding:10px;background:var(--bg);">' + items + '</div>'
+                + '</details>';
+        }
+
         function buildResultsConsole(caseName) {
             const cr = CASE_RESULTS[caseName];
             if (!cr) return '';
@@ -2013,7 +2089,9 @@
             const p2 = document.getElementById('judgePals2')?.value || 'Judge 2';
             const b1 = document.getElementById('judgeBls1')?.value || 'Judge 1';
             const b2 = document.getElementById('judgeBls2')?.value || 'Judge 2';
-            return { pals: [p1, p2], bls: [b1, b2] };
+            const dA = document.getElementById('debrieferPals')?.value || 'Debriefer A';
+            const dB = document.getElementById('debrieferBls')?.value || 'Debriefer B';
+            return { pals: [p1, p2], bls: [b1, b2], debPals: dA, debBls: dB };
         }
         // ================================================================
         // 4. TAB SWITCHING
@@ -2667,6 +2745,7 @@
                 container.innerHTML += `<div style="background:#FBE4E7; border:1.5px solid #B3273B; border-radius:10px; padding:10px 18px; margin-bottom:16px; font-size:0.88rem; color:#6B1622; font-weight:600;">
                     🔴 Now Live: <strong>${activeCasePals}</strong> — ${caseData[activeCasePals]?.title || ''} ${teamBanner}
                 </div>`;
+                container.innerHTML += buildInvViewer(activeCasePals);
                 container.appendChild(buildJudgeCaseCard(activeCasePals, activeCasePals, activeTeamPals, true));
             } else {
                 container.innerHTML += `<div style="background:#f1f5f9; border-radius:10px; padding:10px 18px; margin-bottom:16px; font-size:0.88rem; color:#64748b;">
@@ -2689,6 +2768,7 @@
                 container.innerHTML += `<div style="background:#E6F4F7; border:1.5px solid var(--primary); border-radius:10px; padding:10px 18px; margin-bottom:16px; font-size:0.88rem; color:var(--bls-text); font-weight:600;">
                     🔵 Now Live: <strong>${activeCaseBls}</strong> — ${caseData[activeCaseBls]?.title || ''} ${teamBanner}
                 </div>`;
+                container.innerHTML += buildInvViewer(activeCaseBls);
                 container.appendChild(buildJudgeCaseCard(activeCaseBls, activeCaseBls, activeTeamBls, false));
             } else {
                 container.innerHTML += `<div style="background:#f1f5f9; border-radius:10px; padding:10px 18px; margin-bottom:16px; font-size:0.88rem; color:#64748b;">
@@ -2733,13 +2813,13 @@
             if (activeCasePals) {
                 const tb = activeTeamPals ? `| Now Performing: <strong>${getDisplayName(activeTeamPals)}</strong>` : `| Teams: ${(caseTeams[activeCasePals]||[]).map(t=>getDisplayName(t)).join(' · ')}`;
                 container.innerHTML += `<div style="background:#FBE4E7;border:1.5px solid #B3273B;border-radius:10px;padding:10px 18px;margin-bottom:8px;font-size:0.88rem;color:#6B1622;font-weight:600;">
-                    🔴 Room A PALS: <strong>${activeCasePals}</strong> — ${caseData[activeCasePals]?.title||''} ${tb}
+                    🔴 Room A PALS: <strong>${activeCasePals}</strong> — ${caseData[activeCasePals]?.title||''} · Debriefer: <strong>${judges.debPals}</strong> ${tb}
                 </div>`;
             }
             if (activeCaseBls) {
                 const tb = activeTeamBls ? `| Now Performing: <strong>${getDisplayName(activeTeamBls)}</strong>` : `| Teams: ${(caseTeams[activeCaseBls]||[]).map(t=>getDisplayName(t)).join(' · ')}`;
                 container.innerHTML += `<div style="background:#E6F4F7;border:1.5px solid var(--primary);border-radius:10px;padding:10px 18px;margin-bottom:16px;font-size:0.88rem;color:var(--bls-text);font-weight:600;">
-                    🔵 Room B BLS: <strong>${activeCaseBls}</strong> — ${caseData[activeCaseBls]?.title||''} ${tb}
+                    🔵 Room B BLS: <strong>${activeCaseBls}</strong> — ${caseData[activeCaseBls]?.title||''} · Debriefer: <strong>${judges.debBls}</strong> ${tb}
                 </div>`;
             }
             if (!activeCasePals && !activeCaseBls) {
@@ -2767,7 +2847,7 @@
                     <div class="case-header">
                         <div>
                             <span class="case-title">${caseName} — ${cd.title||typeLabel}</span>
-                            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">${cd.round||''}</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px;">${cd.round||''} · Debriefer: ${isPals ? judges.debPals : judges.debBls}</div>
                         </div>
                         <span class="case-type ${typeClass}">${typeLabel}</span>
                     </div>`;
@@ -3549,6 +3629,16 @@
                         }
                         continue;
                     }
+                    // Live SF scenario (round) — organiser controls which round shows
+                    if (key === 'active_sf_round') {
+                        if (value !== activeSFRound) { activeSFRound = value; applySFRoundVisibility(); }
+                        continue;
+                    }
+                    // Live Finals team
+                    if (key === 'active_fn_team') {
+                        if (value !== activeFNTeam) { activeFNTeam = value; buildFNCaseCard('F2'); needsFNRecalc = true; }
+                        continue;
+                    }
                     // SF submitted flags
                     if (key.startsWith('sfSubmitted_') && value === 'true') {
                         const parts = key.replace('sfSubmitted_', '').split('_'); // [R, team]
@@ -3730,7 +3820,7 @@
         const SF_ROUNDS = {
             R1: {
                 label: 'Round 1 — "The Quiet Head"',
-                patients: 'Ananya Rao (7y, 24 kg) · Vihaan Rao (18m, 10 kg)',
+                patients: 'Ananya Rao (7y, 24 kg) · Vihaana Rao (18m, 10 kg)',
                 summary: 'Two siblings arrive after a road traffic accident — one initially appears calm, the other is visibly distressed but stable. The team must manage both simultaneously and correctly prioritise as the picture evolves.',
                 tiebreaker: 'You have one CT scanner and one theatre. Justify the order in which you would use them for these two children, and state what would change that order.',
                 clinical: {
@@ -3740,23 +3830,23 @@
                             { k:'a1', label:'Rapidly assesses both children during the Golden Minute', max:2 },
                             { k:'a2', label:'Organised ABCDE on both children', max:2 },
                             { k:'a3', label:'Maintains cervical-spine protection for Ananya', max:2 },
-                            { k:'a4', label:"Recognises Ananya's high-risk handover history (LOC, vomiting, increasing sleepiness) while continuing Vihaan's care", max:2 }
+                            { k:'a4', label:"Recognises Ananya's high-risk handover history (LOC, vomiting, increasing sleepiness) while continuing Vihaana's care", max:2 }
                          ]
                     },
                     B: { title: 'B. Ananya — evolving traumatic brain injury', max: 16,
-                         note: 'CT report states small right temporal extradural collection; recommendation to repeat on deterioration. Father says scan was normal. Tested behaviour: reading the document.',
+                         note: 'Outside CT (90 min post-injury) is genuinely normal — an early EDH may not yet be visible. Tested behaviour: refusing to anchor on the normal report and acting on the clinical trend.',
                          items: [
                             { k:'b1', label:'Baseline GCS and pupils documented', max:2 },
                             { k:'b2', label:'Repeats neurological examination; identifies the GCS trend', max:2 },
-                            { k:'b3', label:"Reads the outside CT report directly rather than accepting the father's verbal account; identifies the extradural collection and recognises expansion", max:2 },
+                            { k:'b3', label:"Does not anchor on the genuinely normal early outside CT — recognises that an extradural haematoma imaged very early may not yet be visible, and acts on the evolving GCS and pupil trend", max:2 },
                             { k:'b4', label:'Recognises pupillary asymmetry (unequal and fixed) or other raised-ICP signs', max:2 },
                             { k:'b5', label:'Neuroprotection bundle: oxygenation, normotension, head up ~30° neutral neck, normocapnia, 3% hypertonic saline 3–5 mL/kg', max:4 },
                             { k:'b6', label:'Timely airway management with C-spine protection', max:2 },
                             { k:'b7', label:'Activates neurosurgery; arranges urgent imaging with explicit safe-transfer plan', max:2 }
                          ]
                     },
-                    C: { title: 'C. Vihaan — polytrauma, proportionate response', max: 8,
-                         note: 'Vihaan is not in progressive haemorrhagic shock. His tachycardia is multifactorial (pain, fracture, mild hypovolaemia). Score calibration, never restraint.',
+                    C: { title: 'C. Vihaana — polytrauma, proportionate response', max: 8,
+                         note: 'Vihaana is not in progressive haemorrhagic shock. His tachycardia is multifactorial (pain, fracture, mild hypovolaemia). Score calibration, never restraint.',
                          items: [
                             { k:'c1', label:'Trauma survey: abdomen, chest and limb examination', max:2 },
                             { k:'c2', label:'Analgesia, splintage and monitoring', max:2 },
@@ -3769,7 +3859,7 @@
                          items: [
                             { k:'d1', label:'Manages seizure: airway, O₂, suction, benzodiazepine, AED loading dose', max:2 },
                             { k:'d2', label:'Reassesses Ananya after the event; modifies management', max:2 },
-                            { k:'d3', label:'Maintains ongoing reassessment of Vihaan', max:2 },
+                            { k:'d3', label:'Maintains ongoing reassessment of Vihaanaa', max:2 },
                             { k:'d4', label:'Clear final disposition and SBAR handover for both children', max:2 }
                          ]
                     }
@@ -3803,11 +3893,11 @@
                          ]
                     },
                     C: { title: 'C. Diya — visible but stable distractor', max: 8,
-                         note: 'Two failure modes: dismissing the wound entirely, or over-reacting and diverting the team. FAST is not indicated for Diya (no abdominal mechanism).',
+                         note: 'At 4:30 Diya vomits once and is briefly drowsy, then settles. Two failure modes: reflex CT that takes the team with her, or dismissing the episode without applying any rule. FAST is not indicated (no abdominal mechanism).',
                          items: [
                             { k:'c1', label:'Trauma survey: full exposure, scalp and neurological examination', max:2 },
-                            { k:'c2', label:'Analgesia, wound pressure dressing and monitoring', max:2 },
-                            { k:'c3', label:'Calibrated response to visible bleeding — controlled and low-acuity, without diverting from Meera', max:2 },
+                            { k:'c2', label:'Analgesia, wound pressure dressing and monitoring — without diverting the team from Meera', max:2 },
+                            { k:'c3', label:'At the 4:30 vomit and brief drowsiness: explicitly applies a paediatric head-injury decision rule and states the conclusion — neither reflex CT nor unreasoned dismissal', max:2 },
                             { k:'c4', label:'Appropriate wound closure and disposition plan with safety-net advice', max:2 }
                          ]
                     },
@@ -3875,9 +3965,24 @@
             return document.getElementById('sfName_' + t)?.value?.trim() || t.toUpperCase();
         }
         function sfGetJudge(j) {
-            const map = {cj1:'sfJudgeCJ1', cj2:'sfJudgeCJ2', cj3:'sfJudgeCJ3', crm1:'sfJudgeCRM1', crm2:'sfJudgeCRM2'};
-            const fallback = {cj1:'Clinical J1', cj2:'Clinical J2', cj3:'Clinical J3', crm1:'CRM J1', crm2:'CRM J2'};
+            const map = {cj1:'sfJudgeCJ1', cj2:'sfJudgeCJ2', cj3:'sfJudgeCJ3', crm1:'sfJudgeCRM1', crm2:'sfJudgeCRM2', crm3:'sfJudgeCRM3'};
+            const fallback = {cj1:'Clinical J1', cj2:'Clinical J2', cj3:'Clinical J3', crm1:'CRM J1', crm2:'CRM J2', crm3:'CRM J3'};
             return document.getElementById(map[j])?.value?.trim() || fallback[j];
+        }
+
+        let activeSFRound = '';
+        function setActiveSFRound(v) {
+            activeSFRound = v;
+            saveToServer('active_sf_round', v);
+            applySFRoundVisibility();
+        }
+        function applySFRoundVisibility() {
+            const r1 = document.getElementById('sfR1Container');
+            const r2 = document.getElementById('sfR2Container');
+            if (r1) r1.style.display = (!activeSFRound || activeSFRound === 'R1') ? '' : 'none';
+            if (r2) r2.style.display = (!activeSFRound || activeSFRound === 'R2') ? '' : 'none';
+            const sel = document.getElementById('sfLiveRoundSelect');
+            if (sel && sel.value !== activeSFRound) sel.value = activeSFRound;
         }
 
         // ── SF Live Team control (mirrors prelims active-case/active-team) ──
@@ -3964,13 +4069,14 @@
             const cj3 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj3_clinTotal')?.textContent) || 0;
             const crm1 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm1_crmTotal')?.textContent) || 0;
             const crm2 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm2_crmTotal')?.textContent) || 0;
+            const crm3 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm3_crmTotal')?.textContent) || 0;
             const globalV = parseFloat(document.getElementById('sf_' + r + '_' + t + '_global')?.value) || 0;
             const d1 = (cj1 + cj2 + cj3) / 3;
-            const d2 = (crm1 + crm2) / 2;
+            const d2 = (crm1 + crm2 + crm3) / 3;
             const d3 = globalV;
             const total = d1 + d2 + d3;
             const spread1 = Math.max(cj1, cj2, cj3) - Math.min(cj1, cj2, cj3);
-            const spread2 = Math.abs(crm1 - crm2);
+            const spread2 = Math.max(crm1, crm2, crm3) - Math.min(crm1, crm2, crm3);
             function se(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
             se('sf_' + r + '_' + t + '_tally_d1', d1.toFixed(1));
             se('sf_' + r + '_' + t + '_tally_d2', d2.toFixed(1));
@@ -3990,7 +4096,7 @@
         }
 
         function sfSyncJudgeNames() {
-            ['cj1','cj2','cj3','crm1','crm2'].forEach(j => {
+            ['cj1','cj2','cj3','crm1','crm2','crm3'].forEach(j => {
                 const name = sfGetJudge(j);
                 document.querySelectorAll('.sfJName_' + j).forEach(el => el.textContent = name);
             });
@@ -4061,10 +4167,11 @@
             h += '</div>';
 
             // Domain II (two CRM judge sheets)
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Crisis Resource Management (two judges, score averaged)</div>';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Crisis Resource Management (three judges, score averaged)</div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
             h += '<div class="sf-judgeblock-crm1">' + sfBuildCRMSheet(r, t, 'crm1') + '</div>';
             h += '<div class="sf-judgeblock-crm2">' + sfBuildCRMSheet(r, t, 'crm2') + '</div>';
+            h += '<div class="sf-judgeblock-crm3">' + sfBuildCRMSheet(r, t, 'crm3') + '</div>';
             h += '</div>';
 
             // Domain III — Global
@@ -4088,7 +4195,7 @@
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="sfLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
             h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical Judgement (mean of three judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + teal + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d1">0.0</span> / 40</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Crisis Resource Management (mean of two judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d2">0.0</span> / 50</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Crisis Resource Management (mean of three judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d2">0.0</span> / 50</td></tr>';
             h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Global Entrustment (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d3">0</span> / 10</td></tr>';
             h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_total">0.0</span> / 100</td></tr>';
             h += '</table>';
@@ -4120,6 +4227,7 @@
             h += '</select>';
             if (activeTeam) h += '<span style="font-size:0.82rem;color:#0f766e;font-weight:600;">On stage: ' + sfGetName(activeTeam) + '</span>';
             h += '</div>';
+            h += buildInvViewer(r);
             teams.forEach(t => { h += sfBuildTeamCard(r, t); });
             h += '<div style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (if required):</strong> ' + rd.tiebreaker + '</div>';
             h += '</div>';
@@ -4127,18 +4235,18 @@
             sfRestoreSubmittedForRound(r);
         }
 
-        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', cj3: 'Clinical Judge 3', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2' };
+        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', cj3: 'Clinical Judge 3', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2', crm3: 'CRM Judge 3' };
 
         function sfApplyMyRoleHiding(j) {
             const existing = document.getElementById('sfMyRoleStyle');
             if (existing) existing.remove();
-            const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2'];
+            const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'crm3'];
             if (j) {
                 const style = document.createElement('style');
                 style.id = 'sfMyRoleStyle';
                 style.textContent = allJudges
                     .filter(x => x !== j)
-                    .map(x => `.sf-judgeblock-${x}{display:none !important;}`)
+                    .map(x => '.sf-judgeblock-' + x + '{display:none !important;}\n.fn-judgeblock-' + x + '{display:none !important;}')
                     .join('\n');
                 document.head.appendChild(style);
             }
@@ -4229,6 +4337,7 @@
                     sfUpdateClinicalTotal(r, t, 'cj3');
                     sfUpdateCRMTotal(r, t, 'crm1');
                     sfUpdateCRMTotal(r, t, 'crm2');
+                    sfUpdateCRMTotal(r, t, 'crm3');
                     sfUpdateChiefTally(r, t);
                 });
             });
@@ -4307,57 +4416,67 @@
         function fnGetName(t) {
             return document.getElementById('fnName_' + t)?.value?.trim() || t.toUpperCase();
         }
-        function fnGetJudge(j) {
-            const map = { phys:'fnJudgePhys', tw:'fnJudgeTW' };
-            const fallback = { phys:'Physiology Judge', tw:'Teamwork Judge' };
-            return document.getElementById(map[j])?.value?.trim() || fallback[j];
-        }
+        function fnGetJudge(j) { return sfGetJudge(j); }
+        function fnSyncJudgeNames() { sfSyncJudgeNames(); }
 
-        function fnUpdateClinTotal(caseId, t) {
+        function fnUpdateClinTotal(caseId, t, j) {
             const cd = FN_CASES[caseId];
             let total = 0;
             cd.stages.forEach(stage => {
                 stage.items.forEach(item => {
-                    const el = document.getElementById('fn_' + caseId + '_' + t + '_clin_' + item.k);
+                    const el = document.getElementById('fn_' + caseId + '_' + t + '_' + j + '_clin_' + item.k);
                     total += Math.min(item.max, Math.max(0, parseFloat(el?.value) || 0));
                 });
             });
-            cd.penalties.forEach(p => {
-                const el = document.getElementById('fn_' + caseId + '_' + t + '_' + p.k);
-                if (el?.checked) total += p.pts;
-            });
-            total = Math.max(0, total);
-            const totEl = document.getElementById('fn_' + caseId + '_' + t + '_clinTotal');
+            const totEl = document.getElementById('fn_' + caseId + '_' + t + '_' + j + '_clinTotal');
             if (totEl) totEl.textContent = total;
             fnUpdateGrandTotal(caseId, t);
         }
 
-        function fnUpdateTWTotal(caseId, t) {
+        function fnPenaltyTotal(caseId, t) {
+            const cd = FN_CASES[caseId];
+            let pen = 0;
+            cd.penalties.forEach(p => {
+                const el = document.getElementById('fn_' + caseId + '_' + t + '_' + p.k);
+                if (el?.checked) pen += p.pts;
+            });
+            const el = document.getElementById('fn_' + caseId + '_' + t + '_penTotal');
+            if (el) el.textContent = pen;
+            return pen;
+        }
+
+        function fnUpdateTWTotal(caseId, t, j) {
             const cd = FN_CASES[caseId];
             let total = 0;
             cd.twItems.forEach(item => {
-                const el = document.getElementById('fn_' + caseId + '_' + t + '_tw_' + item.k);
+                const el = document.getElementById('fn_' + caseId + '_' + t + '_' + j + '_tw_' + item.k);
                 total += Math.min(item.max, Math.max(0, parseFloat(el?.value) || 0));
             });
-            const totEl = document.getElementById('fn_' + caseId + '_' + t + '_twTotal');
+            const totEl = document.getElementById('fn_' + caseId + '_' + t + '_' + j + '_twTotal');
             if (totEl) totEl.textContent = total;
             fnUpdateGrandTotal(caseId, t);
         }
 
         function fnUpdateGrandTotal(caseId, t) {
-            const clin   = parseFloat(document.getElementById('fn_' + caseId + '_' + t + '_clinTotal')?.textContent) || 0;
-            const tw     = parseFloat(document.getElementById('fn_' + caseId + '_' + t + '_twTotal')?.textContent) || 0;
+            const g = id => parseFloat(document.getElementById(id)?.textContent) || 0;
+            const cjs = ['cj1','cj2','cj3'].map(j => g('fn_' + caseId + '_' + t + '_' + j + '_clinTotal'));
+            const crms = ['crm1','crm2','crm3'].map(j => g('fn_' + caseId + '_' + t + '_' + j + '_twTotal'));
+            const pen = fnPenaltyTotal(caseId, t);
+            const d1 = Math.max(0, (cjs[0] + cjs[1] + cjs[2]) / 3 + pen);
+            const d2 = (crms[0] + crms[1] + crms[2]) / 3;
             const shared = parseFloat(document.getElementById('fn_' + caseId + '_' + t + '_shared')?.value) || 0;
-            const dispEl = document.getElementById('fn_' + caseId + '_' + t + '_sharedDisp');
-            if (dispEl) dispEl.textContent = shared;
-            const dClin = document.getElementById('fn_' + caseId + '_' + t + '_clinTotal_disp');
-            if (dClin) dClin.textContent = clin.toFixed(0);
-            const dTW = document.getElementById('fn_' + caseId + '_' + t + '_twTotal_disp');
-            if (dTW) dTW.textContent = tw.toFixed(0);
-            const total  = clin + tw + shared;
-            const gtEl   = document.getElementById('fn_' + caseId + '_' + t + '_grandTotal');
+            const se = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            se('fn_' + caseId + '_' + t + '_sharedDisp', shared);
+            se('fn_' + caseId + '_' + t + '_clinTotal_disp', d1.toFixed(1));
+            se('fn_' + caseId + '_' + t + '_twTotal_disp', d2.toFixed(1));
+            const spread1 = Math.max(...cjs) - Math.min(...cjs);
+            const spread2 = Math.max(...crms) - Math.min(...crms);
+            se('fn_' + caseId + '_' + t + '_spread1', spread1.toFixed(0) + (spread1 > 12 ? ' ⚠️ Conference required' : ''));
+            se('fn_' + caseId + '_' + t + '_spread2', spread2.toFixed(0) + (spread2 > 12 ? ' ⚠️ Conference required' : ''));
+            const total = d1 + d2 + shared;
+            const gtEl = document.getElementById('fn_' + caseId + '_' + t + '_grandTotal');
             if (gtEl) {
-                gtEl.textContent = total.toFixed(0);
+                gtEl.textContent = total.toFixed(1);
                 gtEl.style.color = total >= 160 ? '#065f46' : total >= 120 ? '#d97706' : '#374151';
             }
         }
@@ -4368,59 +4487,57 @@
                 document.querySelectorAll('.fnLabel_' + t).forEach(el => el.textContent = name);
             });
         }
-        function fnSyncJudgeNames() {
-            ['phys','tw'].forEach(j => {
-                const name = fnGetJudge(j);
-                document.querySelectorAll('.fnJName_' + j).forEach(el => el.textContent = name);
-            });
-        }
 
-        function fnBuildClinSheet(caseId, t) {
+        function fnBuildClinSheet(caseId, t, j) {
             const cd = FN_CASES[caseId];
             const amber = '#d97706';
             let h = '<div style="background:white;border:1.5px solid ' + amber + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN I — CLINICAL &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_clinTotal">0</span> / 90</div>';
-            h += '<div style="font-size:0.72rem;font-weight:600;color:#92400e;margin-bottom:8px;" class="fnJName_phys">' + fnGetJudge('phys') + '</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + amber + ';margin-bottom:6px;">🫀 DOMAIN I — CLINICAL &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_' + j + '_clinTotal">0</span> / 90</div>';
+            h += '<div style="font-size:0.72rem;font-weight:600;color:#92400e;margin-bottom:8px;" class="sfJName_' + j + '">' + sfGetJudge(j) + '</div>';
             h += '<div style="font-size:0.72rem;color:#6b7280;background:#fffbeb;border-radius:5px;padding:5px 8px;margin-bottom:10px;">Score each item 0 up to its maximum. Partial/delayed performance earns a proportional mark.</div>';
             cd.stages.forEach(stage => {
                 h += '<div style="margin-bottom:12px;">';
                 h += '<div style="font-weight:700;font-size:0.8rem;color:#374151;margin-bottom:4px;display:flex;justify-content:space-between;"><span>' + stage.label + '</span><span style="color:' + amber + ';font-size:0.72rem;">/' + stage.max + '</span></div>';
                 h += '<table style="width:100%;border-collapse:collapse;">';
                 stage.items.forEach(item => {
-                    const id = 'fn_' + caseId + '_' + t + '_clin_' + item.k;
+                    const id = 'fn_' + caseId + '_' + t + '_' + j + '_clin_' + item.k;
                     h += '<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:5px 5px;font-size:0.78rem;color:#374151;line-height:1.4;">' + item.label + '</td>';
                     h += '<td style="width:34px;text-align:center;font-size:0.68rem;color:#9ca3af;">/' + item.max + '</td>';
-                    h += '<td style="width:58px;text-align:center;padding:3px;"><input type="number" id="' + id + '" min="0" max="' + item.max + '" value="0" style="width:50px;border:1.5px solid ' + amber + '40;border-radius:4px;padding:3px;text-align:center;font-size:0.88rem;font-weight:700;" oninput="this.value=Math.min(' + item.max + ',Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateClinTotal(\'' + caseId + '\',\'' + t + '\');"></td></tr>';
+                    h += '<td style="width:58px;text-align:center;padding:3px;"><input type="number" id="' + id + '" min="0" max="' + item.max + '" value="0" style="width:50px;border:1.5px solid ' + amber + '40;border-radius:4px;padding:3px;text-align:center;font-size:0.88rem;font-weight:700;" oninput="this.value=Math.min(' + item.max + ',Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateClinTotal(&quot;' + caseId + '&quot;,&quot;' + t + '&quot;,&quot;' + j + '&quot;);"></td></tr>';
                 });
                 h += '</table></div>';
             });
-            // Penalties
-            h += '<div style="background:#fef2f2;border-radius:7px;padding:10px;margin-top:4px;">';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:#991b1b;margin-bottom:6px;">⚠️ Penalties — check all that apply</div>';
-            cd.penalties.forEach(p => {
-                const id = 'fn_' + caseId + '_' + t + '_' + p.k;
-                h += '<label style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="' + id + '" onchange="saveToServer(this.id,this.checked?\'1\':\'0\');fnUpdateClinTotal(\'' + caseId + '\',\'' + t + '\');"><span>' + p.label + '</span><span style="color:#991b1b;font-weight:700;margin-left:auto;">' + p.pts + '</span></label>';
-            });
-            h += '</div></div>';
+            h += '</div>';
             return h;
         }
 
-        function fnBuildTWSheet(caseId, t) {
+        function fnBuildPenaltySheet(caseId, t) {
+            const cd = FN_CASES[caseId];
+            let h = '<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 14px;margin-bottom:16px;">';
+            h += '<div style="font-size:0.78rem;font-weight:700;color:#991b1b;margin-bottom:6px;">⚠️ Penalties — scripted, objective events. The Chief/MC records them ONCE; they apply to the Domain I mean. &nbsp;·&nbsp; Applied: <span id="fn_' + caseId + '_' + t + '_penTotal" style="font-weight:800;">0</span></div>';
+            cd.penalties.forEach(p => {
+                const id = 'fn_' + caseId + '_' + t + '_' + p.k;
+                h += '<label style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="' + id + '" onchange="saveToServer(this.id,this.checked?&quot;1&quot;:&quot;0&quot;);fnUpdateGrandTotal(&quot;' + caseId + '&quot;,&quot;' + t + '&quot;);"><span>' + p.label + '</span><span style="color:#991b1b;font-weight:700;margin-left:auto;">' + p.pts + '</span></label>';
+            });
+            h += '</div>';
+            return h;
+        }
+
+        function fnBuildTWSheet(caseId, t, j) {
             const cd = FN_CASES[caseId];
             const blue = '#1d4ed8';
             let h = '<div style="background:white;border:1.5px solid ' + blue + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN II — HUMAN FACTORS (five 0–16 anchors) &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_twTotal">0</span> / 80</div>';
-            h += '<div style="font-size:0.72rem;font-weight:600;color:#1e40af;margin-bottom:8px;" class="fnJName_tw">' + fnGetJudge('tw') + '</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + blue + ';margin-bottom:6px;">🤝 DOMAIN II — HUMAN FACTORS (five 0–16 anchors) &nbsp;·&nbsp; <span id="fn_' + caseId + '_' + t + '_' + j + '_twTotal">0</span> / 80</div>';
+            h += '<div style="font-size:0.72rem;font-weight:600;color:#1e40af;margin-bottom:8px;" class="sfJName_' + j + '">' + sfGetJudge(j) + '</div>';
             h += '<table style="width:100%;border-collapse:collapse;">';
             cd.twItems.forEach(item => {
-                const id = 'fn_' + caseId + '_' + t + '_tw_' + item.k;
+                const id = 'fn_' + caseId + '_' + t + '_' + j + '_tw_' + item.k;
                 const hilight = item.k === 'tw1' ? 'background:#eff6ff;' : '';
                 h += '<tr style="border-bottom:1px solid #f3f4f6;' + hilight + '"><td style="padding:5px 5px;font-size:0.78rem;color:#374151;line-height:1.4;">' + item.label + '</td>';
                 h += '<td style="width:34px;text-align:center;font-size:0.68rem;color:#9ca3af;">/' + item.max + '</td>';
-                h += '<td style="width:58px;text-align:center;padding:3px;"><input type="number" id="' + id + '" min="0" max="' + item.max + '" value="0" style="width:50px;border:1.5px solid ' + blue + '40;border-radius:4px;padding:3px;text-align:center;font-size:0.88rem;font-weight:700;" oninput="this.value=Math.min(' + item.max + ',Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateTWTotal(\'' + caseId + '\',\'' + t + '\');"></td></tr>';
+                h += '<td style="width:58px;text-align:center;padding:3px;"><input type="number" id="' + id + '" min="0" max="' + item.max + '" value="0" style="width:50px;border:1.5px solid ' + blue + '40;border-radius:4px;padding:3px;text-align:center;font-size:0.88rem;font-weight:700;" oninput="this.value=Math.min(' + item.max + ',Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateTWTotal(&quot;' + caseId + '&quot;,&quot;' + t + '&quot;,&quot;' + j + '&quot;);"></td></tr>';
             });
             h += '</table>';
-            
             h += '<div style="font-size:0.72rem;color:#6b7280;margin-top:6px;font-style:italic;">' + cd.twNote + '</div>';
             h += '</div>';
             return h;
@@ -4437,11 +4554,11 @@
                 h += '<div style="font-size:0.77rem;background:#f5f3ff;border-left:3px solid ' + purple + '60;border-radius:0 5px 5px 0;padding:5px 9px;margin-bottom:4px;"><strong style="color:' + purple + ';">' + a.range + ':</strong> ' + a.label + '</div>';
             });
             h += '</div>';
-            h += '<div style="font-size:0.78rem;font-weight:600;color:#6b7280;margin-bottom:6px;">Step 1 — each judge notes privately. Step 2 — agree collectively, enter the mark below <em>before</em> calculating domain totals.</div>';
+            h += '<div style="font-size:0.78rem;font-weight:600;color:#6b7280;margin-bottom:6px;">Step 1 — each judge notes privately. Step 2 — all six agree collectively, enter the mark below <em>before</em> calculating domain totals.</div>';
             const id = 'fn_' + caseId + '_' + t + '_shared';
             h += '<div style="display:flex;align-items:center;gap:10px;">';
             h += '<label style="font-size:0.85rem;font-weight:700;color:#374151;">Agreed mark:</label>';
-            h += '<input type="number" id="' + id + '" min="0" max="30" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(30,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(\'' + caseId + '\',\'' + t + '\');">';
+            h += '<input type="number" id="' + id + '" min="0" max="30" value="0" style="width:64px;border:2px solid ' + purple + '60;border-radius:6px;padding:5px;text-align:center;font-size:1rem;font-weight:800;color:' + purple + ';" oninput="this.value=Math.min(30,Math.max(0,+this.value||0));saveToServer(this.id,this.value);fnUpdateGrandTotal(&quot;' + caseId + '&quot;,&quot;' + t + '&quot;);">';
             h += '<span style="font-size:0.82rem;color:#6b7280;">/ 30</span>';
             h += '</div></div>';
             return h;
@@ -4452,27 +4569,37 @@
             const name = fnGetName(t);
             let h = '<div style="border:2px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:20px;">';
             h += '<div style="font-size:1.05rem;font-weight:800;color:#111827;margin-bottom:14px;" class="fnLabel_' + t + '">' + name + '</div>';
-            h += '<div class="fn-judgeblock-phys">';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical (Physiology Judge only)</div>';
-            h += fnBuildClinSheet(caseId, t);
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical (three Clinical judges, score averaged)</div>';
+            h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:10px;">';
+            ['cj1','cj2','cj3'].forEach(j => { h += '<div class="fn-judgeblock-' + j + '">' + fnBuildClinSheet(caseId, t, j) + '</div>'; });
             h += '</div>';
-            h += '<div class="fn-judgeblock-tw">';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Human Factors (Teamwork Judge only)</div>';
-            h += fnBuildTWSheet(caseId, t);
+            h += fnBuildPenaltySheet(caseId, t);
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Human Factors (three CRM judges, score averaged)</div>';
+            h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
+            ['crm1','crm2','crm3'].forEach(j => { h += '<div class="fn-judgeblock-' + j + '">' + fnBuildTWSheet(caseId, t, j) + '</div>'; });
             h += '</div>';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + purple + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain III — Shared Reasoning with Confederate (Physiology + Teamwork judges, collectively)</div>';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + purple + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain III — Shared Reasoning with Confederate (all six judges, collectively)</div>';
             h += fnBuildSharedSheet(caseId, t);
-            // Chief's Tally
             h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="fnLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical (Physiology Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0</span> / 90</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Human Factors (Teamwork Judge)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0</span> / 80</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical (mean of three Clinical judges, after penalties)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0.0</span> / 90</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Human Factors (mean of three CRM judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0.0</span> / 80</td></tr>';
             h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Shared Reasoning with Confederate (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 30</td></tr>';
-            h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0</span> / 200</td></tr>';
-            h += '</table></div>';
+            h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0.0</span> / 200</td></tr>';
+            h += '</table>';
+            h += '<div style="margin-top:8px;font-size:0.73rem;color:#78350f;">D1 spread: <strong><span id="fn_' + caseId + '_' + t + '_spread1">0</span></strong> marks (conference if &gt;12) &nbsp;·&nbsp; D2 spread: <strong><span id="fn_' + caseId + '_' + t + '_spread2">0</span></strong> marks (conference if &gt;12)</div>';
+            h += '</div>';
             h += '</div>';
             return h;
+        }
+
+        let activeFNTeam = '';
+        function setActiveFNTeam(v) {
+            activeFNTeam = v;
+            saveToServer('active_fn_team', v);
+            buildFNCaseCard('F2');
+            fnRecalcAll();
         }
 
         function buildFNCaseCard(caseId) {
@@ -4480,38 +4607,40 @@
             if (!container) return;
             const cd = FN_CASES[caseId];
             const amber = '#d97706';
+            const allTeams = ['fin1','fin2'];
+            const teams = activeFNTeam ? allTeams.filter(t => t === activeFNTeam) : allTeams;
             let h = '<div class="card" style="border-left-color:' + amber + ';">';
             h += '<h2><span class="emoji">🏆</span> ' + cd.label + '</h2>';
             h += '<div style="font-size:0.85rem;color:#92400e;background:#fffbeb;border-radius:8px;padding:8px 14px;margin-bottom:16px;">👤 ' + cd.patient + '</div>';
-            if (cd.summary) h += '<div style="font-size:0.85rem;color:var(--text-secondary);background:var(--surface-1);border-radius:8px;padding:8px 12px;margin-bottom:16px;line-height:1.5;">📋 <strong>Scenario Summary:</strong> ' + cd.summary + '</div>';
-            ['fin1','fin2'].forEach(t => { h += fnBuildTeamCard(caseId, t); });
+            if (cd.summary) h += '<div style="font-size:0.85rem;color:var(--text-secondary);background:var(--surface-1);border-radius:8px;padding:8px 12px;margin-bottom:12px;line-height:1.5;">📋 <strong>Scenario Summary:</strong> ' + cd.summary + '</div>';
+            h += '<div style="background:#fff;border:1.5px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+            h += '<span style="font-size:0.75rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.4px;">🔴 Live Team</span>';
+            h += '<select onchange="setActiveFNTeam(this.value)" style="border:1.5px solid #fde68a;border-radius:6px;padding:5px 10px;font-size:0.85rem;font-weight:700;">';
+            h += '<option value="">— Not set (show both) —</option>';
+            allTeams.forEach(t => { h += '<option value="' + t + '"' + (activeFNTeam === t ? ' selected' : '') + '>' + fnGetName(t) + '</option>'; });
+            h += '</select>';
+            if (activeFNTeam) h += '<span style="font-size:0.82rem;color:#92400e;font-weight:600;">On stage: ' + fnGetName(activeFNTeam) + '</span>';
+            h += '</div>';
+            h += buildInvViewer(caseId);
+            teams.forEach(t => { h += fnBuildTeamCard(caseId, t); });
             h += '<div style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (returning team leader only — 60 s, no conferring):</strong> ' + cd.tiebreaker + '</div>';
             h += '</div>';
             container.innerHTML = h;
         }
 
         function buildFNScoreCards() {
-            // Finals = single case F2, scored out of 100 (45+40+15, minus penalties). F1 is out.
+            // Finals = single case F2, six judges (same SF panel), scored /200.
             buildFNCaseCard('F2');
             fnUpdateAllLabels();
-            fnSyncJudgeNames();
         }
 
         function fnRecalcAll() {
             fnUpdateAllLabels();
-            fnSyncJudgeNames();
             ['F2'].forEach(caseId => {
                 ['fin1','fin2'].forEach(t => {
-                    fnUpdateClinTotal(caseId, t);
-                    fnUpdateTWTotal(caseId, t);
+                    ['cj1','cj2','cj3'].forEach(j => fnUpdateClinTotal(caseId, t, j));
+                    ['crm1','crm2','crm3'].forEach(j => fnUpdateTWTotal(caseId, t, j));
                     fnUpdateGrandTotal(caseId, t);
-                    // Mirror the span values into the tally display spans
-                    const clinVal = document.getElementById('fn_' + caseId + '_' + t + '_clinTotal')?.textContent || '0';
-                    const twVal   = document.getElementById('fn_' + caseId + '_' + t + '_twTotal')?.textContent  || '0';
-                    const dClin = document.getElementById('fn_' + caseId + '_' + t + '_clinTotal_disp');
-                    const dTW   = document.getElementById('fn_' + caseId + '_' + t + '_twTotal_disp');
-                    if (dClin) dClin.textContent = clinVal;
-                    if (dTW)   dTW.textContent   = twVal;
                 });
             });
         }
@@ -4536,9 +4665,8 @@
             'sf-cj2':  { label: '🏟️ Semi-Finals — Clinical Judge 2', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj2' },
             'sf-cj3':  { label: '🏟️ Semi-Finals — Clinical Judge 3', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj3' },
             'sf-crm1': { label: '🏟️ Semi-Finals — CRM Judge 1',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm1' },
-            'sf-crm2': { label: '🏟️ Semi-Finals — CRM Judge 2',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm2' },
-            'fn-phys': { label: '🏆 Finals — Physiology Judge', tab: 'tabFinals', color: '#d97706', bg: '#fffbeb', hint: 'Domain I sheet only (+ collective Domain III)', fnOnly: 'phys' },
-            'fn-tw':   { label: '🏆 Finals — Teamwork Judge',   tab: 'tabFinals', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only (+ collective Domain III)', fnOnly: 'tw' },
+            'sf-crm2': { label: '🏟️ Semi-Finals & Finals — CRM Judge 2',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only (SF + Finals)', sfOnly: 'crm2' },
+            'sf-crm3': { label: '🏟️ Semi-Finals & Finals — CRM Judge 3', tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only (SF + Finals)', sfOnly: 'crm3' },
         };
 
         function buildShareLinks() {
@@ -4595,20 +4723,18 @@
             // entry blocks so no judge can see (or accidentally edit) a colleague's
             // marks — each judge only ever sees their own Domain I or Domain II sheet.
             if (meta.sfOnly) {
-                const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2'];
+                const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'crm3'];
                 const style = document.createElement('style');
                 style.textContent = allJudges
                     .filter(j => j !== meta.sfOnly)
-                    .map(j => `.sf-judgeblock-${j}{display:none !important;}`)
+                    .map(j => '.sf-judgeblock-' + j + '{display:none !important;}\n.fn-judgeblock-' + j + '{display:none !important;}')
                     .join('\n');
                 document.head.appendChild(style);
-            }
-            // Finals judge-specific views: hide the other judge's domain sheet.
-            if (meta.fnOnly) {
-                const other = meta.fnOnly === 'phys' ? 'tw' : 'phys';
-                const st = document.createElement('style');
-                st.textContent = '.fn-judgeblock-' + other + '{display:none !important;}';
-                document.head.appendChild(st);
+                // The same six judges score the Finals — locked views get a stage switcher.
+                const sw = document.createElement('div');
+                sw.style.cssText = 'padding:8px 20px;display:flex;gap:8px;background:' + meta.bg + ';border-bottom:1px solid ' + meta.color + '40;';
+                sw.innerHTML = '<button onclick="document.querySelector(&quot;[data-tab=tabSemiF]&quot;).click()" style="background:#0d9488;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">🏟️ Semi-Finals</button><button onclick="document.querySelector(&quot;[data-tab=tabFinals]&quot;).click()" style="background:#d97706;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">🏆 Finals</button>';
+                document.body.insertBefore(sw, document.body.children[1]);
             }
             // Prelim per-domain views: hide the other domain's sheet entirely.
             if (meta.domOnly) {
@@ -4619,7 +4745,7 @@
             }
             // Claim this view's slot server-side so score filtering applies to this session.
             const slotMap = { pals: 'pals', bls: 'bls', debriefer: 'debriefer' };
-            const viewSlot = meta.sfOnly || (meta.fnOnly ? 'fn-' + meta.fnOnly : '') || meta.domOnly || slotMap[view] || '';
+            const viewSlot = meta.sfOnly || meta.domOnly || slotMap[view] || '';
             if (viewSlot) claimSlot(viewSlot);
         }
 
@@ -4652,7 +4778,7 @@
             buildSFScoreCards();
             buildFNScoreCards();
             try {
-                const serverSlot = ['cj1','cj2','cj3','crm1','crm2'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
+                const serverSlot = ['cj1','cj2','cj3','crm1','crm2','crm3'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
                 const savedSFRole = localStorage.getItem('simwars_sf_my_role') || serverSlot;
                 if (savedSFRole) sfApplyMyRoleHiding(savedSFRole);
                 const serverPrelim = ['pals-cj','pals-crm','bls-cj','bls-crm'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';

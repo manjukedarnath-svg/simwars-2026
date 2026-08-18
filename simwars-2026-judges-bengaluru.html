@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Namma Bengaluru — SimWars 2026 Judges' Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--purple-900:#2a0a44;--purple-700:#4a1a6e;--magenta:#d81b7a;--gold:#f2b705;--teal:#0d8a72;--ink:#1b2430;--muted:#6a5a72;--line:#eee0ea;--bg:#faf7fb;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Poppins',sans-serif;background:var(--bg) url('static/images/guide/sky-bg.png') center top/cover fixed;color:var(--ink);line-height:1.6;}
+a{color:var(--magenta);}a:hover{color:var(--purple-700);}
+.container{max-width:1040px;margin:0 auto;padding:0 1.2rem;}
+.hero{background:linear-gradient(160deg,var(--purple-900) 0%,var(--purple-700) 70%,#5e2585 100%);color:#fff;padding:3.2rem 0 2.6rem;text-align:center;}
+.hero .kn{font-size:2rem;font-weight:900;color:var(--gold);letter-spacing:.02em;}
+.hero h1{font-size:2rem;font-weight:900;margin:.3rem 0 .4rem;}
+.hero p.sub{font-size:1rem;font-style:italic;opacity:.9;max-width:624px;margin:0 auto;}
+.back{position:fixed;top:12px;left:12px;z-index:99;display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--purple-900);font-size:.78rem;font-weight:800;padding:.45rem .9rem;border-radius:60px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.letter{background:rgba(255,255,255,.96);border-radius:1.2rem;box-shadow:0 6px 24px rgba(42,10,68,.08);padding:2.2rem 2.4rem;margin:1.6rem auto 2.4rem;max-width:820px;position:relative;}
+.letter::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;border-radius:1.2rem 1.2rem 0 0;background:linear-gradient(90deg,var(--magenta),var(--gold));}
+.letter p{font-size:.95rem;color:#3d2b4a;margin-bottom:.95rem;}
+.letter p b{color:var(--purple-900);}
+.letter .sign{font-weight:800;color:var(--purple-900);margin-top:1.2rem;}
+.eyebrow{text-align:center;font-size:.75rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--magenta);margin-bottom:.3rem;}
+h2.sec{text-align:center;font-size:1.5rem;font-weight:900;color:var(--purple-900);margin-bottom:.4rem;}
+p.secsub{text-align:center;font-size:.9rem;color:var(--muted);max-width:620px;margin:0 auto 1.6rem;}
+section{padding:2.2rem 0;}
+.venue-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.venue-card{border-radius:1.1rem;padding:1.8rem;color:#fff;}
+.venue-card.v1{background:linear-gradient(135deg,var(--purple-900),var(--purple-700));}
+.venue-card.v2{background:linear-gradient(135deg,var(--magenta),#a3115c);}
+.venue-card .date{display:inline-block;background:rgba(255,255,255,.18);padding:.3rem 1rem;border-radius:20px;font-weight:800;font-size:.8rem;margin-bottom:.8rem;}
+.venue-card h3{color:var(--gold);font-size:1.25rem;font-weight:900;}
+.venue-card h4{font-size:1rem;font-weight:800;margin:.2rem 0;}
+.venue-card p{font-size:.88rem;opacity:.92;}
+.venue-card .acts{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1rem;}
+.venue-card .dir{display:inline-block;background:rgba(255,255,255,.16);color:#fff;padding:.5rem .9rem;border-radius:8px;font-size:.78rem;font-weight:700;text-decoration:none;}
+.venue-card .dir:hover{background:rgba(255,255,255,.3);color:#fff;}
+.venue-card .qr{background:#fff;padding:4px;border-radius:8px;width:58px;height:58px;line-height:0;flex-shrink:0;}
+.venue-card .qr img{width:100%;height:100%;display:block;}
+.stay-band{background:#fff;border:1.5px solid var(--line);border-radius:1.1rem;padding:1.4rem 1.8rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;justify-content:space-between;}
+.stay-band .txt{max-width:600px;}
+.stay-band b{color:var(--purple-900);}
+.stay-band p{font-size:.85rem;color:var(--muted);}
+.btn{display:inline-block;background:var(--magenta);color:#fff;font-weight:800;font-size:.85rem;padding:.65rem 1.3rem;border-radius:60px;text-decoration:none;}
+.btn:hover{background:var(--purple-700);color:#fff;}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin-top:1.2rem;}
+.tip{background:#fff;border:1.5px solid var(--line);border-radius:.9rem;padding:.9rem 1.1rem;font-size:.82rem;color:var(--muted);}
+.tip b{display:block;color:var(--purple-900);font-size:.86rem;margin-bottom:.15rem;}
+.group-title{font-size:1.02rem;font-weight:900;color:var(--purple-900);margin:1.8rem 0 .8rem;display:flex;align-items:center;gap:.5rem;}
+.see-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;}
+.see-card{background:#fff;border-radius:1rem;overflow:hidden;box-shadow:0 3px 14px rgba(42,10,68,.07);display:flex;flex-direction:column;}
+.chip{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#f6edfa,#fdeaf3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:.2rem;}
+.hero-art{max-width:820px;margin:1.8rem auto 0;padding:0 1.2rem;}
+.hero-art img{width:100%;border-radius:1.2rem;box-shadow:0 10px 34px rgba(42,10,68,.18);display:block;}
+.collage{position:relative;}
+.collage-title{position:absolute;left:28.6%;top:28.6%;width:42.5%;margin:0;text-align:center;color:#D4C52A;font-weight:900;font-size:clamp(1.1rem,3.8vw,1.9rem);line-height:1.25;text-shadow:0 2px 10px rgba(0,0,0,.25);z-index:1;}
+.see-card .bd{padding:1rem 1.1rem 1.1rem;display:flex;flex-direction:column;gap:.3rem;flex:1;}
+.see-card b{font-size:.92rem;color:var(--purple-900);}
+.see-card p{font-size:.78rem;color:var(--muted);flex:1;}
+.see-card .map{font-size:.78rem;font-weight:800;text-decoration:none;}
+footer{background:var(--purple-900);color:#e8d9f3;text-align:center;font-size:.8rem;padding:1.6rem 1rem;margin-top:2.5rem;}
+@media (max-width:680px){.venue-grid{grid-template-columns:1fr;}.letter{padding:1.6rem 1.3rem;}.hero h1{font-size:1.5rem;}}
+</style>
+</head>
+<body>
+<a class="back" href="/register">← SimWars 2026</a>
+<div class="hero">
+  <div class="container">
+    <p class="sub">Where every heartbeat tells a story — of tradition, innovation, and care. A guide for our SimWars 2026 judges.</p>
+  </div>
+</div>
+
+<div class="hero-art"><div class="collage"><h1 class="collage-title">Welcome to<br>Namma Bengaluru</h1><img src="static/images/guide/bengaluru-collage.jpg" alt="Karnataka collage — Vidhana Soudha, Mysuru Palace, Hampi, filter coffee, Channapatna dolls"></div></div>
+
+<div class="container">
+  <div class="letter">
+    <p>Step into <b>ನಮ್ಮ ಬೆಂಗಳೂರು — Our Bengaluru</b> — a city where ancient wisdom walks beside innovation, and every corner hums with history, hope, and heart.</p>
+    <p>Often hailed as India's Silicon Valley, Bengaluru is more than a tech capital — it's a <b>city of contrasts</b>: where centuries-old whispers from narrow lanes blend seamlessly into the gleaming corridors of innovation, weaving a vibrant tapestry that is at once familiar and exhilaratingly new.</p>
+    <p>Amidst the city's energy you'll find pockets of peace — stroll through <b>Lalbagh</b> or <b>Cubbon Park</b>, or watch reflections ripple across <b>Ulsoor Lake</b>, <b>Sankey Tank</b> and <b>Agara Lake</b>.</p>
+    <p>Let the city's culinary soul awaken your senses — from the first sip of filter coffee at <b>Hatti Kaapi</b>, to the comfort of <b>Bisi Bele Bath</b>, the crisp joy of a <b>Masala Dosa</b>, and the spice-splashed streets of <b>Basavanagudi Chat Street</b>. Be it <b>Veena Stores</b> or <b>CTR</b>, it's a simple example of simplicity meeting class. From the charm of old Bangalore cafés like <b>Koshy's</b> to the modern buzz of Indiranagar's <b>microbreweries</b>, Bengaluru serves tradition with a twist.</p>
+    <p>But this city is more than its sights and flavours. It's a cradle of healing and knowledge, home to pioneering hospitals and research institutes. It's a stage for expression — where Bharatanatyam meets African jazz, and where <b>Ranga Shankara</b> and <b>Chitrakala Parishath</b> keep the arts alive and stirring.</p>
+    <p>Beyond its boundaries lie timeless treasures — the sculpted wonders of <b>Belur and Halebeedu</b>, the serenity of the <b>Adiyogi Shiva statue</b>, the misty trails of <b>Nandi Hills</b> and <b>Skandagiri</b>, and the regal charm of <b>Mysuru</b>.</p>
+    <p>Bengaluru moves with its own rhythm — a blend of chaos and calm that somehow makes sense. Its charm lies in quiet gestures, thoughtful spaces, and the ease with which it lets you belong. Whether you've travelled from across the country or across continents, you'll find in this city not just a welcome, but a quiet sense of connection.</p>
+    <p>We eagerly await the moment to welcome you — to share our stories, our science, and our spirit.</p>
+    <p class="sign">Warm regards,<br>PediSTARS · SimWars 2026</p>
+  </div>
+</div>
+
+<section id="venues">
+  <div class="container">
+    <div class="eyebrow">Where you'll be judging</div>
+    <h2 class="sec">Venues &amp; Directions</h2>
+    <p class="secsub">Prelims and finals run at two venues across Bengaluru. Tap for directions, or scan the QR from a printed copy.</p>
+    <div class="venue-grid">
+      <div class="venue-card v1">
+        <span class="date">📅 Friday, August 22nd, 2026</span>
+        <h3>Preliminary Round</h3>
+        <h4>DHEE Hospitals</h4>
+        <p>Kanakapura Road, Bengaluru</p>
+        <p style="margin-top:.4rem;font-size:.8rem;">Day 1 · Prelims · 8:00 AM – 6:00 PM · Rooms A (PALS) &amp; B (BLS)</p>
+        <div class="acts">
+          <a class="dir" href="https://www.google.com/maps/search/?api=1&amp;query=DHEE+Hospitals+Kanakapura+Road+Bengaluru" target="_blank" rel="noopener">📍 Get Directions</a>
+          <span class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&amp;data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3DDHEE%2BHospitals%2BKanakapura%2BRoad%2BBengaluru" alt="QR to DHEE Hospitals"></span>
+        </div>
+      </div>
+      <div class="venue-card v2">
+        <span class="date">📅 Saturday, August 23rd, 2026</span>
+        <h3>Semi-Finals &amp; Finals</h3>
+        <h4>VASA</h4>
+        <p>Bengaluru</p>
+        <p style="margin-top:.4rem;font-size:.8rem;">Day 2 · Semi-Finals, Special Scenario &amp; Finals · from 12:00 PM</p>
+        <div class="acts">
+          <a class="dir" href="https://www.google.com/maps/search/?api=1&amp;query=VASA+Bengaluru" target="_blank" rel="noopener">📍 Get Directions</a>
+          <span class="qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&amp;data=https%3A%2F%2Fwww.google.com%2Fmaps%2Fsearch%2F%3Fapi%3D1%26query%3DVASA%2BBengaluru" alt="QR to VASA"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stay">
+  <div class="container">
+    <div class="eyebrow">Getting here &amp; staying</div>
+    <h2 class="sec">Travel &amp; Stay</h2>
+    <p class="secsub">Everything about hotels, airport routes and getting around is in the Stay Brochure.</p>
+    <div class="stay-band">
+      <div class="txt">
+        <b>🏨 SimWars 2026 Travel &amp; Stay Brochure</b>
+        <p>Recommended hotels near both venues, airport transfer options, and local transport tips — the same brochure shared with teams and mentors.</p>
+      </div>
+      <a class="btn" href="/stay" target="_blank" rel="noopener">Open the Stay Brochure →</a>
+    </div>
+    <div class="tips">
+      <div class="tip"><b>✈️ Kempegowda International (BLR)</b>~35–50 km from the venues depending on traffic — allow 1.5–2 hours by cab at peak times.</div>
+      <div class="tip"><b>🚕 Getting around</b>Ola/Uber and autos work everywhere; Namma Metro covers much of the city centre.</div>
+      <div class="tip"><b>🌦️ August weather</b>Pleasant 20–28°C with passing monsoon showers — carry a light umbrella.</div>
+      <div class="tip"><b>☕ First stop</b>A hot filter coffee — Hatti Kaapi outlets are all over the city.</div>
+    </div>
+  </div>
+</section>
+
+<section id="see">
+  <div class="container">
+    <div class="eyebrow">Between the scenarios</div>
+    <h2 class="sec">What to See Around Bengaluru</h2>
+    <p class="secsub">Hand-picked from our welcome letter — parks and lakes, the city's culinary soul, its stages and galleries, and day trips beyond. Every card links to Google Maps.</p>
+
+    <div class="group-title">🌳 Green &amp; Calm</div>
+    <div class="see-grid">
+      <div class="see-card"><div class="bd"><span class="chip">🌺</span><b>Lalbagh Botanical Garden</b><p>240 acres of heritage gardens around a Kempegowda-era watchtower and the famous Glass House.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Lalbagh+Botanical+Garden+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🌳</span><b>Cubbon Park</b><p>The city's green lung — morning walks under rain trees, right beside the grand red Vidhana Soudha.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Cubbon+Park+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🛶</span><b>Ulsoor Lake</b><p>Boat rides and island views in the heart of the city — loveliest at sunrise.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Ulsoor+Lake+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🌅</span><b>Sankey Tank</b><p>A calm lakeside promenade in Malleshwaram — pair it with a CTR dosa nearby.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Sankey+Tank+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+    </div>
+
+    <div class="group-title">🍛 The City's Culinary Soul</div>
+    <div class="see-grid">
+      <div class="see-card"><div class="bd"><span class="chip">🥞</span><b>CTR, Malleshwaram</b><p>The legendary benne (butter) masala dosa — simplicity meeting class since 1952.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=CTR+Shri+Sagar+Malleshwaram+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🍚</span><b>Veena Stores</b><p>Standing-room-only idlis and khara bath — a Malleshwaram institution.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Veena+Stores+Malleshwaram+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🌶️</span><b>Basavanagudi Chat Street</b><p>VV Puram's spice-splashed evening food street — go hungry, graze everything.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=VV+Puram+Food+Street+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">☕</span><b>Hatti Kaapi</b><p>The first sip of true South Indian filter coffee — outlets across the city.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Hatti+Kaapi+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🍽️</span><b>Koshy's</b><p>Old-Bangalore café charm on St. Mark's Road — unchanged, and proudly so.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Koshys+St+Marks+Road+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🍺</span><b>Indiranagar Microbreweries</b><p>The modern buzz — craft breweries and rooftop bars along 100 Feet Road.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Microbreweries+Indiranagar+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+    </div>
+
+    <div class="group-title">🎭 Arts &amp; Culture</div>
+    <div class="see-grid">
+      <div class="see-card"><div class="bd"><span class="chip">🎭</span><b>Ranga Shankara</b><p>A play a day — one of India's best-loved theatres, in JP Nagar.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Ranga+Shankara+JP+Nagar+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🖼️</span><b>Chitrakala Parishath</b><p>Galleries, folk-art museums and a leafy art-school campus on Kumara Krupa Road.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Karnataka+Chitrakala+Parishath+Bengaluru" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+    </div>
+
+    <div class="group-title">🚗 Day Trips Beyond the City</div>
+    <div class="see-grid">
+      <div class="see-card"><div class="bd"><span class="chip">⛰️</span><b>Nandi Hills</b><p>Misty sunrise viewpoints an hour from the city — Bengaluru's favourite early-morning drive.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Nandi+Hills+Karnataka" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🥾</span><b>Skandagiri</b><p>A pre-dawn trek above the clouds — book the guided sunrise slot in advance.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Skandagiri+Trek+Karnataka" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🧘</span><b>Adiyogi Shiva Statue</b><p>The serene 112-ft Adiyogi at Chikkaballapur, with a light-and-sound show at dusk.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Adiyogi+Chikkaballapur" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">🛕</span><b>Belur &amp; Halebeedu</b><p>Hoysala temples of impossibly intricate stone — a long day trip for the sculpted wonders.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Chennakeshava+Temple+Belur" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+      <div class="see-card"><div class="bd"><span class="chip">👑</span><b>Mysuru</b><p>The regal charm of the Palace city — 3 hours by road or a comfortable train ride away.</p><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Mysore+Palace" target="_blank" rel="noopener">Open in Maps ↗</a></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  ನಮ್ಮ ಬೆಂಗಳೂರು · SimWars 2026 · PediSTARS India — we can't wait to welcome you.
+</footer>
+</body>
+</html>
