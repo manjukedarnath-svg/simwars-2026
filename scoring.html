@@ -852,6 +852,15 @@
                 <div id="syncIndicator" style="font-size:0.85rem; font-weight:700; color:#02C39A; background:rgba(2,195,154,0.12); padding:5px 14px; border-radius:20px; border:1px solid rgba(2,195,154,0.3);">⬤ Live</div>
             </div>
         </div>
+        <!-- JUDGE ALLOCATIONS — visible to every login -->
+        <div class="no-print" style="background:white;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 18px;margin-bottom:14px;">
+            <div style="font-size:0.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">⚖️ Judging Panel &amp; Allocations</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;font-size:0.82rem;line-height:1.7;">
+                <div style="background:#FBE4E7;border-radius:8px;padding:8px 12px;"><b style="color:#B3273B;">🔴 Prelims 22 Aug · Room A (PALS)</b><br>Clinical: <b>Dr Aaron Calhoun</b> · CRM: <b>Dr Ram K Nair</b><br>Debriefer: <b>Dr Mike Sheperd</b></div>
+                <div style="background:#E6F4F7;border-radius:8px;padding:8px 12px;"><b style="color:#0d6e8a;">🔵 Prelims 22 Aug · Room B (BLS)</b><br>Clinical: <b>Dr Durga Devi</b> · CRM: <b>Dr Khang Gan</b><br>Debriefer: <b>Dr Mohan</b></div>
+                <div style="background:#f0fdfa;border-radius:8px;padding:8px 12px;"><b style="color:#0d9488;">🏟️ SF &amp; Finals 23 Aug · VASA</b><br>Clinical: <b>Aruna Ramesh · Khang Gan · Kiran Hebbar</b><br>CRM: <b>Dinakar Pai · Durga Devi · Rana Chami</b></div>
+            </div>
+        </div>
         <!-- TABS -->
         <div class="tabs no-print">
             <button class="tab-btn active" data-tab="tabMaster">📊 Master Scoreboard</button>
@@ -1108,6 +1117,7 @@
         ============================================================ -->
         <!-- PALS Judges Tab -->
         <div id="tabJudgePals" class="tab-content">
+            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#B3273B;">🔴 Room A (PALS) — Judging Panel · Prelims 22 Aug</b><br>Clinical Judge: <b>Dr Aaron Calhoun</b> &nbsp;·&nbsp; CRM Judge: <b>Dr Ram K Nair</b> &nbsp;·&nbsp; Debriefer: <b>Dr Mike Sheperd</b></div>
             <div class="card" style="border-left-color:var(--pals); background:var(--pals-bg);">
                 <h2><span class="emoji">🫀</span> PALS Judge Sheet</h2>
                 <p style="color:var(--pals-text); margin-bottom:12px; font-size:0.9rem;">
@@ -1134,6 +1144,7 @@
         </div>
         <!-- BLS Judges Tab -->
         <div id="tabJudgeBls" class="tab-content">
+            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#0d6e8a;">🔵 Room B (BLS) — Judging Panel · Prelims 22 Aug</b><br>Clinical Judge: <b>Dr Durga Devi</b> &nbsp;·&nbsp; CRM Judge: <b>Dr Khang Gan</b> &nbsp;·&nbsp; Debriefer: <b>Dr Mohan</b></div>
             <div class="card" style="border-left-color:var(--primary); background:#E6F4F7;">
                 <h2><span class="emoji">❤️</span> BLS Judge Sheet</h2>
                 <p style="color:var(--bls-text); margin-bottom:12px; font-size:0.9rem;">
@@ -1285,6 +1296,7 @@
         TAB 6: SEMI-FINALS SCORING PACK
         ================================================================ -->
         <div id="tabSemiF" class="tab-content">
+            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#0d9488;">🏟️ Semi-Finals &amp; Finals — Judging Panel · 23 Aug · VASA</b><br>Clinical: <b>Dr Aruna Ramesh · Dr Khang Gan · Dr Kiran Hebbar</b> &nbsp;·&nbsp; CRM: <b>Dr Dinakar Pai · Dr Durga Devi · Dr Rana Chami</b></div>
             <!-- Config card -->
             <div class="card" style="border-left-color:#0d9488; background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);">
                 <h2><span class="emoji">🏟️</span> Semi-Finals Scoring Pack</h2>
