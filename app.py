@@ -2428,7 +2428,7 @@ th{background:#f4effa;font-size:.72rem;letter-spacing:.08em;text-transform:upper
 <div class="toolbar"><a class="btn" href="/register">&#8592; Home</a><button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button></div>
 <div class="sheet">
 <h1>🎲 SIM WARS 2026 — Official Draw &amp; Colour Groups</h1>
-<div class="sub">Drawn 21 Aug 2026 · 16 teams · Prelims Fri 22 Aug, DHEE Hospitals · <span id="stamp"></span></div>
+<div class="sub">Drawn 21 Aug 2026 · 16 teams · Prelims Sat 22 Aug, DHEE Hospitals · <span id="stamp"></span></div>
 <div class="grid" id="groups">Loading teams…</div>
 <div class="sched">
 <h2>Preliminary Round Schedule</h2>
