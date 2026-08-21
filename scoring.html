@@ -1607,13 +1607,27 @@
                     ['HCO₃⁻','16 mEq/L','22–26','low'],['BE','−10 mmol/L','−2 to +2','low'],
                     ['Lactate','6 mmol/L','< 2.2','high'],['K⁺','4.1 mEq/L','3.5–5.0','norm']
                 ]},
-                { id:'labs', icon:'🔬', label:'Labs — FBC / Electrolytes / Coag', type:'lab', rows:[
-                    ['Na⁺','138 mEq/L','135–145','norm'],['iCa','1.15 mmol/L','1.1–1.3','norm'],['Mg²⁺','0.9 mmol/L','0.7–1.0','norm'],
-                    ['Hb / WCC / Plt','12.9 · 14.2 · 260','—','norm'],['PT / APTT / INR','15.8 s · 38 s · 1.3 — mildly deranged (hypothermia)','—','high'],
-                    ['Troponin','Mildly elevated — from the arrest, not a primary cardiac event','—','high'],['Urea / Creatinine','4.2 mmol/L · 38 μmol/L — normal for age','—','norm']
+                { id:'fbc', icon:'🔬', label:'Full Blood Count', type:'lab', rows:[
+                    ['Hb','12.9 g/dL','11.5–15.5','norm'],['WCC','14.2 ×10⁹/L','4–11','high'],['Platelets','260 ×10⁹/L','150–400','norm']
+                ]},
+                { id:'lytes', icon:'🔬', label:'Electrolytes', type:'lab', rows:[
+                    ['Na⁺','138 mEq/L','135–145','norm'],['K⁺','4.5 mEq/L','3.5–5.0','norm'],
+                    ['Ionised Ca²⁺','1.15 mmol/L','1.1–1.3','norm'],['Mg²⁺','2 mg/dL','1.7–2.2','norm']
+                ]},
+                { id:'renal', icon:'🔬', label:'Renal Function', type:'lab', rows:[
+                    ['Urea','22 mg/dL','7–20','high'],['Creatinine','0.5 mg/dL','0.3–0.7','norm']
+                ]},
+                { id:'coag', icon:'🔬', label:'Coagulation Profile', type:'lab', rows:[
+                    ['PT','15.8 s','11–13.5','high'],['APTT','38 s','25–35','high'],['INR','1.3','0.8–1.1','high — mildly deranged (hypothermia)']
+                ]},
+                { id:'trop', icon:'🔬', label:'Qualitative Troponin', type:'lab', rows:[
+                    ['Troponin','Positive — from the arrest, not a primary cardiac event','Negative','high']
+                ]},
+                { id:'lft', icon:'🔬', label:'Liver Function', type:'lab', rows:[
+                    ['Bilirubin','1.4 mg%','0.3–1.2','high'],['SGPT','45 U/L','7–40','high'],['SGOT','56 U/L','8–40','high']
                 ]},
                 { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
-                  findings:'Diffuse bilateral infiltrates, consistent with aspiration.',
+                  findings:'<img src="static/images/b1-cxr.png" style="max-width:100%;border-radius:8px;margin-bottom:8px;display:block;" alt="Chest X-Ray"> Diffuse bilateral infiltrates, consistent with aspiration.',
                   flag:'high', note:'CT head deferred until haemodynamically stable for transfer — Chief states it is not safe to move her for a scan right now.' },
                 { id:'ecg', icon:'📈', label:'Cardiac Monitor / 12-Lead', type:'rhythm',
                   rhythm:'Fine VF → organised rhythm at ROSC (~5:30). Post-ROSC 12-lead: sinus with Osborn (J) waves — classic hypothermia', rate:'—',
