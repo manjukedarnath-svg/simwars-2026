@@ -907,10 +907,10 @@
                 <select id="activeCaseBlsSelect" onchange="setActiveCaseBls(this.value)"
                     style="width:100%; padding:9px 14px; border-radius:8px; border:2px solid var(--primary); font-size:0.9rem; font-weight:700; color:var(--bls-text); background:white; cursor:pointer; margin-bottom:10px;">
                     <option value="">— No active BLS case —</option>
-                    <option value="B2">B2 · Torsades / Long QT Arrest  (Round 1)</option>
+                    <option value="B1">B1 · Near Drowning / VF Arrest — Hypothermia  (Round 1)</option>
                     <option value="B4">B4 · Refractory Status Epilepticus  (Round 2)</option>
                     <option value="B3">B3 · Electrocution — VF + Hyperkalaemia  (Round 3)</option>
-                    <option value="B1">B1 · Near Drowning / VF Arrest — Hypothermia  (Round 4)</option>
+                    <option value="B2">B2 · Torsades / Long QT Arrest  (Round 4)</option>
                 </select>
                 <div id="liveTeamsBlsDisplay" style="font-size:0.82rem; color:var(--bls-text); font-weight:600; margin-bottom:8px;"></div>
                 <div id="activeTeamBlsControl" style="display:none;">
@@ -1038,13 +1038,13 @@
                     </div>
                     <div class="schedule-slot">
                         <div class="time">Round 2</div>
-                        <div><span class="room-a">ROOM A · PALS:</span> Case P2 · <strong>BLUE</strong> (draws 9–12)</div>
+                        <div><span class="room-a">ROOM A · PALS:</span> Case P2 · <strong>GREEN</strong> (draws 5–8)</div>
                         <div><span class="room-b">ROOM B · BLS:</span> Case B4 · <strong>RED</strong> (draws 1–4)</div>
                         <div style="margin-top:6px; font-size:0.8rem; color: var(--warning);"><span class="buffer-tag">BUFFER</span> between rounds</div>
                     </div>
                     <div class="schedule-slot">
                         <div class="time">Round 3</div>
-                        <div><span class="room-a">ROOM A · PALS:</span> Case P3 · <strong>GREEN</strong> (draws 5–8)</div>
+                        <div><span class="room-a">ROOM A · PALS:</span> Case P3 · <strong>BLUE</strong> (draws 9–12)</div>
                         <div><span class="room-b">ROOM B · BLS:</span> Case B3 · <strong>GREEN</strong> (draws 5–8)</div>
                         <div style="margin-top:6px; font-size:0.8rem; color: var(--warning);"><span class="buffer-tag">BUFFER</span> between rounds</div>
                     </div>
@@ -1462,15 +1462,21 @@
         // 1. DATA
         // ================================================================
         // Colour groups by draw number: RED 1-4 · GREEN 5-8 · BLUE 9-12 · YELLOW 13-16
-        // Round 1: P1 (RED)    + B1 (YELLOW) | Round 2: P2 (BLUE)  + B4 (RED)
-        // Round 3: P3 (GREEN)  + B3 (GREEN)  | Round 4: P4 (YELLOW) + B2 (BLUE)
+        // Round 1: P1 (RED)    + B1 (YELLOW) | Round 2: P2 (GREEN) + B4 (RED)
+        // Round 3: P3 (BLUE)   + B3 (GREEN)  | Round 4: P4 (YELLOW) + B2 (BLUE)
         // All 16 teams — source of truth independent of case assignments
         const ALL_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17'];
+        const DEFAULT_TEAM_NAMES = {
+            T1:'Code Rapido', T2:'CodeX', T3:'STAT SQUAD', T4:'Saṃrakṣaṇa',
+            T5:'Simusapiens', T6:'Team MANTRA', T7:'The Codefather', T8:'The Calcutta Coders',
+            T9:'Sinus Survivors', T10:'Code Breakers', T11:'Simtitans', T12:'Team Revive',
+            T13:'SHOCK SQUAD', T14:'SIMKIMS', T15:'AC⚡DC', T16:'PULSE CHECK', T17:'Code Surprise'
+        };
 
         // Rebuilt from draw results via rebuildCaseTeams(). Default: spread evenly as placeholder.
         let caseTeams = {
-            'P1': ['T1','T2','T3','T4'],   'P3': ['T5','T6','T7','T8'],
-            'P2': ['T9','T10','T11','T12'],'P4': ['T13','T14','T15','T16'],
+            'P1': ['T1','T2','T3','T4'],   'P2': ['T5','T6','T7','T8'],
+            'P3': ['T9','T10','T11','T12'],'P4': ['T13','T14','T15','T16'],
             'B4': ['T1','T2','T3','T4'],   'B3': ['T5','T6','T7','T8'],
             'B2': ['T9','T10','T11','T12'],'B1': ['T13','T14','T15','T16'],
         };
@@ -2173,7 +2179,7 @@
                 row.innerHTML = `
                     <span style="font-weight:800; font-size:0.82rem; color:var(--text-muted);">${teamId}</span>
                     <input type="text" id="team_name_${teamId}" class="team-name-input"
-                           placeholder="Team name" value="${teamId === 'T17' ? 'Code Surprise' : 'Team ' + parseInt(teamId.slice(1))}"
+                           placeholder="Team name" value="${DEFAULT_TEAM_NAMES[teamId] || 'Team ' + parseInt(teamId.slice(1))}"
                            oninput="updateAllNames()"
                            style="width:100%; padding:5px 7px; border:1px solid var(--border); border-radius:5px; font-size:0.82rem;">
                     <input type="text" id="team_leader_${teamId}"
