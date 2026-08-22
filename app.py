@@ -1383,10 +1383,10 @@ def get_results():
     def flt(val, default=0):
         try: return float(val) if val not in (None, '') else default
         except: return default
-    ALL_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16']
+    ALL_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17']
     teams = []
     for team in ALL_TEAMS:
-        name = (sc.get(f'team_name_{team}') or '').strip() or team
+        name = (sc.get(f'team_name_{team}') or '').strip() or (('Code Surprise') if team == 'T17' else team)
         pals = min(100, flt(sc.get(f'score_pals_{team}')))
         bls  = min(100, flt(sc.get(f'score_bls_{team}')))
         pals_case = sc.get(f'team_pals_case_{team}') or ''

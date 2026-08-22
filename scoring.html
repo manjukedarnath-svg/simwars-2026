@@ -848,17 +848,8 @@
             <a href="/register" style="display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;color:#94a3b8;text-decoration:none;margin-bottom:10px;">&larr; Back to SimWars Home</a>
             <h1>🏆 SimWars <span>Scoring System</span></h1>
             <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-                <div class="badge">16 Teams · 8 Cases · Top 4 + 6 Special Prizes</div>
+                <div class="badge">17 Teams · 8 Cases · Top 4 + 6 Special Prizes</div>
                 <div id="syncIndicator" style="font-size:0.85rem; font-weight:700; color:#02C39A; background:rgba(2,195,154,0.12); padding:5px 14px; border-radius:20px; border:1px solid rgba(2,195,154,0.3);">⬤ Live</div>
-            </div>
-        </div>
-        <!-- JUDGE ALLOCATIONS — visible to every login -->
-        <div class="no-print" style="background:white;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 18px;margin-bottom:14px;">
-            <div style="font-size:0.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">⚖️ Judging Panel &amp; Allocations</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;font-size:0.82rem;line-height:1.7;">
-                <div style="background:#FBE4E7;border-radius:8px;padding:8px 12px;"><b style="color:#B3273B;">🔴 Prelims 22 Aug · Room A (PALS)</b><br>Clinical: <b>Dr Aaron Calhoun</b> · CRM: <b>Dr Ram K Nair</b><br>Debriefer: <b>Dr Mike Sheperd</b></div>
-                <div style="background:#E6F4F7;border-radius:8px;padding:8px 12px;"><b style="color:#0d6e8a;">🔵 Prelims 22 Aug · Room B (BLS)</b><br>Clinical: <b>Dr Durga Devi</b> · CRM: <b>Dr Khang Gan</b><br>Debriefer: <b>Dr Mohan</b></div>
-                <div style="background:#f0fdfa;border-radius:8px;padding:8px 12px;"><b style="color:#0d9488;">🏟️ SF &amp; Finals 23 Aug · VASA</b><br>Clinical: <b>Aruna Ramesh · Khang Gan · Kiran Hebbar</b><br>CRM: <b>Dinakar Pai · Durga Devi · Rana Chami</b></div>
             </div>
         </div>
         <!-- TABS -->
@@ -1117,7 +1108,6 @@
         ============================================================ -->
         <!-- PALS Judges Tab -->
         <div id="tabJudgePals" class="tab-content">
-            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#B3273B;">🔴 Room A (PALS) — Judging Panel · Prelims 22 Aug</b><br>Clinical Judge: <b>Dr Aaron Calhoun</b> &nbsp;·&nbsp; CRM Judge: <b>Dr Ram K Nair</b> &nbsp;·&nbsp; Debriefer: <b>Dr Mike Sheperd</b></div>
             <div class="card" style="border-left-color:var(--pals); background:var(--pals-bg);">
                 <h2><span class="emoji">🫀</span> PALS Judge Sheet</h2>
                 <p style="color:var(--pals-text); margin-bottom:12px; font-size:0.9rem;">
@@ -1144,16 +1134,17 @@
         </div>
         <!-- BLS Judges Tab -->
         <div id="tabJudgeBls" class="tab-content">
-            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#0d6e8a;">🔵 Room B (BLS) — Judging Panel · Prelims 22 Aug</b><br>Clinical Judge: <b>Dr Durga Devi</b> &nbsp;·&nbsp; CRM Judge: <b>Dr Khang Gan</b> &nbsp;·&nbsp; Debriefer: <b>Dr Mohan</b></div>
             <div class="card" style="border-left-color:var(--primary); background:#E6F4F7;">
                 <h2><span class="emoji">❤️</span> BLS Judge Sheet</h2>
                 <p style="color:var(--bls-text); margin-bottom:12px; font-size:0.9rem;">
                     BLS judges see only BLS cases (B1–B4). <strong>All scores auto-sync</strong> to the Master Scoreboard.
                     <span style="display:inline-block; background:white; padding:2px 12px; border-radius:20px; font-size:0.8rem; margin-left:8px; color:var(--text-secondary);">Updated live</span>
                 </p>
-                <!-- Note: intro scoring is handled on the PALS judge sheet -->
-                <div style="margin-bottom:16px; padding:10px 16px; background:white; border-radius:10px; border:1px dashed var(--border-strong); font-size:0.83rem; color:var(--text-secondary);">
-                    🎬 <strong>Best Video &amp; Best Uniform</strong> are scored at team introduction on the <strong>PALS Judge sheet</strong>. BLS judges focus on case scoring below.
+                <!-- Intro Scoring (video + costume) — scored before cases start -->
+                <div id="introScoringBls" style="margin-bottom:16px; padding:14px 16px; background:white; border-radius:10px; border:1.5px solid var(--primary);">
+                    <div style="font-weight:700; font-size:0.95rem; margin-bottom:10px; color:var(--bls-text);">🎬 Team Introduction Scores</div>
+                    <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:10px;">Score video and costume when teams are introduced at the start. Select the active team on Master Scoreboard.</p>
+                    <div id="introScoreBlsContainer"></div>
                 </div>
                 <div style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
                     <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other domain's sheet so no one sees each other's marks)</div>
@@ -1240,7 +1231,7 @@
             <div class="card gold">
                 <h2><span class="emoji">✏️</span> Special Award Scores — Entered on Judge Sheets</h2>
                 <p style="color: var(--text-secondary); margin-bottom:12px;">
-                    🎬 <strong>Video + Uniform</strong> are scored at team introduction on the PALS Judge sheet (before cases start).<br>
+                    🎬 <strong>Video + Uniform</strong> are scored at team introduction on both the PALS and BLS Judge sheets (before cases start).<br>
                     🫀 <strong>CPR · CRM · Parental Comm · Interprofessional</strong> appear on <em>both</em> PALS and BLS judge sheets — each set of judges scores all 4 prizes for the team performing. Final score = sum of PALS + BLS judge scores (max 200 per prize).
                 </p>
                 <button class="btn" onclick="pollScores().then(() => calculateSpecialPrizes())">🏅 Refresh Prize Winners</button>
@@ -1296,7 +1287,6 @@
         TAB 6: SEMI-FINALS SCORING PACK
         ================================================================ -->
         <div id="tabSemiF" class="tab-content">
-            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#0d9488;">🏟️ Semi-Finals &amp; Finals — Judging Panel · 23 Aug · VASA</b><br>Clinical: <b>Dr Aruna Ramesh · Dr Khang Gan · Dr Kiran Hebbar</b> &nbsp;·&nbsp; CRM: <b>Dr Dinakar Pai · Dr Durga Devi · Dr Rana Chami</b></div>
             <!-- Config card -->
             <div class="card" style="border-left-color:#0d9488; background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);">
                 <h2><span class="emoji">🏟️</span> Semi-Finals Scoring Pack</h2>
@@ -1463,7 +1453,7 @@
         // Round 1: P1 (RED)    + B1 (YELLOW) | Round 2: P3 (GREEN)  + B4 (RED)
         // Round 3: P2 (BLUE)   + B3 (GREEN)  | Round 4: P4 (YELLOW) + B2 (BLUE)
         // All 16 teams — source of truth independent of case assignments
-        const ALL_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16'];
+        const ALL_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17'];
 
         // Rebuilt from draw results via rebuildCaseTeams(). Default: spread evenly as placeholder.
         let caseTeams = {
@@ -2068,7 +2058,8 @@
             'T13': { pals: 75, bls: 90 },
             'T14': { pals: 68, bls: 74 },
             'T15': { pals: 81, bls: 83 },
-            'T16': { pals: 77, bls: 69 }
+            'T16': { pals: 77, bls: 69 },
+            'T17': { pals: 80, bls: 80 }
         };
         // Demo special prizes scores (random but realistic)
         const demoScores = {};
@@ -2170,7 +2161,7 @@
                 row.innerHTML = `
                     <span style="font-weight:800; font-size:0.82rem; color:var(--text-muted);">${teamId}</span>
                     <input type="text" id="team_name_${teamId}" class="team-name-input"
-                           placeholder="Team name" value="Team ${parseInt(teamId.slice(1))}"
+                           placeholder="Team name" value="${teamId === 'T17' ? 'Code Surprise' : 'Team ' + parseInt(teamId.slice(1))}"
                            oninput="updateAllNames()"
                            style="width:100%; padding:5px 7px; border:1px solid var(--border); border-radius:5px; font-size:0.82rem;">
                     <input type="text" id="team_leader_${teamId}"
@@ -2311,7 +2302,7 @@
                 const videos = [];
                 for (const t of teams) {
                     const n = parseInt(t.drawNumber, 10);
-                    if (!n || n < 1 || n > 16) { skipped++; continue; }
+                    if (!n || n < 1 || n > 17) { skipped++; continue; }
                     const teamId = 'T' + n;
                     const nameInput = document.getElementById(`team_name_${teamId}`);
                     if (nameInput && t.teamName) { nameInput.value = t.teamName; saveToServer(`team_name_${teamId}`, t.teamName); }
