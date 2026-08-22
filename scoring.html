@@ -886,9 +886,9 @@
                     style="width:100%; padding:9px 14px; border-radius:8px; border:2px solid #B3273B; font-size:0.9rem; font-weight:700; color:#6B1622; background:white; cursor:pointer; margin-bottom:10px;">
                     <option value="">— No active PALS case —</option>
                     <option value="P1">P1 · Cardiogenic Shock  (Round 1)</option>
-                    <option value="P3">P3 · Asthma + Tension Pneumothorax  (Round 2)</option>
-                    <option value="P4">P4 · Refractory Septic Shock  (Round 3)</option>
-                    <option value="P2">P2 · Septic Shock — Post-Cardiac Surgery  (Round 4)</option>
+                    <option value="P2">P2 · Septic Shock — Post-Cardiac Surgery  (Round 2)</option>
+                    <option value="P3">P3 · Asthma + Tension Pneumothorax  (Round 3)</option>
+                    <option value="P4">P4 · Refractory Septic Shock  (Round 4)</option>
                 </select>
                 <div id="liveTeamsPalsDisplay" style="font-size:0.82rem; color:#6B1622; font-weight:600; margin-bottom:8px;"></div>
                 <div id="activeTeamPalsControl" style="display:none;">
@@ -1038,13 +1038,13 @@
                     </div>
                     <div class="schedule-slot">
                         <div class="time">Round 2</div>
-                        <div><span class="room-a">ROOM A · PALS:</span> Case P3 · <strong>GREEN</strong> (draws 5–8)</div>
+                        <div><span class="room-a">ROOM A · PALS:</span> Case P2 · <strong>BLUE</strong> (draws 9–12)</div>
                         <div><span class="room-b">ROOM B · BLS:</span> Case B4 · <strong>RED</strong> (draws 1–4)</div>
                         <div style="margin-top:6px; font-size:0.8rem; color: var(--warning);"><span class="buffer-tag">BUFFER</span> between rounds</div>
                     </div>
                     <div class="schedule-slot">
                         <div class="time">Round 3</div>
-                        <div><span class="room-a">ROOM A · PALS:</span> Case P2 · <strong>BLUE</strong> (draws 9–12)</div>
+                        <div><span class="room-a">ROOM A · PALS:</span> Case P3 · <strong>GREEN</strong> (draws 5–8)</div>
                         <div><span class="room-b">ROOM B · BLS:</span> Case B3 · <strong>GREEN</strong> (draws 5–8)</div>
                         <div style="margin-top:6px; font-size:0.8rem; color: var(--warning);"><span class="buffer-tag">BUFFER</span> between rounds</div>
                     </div>
@@ -1117,6 +1117,7 @@
         ============================================================ -->
         <!-- PALS Judges Tab -->
         <div id="tabJudgePals" class="tab-content">
+            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#B3273B;">🔴 Room A (PALS) — Judging Panel · Prelims 22 Aug</b><br>Clinical Judge: <b>Dr Aaron Calhoun</b> &nbsp;·&nbsp; CRM Judge: <b>Dr Ram K Nair</b> &nbsp;·&nbsp; Debriefer: <b>Dr Mike Sheperd</b></div>
             <div class="card" style="border-left-color:var(--pals); background:var(--pals-bg);">
                 <h2><span class="emoji">🫀</span> PALS Judge Sheet</h2>
                 <p style="color:var(--pals-text); margin-bottom:12px; font-size:0.9rem;">
@@ -1143,6 +1144,7 @@
         </div>
         <!-- BLS Judges Tab -->
         <div id="tabJudgeBls" class="tab-content">
+            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#0d6e8a;">🔵 Room B (BLS) — Judging Panel · Prelims 22 Aug</b><br>Clinical Judge: <b>Dr Durga Devi</b> &nbsp;·&nbsp; CRM Judge: <b>Dr Khang Gan</b> &nbsp;·&nbsp; Debriefer: <b>Dr Mohan</b></div>
             <div class="card" style="border-left-color:var(--primary); background:#E6F4F7;">
                 <h2><span class="emoji">❤️</span> BLS Judge Sheet</h2>
                 <p style="color:var(--bls-text); margin-bottom:12px; font-size:0.9rem;">
@@ -1296,6 +1298,7 @@
         TAB 6: SEMI-FINALS SCORING PACK
         ================================================================ -->
         <div id="tabSemiF" class="tab-content">
+            <div style="background:white;border:1.5px solid #e2e8f0;border-left:5px solid #d81b7a;border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.88rem;line-height:1.7;"><b style="color:#0d9488;">🏟️ Semi-Finals &amp; Finals — Judging Panel · 23 Aug · VASA</b><br>Clinical: <b>Dr Aruna Ramesh · Dr Khang Gan · Dr Kiran Hebbar</b> &nbsp;·&nbsp; CRM: <b>Dr Dinakar Pai · Dr Durga Devi · Dr Rana Chami</b></div>
             <!-- Config card -->
             <div class="card" style="border-left-color:#0d9488; background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);">
                 <h2><span class="emoji">🏟️</span> Semi-Finals Scoring Pack</h2>
@@ -1459,8 +1462,8 @@
         // 1. DATA
         // ================================================================
         // Colour groups by draw number: RED 1-4 · GREEN 5-8 · BLUE 9-12 · YELLOW 13-16
-        // Round 1: P1 (RED)    + B1 (YELLOW) | Round 2: P3 (GREEN)  + B4 (RED)
-        // Round 3: P2 (BLUE)   + B3 (GREEN)  | Round 4: P4 (YELLOW) + B2 (BLUE)
+        // Round 1: P1 (RED)    + B1 (YELLOW) | Round 2: P2 (BLUE)  + B4 (RED)
+        // Round 3: P3 (GREEN)  + B3 (GREEN)  | Round 4: P4 (YELLOW) + B2 (BLUE)
         // All 16 teams — source of truth independent of case assignments
         const ALL_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17'];
 
@@ -1473,8 +1476,8 @@
         };
 
         // Run order for each room
-        // Schedule: R1 P1+B1 | R2 P3+B4 | R3 P2+B3 | R4 P4+B2
-        const PALS_ORDER = ['P1','P3','P2','P4'];
+        // Schedule: R1 P1+B1 | R2 P2+B4 | R3 P3+B3 | R4 P4+B2
+        const PALS_ORDER = ['P1','P2','P3','P4'];
         const BLS_ORDER  = ['B1','B4','B3','B2'];
         const caseType = {
             'P1': 'PALS',
@@ -2403,12 +2406,12 @@
                     <td style="padding:7px 10px;text-align:center;color:var(--pals);font-weight:700;">${palsCase}</td>
                     <td style="padding:7px 10px;text-align:center;">
                         <span id="${team}_pals_total" class="total-display pals-total" style="font-size:1.05rem;font-weight:700;">0</span>
-                        <span style="color:var(--text-muted);font-size:0.72rem;">/200</span>
+                        <span style="color:var(--text-muted);font-size:0.72rem;">/100</span>
                     </td>
                     <td style="padding:7px 10px;text-align:center;color:var(--primary);font-weight:700;">${blsCase}</td>
                     <td style="padding:7px 10px;text-align:center;">
                         <span id="${team}_bls_total" class="total-display bls-total" style="font-size:1.05rem;font-weight:700;">0</span>
-                        <span style="color:var(--text-muted);font-size:0.72rem;">/200</span>
+                        <span style="color:var(--text-muted);font-size:0.72rem;">/100</span>
                     </td>
                 </tr>`;
             }
