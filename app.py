@@ -1375,6 +1375,21 @@ def reset_scores():
         conn.commit()
     return jsonify({'ok': True})
 
+VALID_CLEAR_TEAMS = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17','fin1','fin2']
+
+@app.route('/api/scores/team/<team>', methods=['POST'])
+def clear_team_scores(team):
+    # Wipes every score key belonging to one team (all keys are suffixed "_<team>"),
+    # leaving every other team's entries untouched. Organiser-only.
+    if session.get('role') != 'organiser':
+        return jsonify({'error': 'locked'}), 403
+    if team not in VALID_CLEAR_TEAMS:
+        return jsonify({'error': 'unknown team'}), 400
+    with get_db() as conn:
+        conn.execute("DELETE FROM scores WHERE key LIKE '%\\_' || ? ESCAPE '\\'", (team,))
+        conn.commit()
+    return jsonify({'ok': True})
+
 @app.route('/api/results')
 def get_results():
     with get_db() as conn:
@@ -1483,6 +1498,8 @@ tr.me td{background:#fdf1f6;font-weight:800;}
 .rank{font-weight:900;color:#d81b7a;width:2.4rem;}
 .muted{color:#6a5a72;font-size:.82rem;}
 .empty{padding:1.2rem;text-align:center;color:#6a5a72;font-size:.9rem;}
+.clear-btn{background:none;border:1px solid #d33;color:#d33;border-radius:6px;font-size:.72rem;padding:.15rem .5rem;cursor:pointer;}
+.clear-btn:hover{background:#d33;color:#fff;}
 </style></head><body>
 <div class="bar"><h1>🏆 SIM WARS 2026 — Team &amp; Score Board</h1><div style="display:flex;gap:.8rem;align-items:center;"><span class="role">{{ role }}{% if team_number %} · Team {{ team_number }}{% endif %}</span><a href="/logout" style="color:#fff;opacity:.85;">Log out</a><a href="/register">← Site</a></div></div>
 <div class="wrap">
@@ -1537,9 +1554,10 @@ function load(){
   var el=document.getElementById('prelim');
   if(!rows.length){el.className='empty';el.textContent='No scores locked yet — check back after the first prelim rounds.';}
   else{
-   var h='<table><tr><th></th><th>Team</th><th>PALS</th><th>BLS</th><th>Combined</th></tr>';
+   var h='<table><tr><th></th><th>Team</th><th>PALS</th><th>BLS</th><th>Combined</th>'+(IS_ORG?'<th></th>':'')+'</tr>';
    rows.forEach(function(t,i){var me=MY_TEAM&&t.team==='T'+MY_TEAM;
-    h+='<tr'+(me?' class="me"':'')+'><td class="rank">'+(i+1)+'</td><td>'+esc(t.team)+' — '+esc(t.name)+'</td><td>'+t.pals+'</td><td>'+t.bls+'</td><td><b>'+t.combined+'</b></td></tr>';});
+    h+='<tr'+(me?' class="me"':'')+'><td class="rank">'+(i+1)+'</td><td>'+esc(t.team)+' — '+esc(t.name)+'</td><td>'+t.pals+'</td><td>'+t.bls+'</td><td><b>'+t.combined+'</b></td>'
+     +(IS_ORG?'<td><button class="clear-btn" onclick="clearTeam(\''+t.team+'\')">Clear</button></td>':'')+'</tr>';});
    h+='</table>';el.className='';el.innerHTML=h;
   }
   var sf=d.sf||{};var sfv=Object.keys(sf).map(function(k){return sf[k];}).filter(function(v){return v&&!/^SF\\d$/i.test(v);});
@@ -1556,6 +1574,12 @@ function load(){
  }).catch(function(){});
 }
 load();setInterval(load,30000);
+function clearTeam(team){
+ if(!confirm('Clear all prelim scores for '+team+'? This cannot be undone.'))return;
+ fetch('/api/scores/team/'+team,{method:'POST'}).then(function(r){return r.json();}).then(function(d){
+  if(d.ok)load();else alert('Could not clear: '+(d.error||'unknown error'));
+ });
+}
 </script></body></html>"""
 
 SCOREBOARD_GATE_TEMPLATE = """<!DOCTYPE html>

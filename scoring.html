@@ -852,6 +852,15 @@
                 <div id="syncIndicator" style="font-size:0.85rem; font-weight:700; color:#02C39A; background:rgba(2,195,154,0.12); padding:5px 14px; border-radius:20px; border:1px solid rgba(2,195,154,0.3);">⬤ Live</div>
             </div>
         </div>
+        <!-- JUDGE ALLOCATIONS — visible to every login -->
+        <div class="no-print" style="background:white;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 18px;margin-bottom:14px;">
+            <div style="font-size:0.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">⚖️ Judging Panel &amp; Allocations</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;font-size:0.82rem;line-height:1.7;">
+                <div style="background:#FBE4E7;border-radius:8px;padding:8px 12px;"><b style="color:#B3273B;">🔴 Prelims 22 Aug · Room A (PALS)</b><br>Clinical: <b>Dr Aaron Calhoun</b> · CRM: <b>Dr Ram K Nair</b><br>Debriefer: <b>Dr Mike Sheperd</b></div>
+                <div style="background:#E6F4F7;border-radius:8px;padding:8px 12px;"><b style="color:#0d6e8a;">🔵 Prelims 22 Aug · Room B (BLS)</b><br>Clinical: <b>Dr Mohan</b> · CRM: <b>Dr Khang Gan</b><br>Debriefer: <b>Dr Manju</b></div>
+                <div style="background:#f0fdfa;border-radius:8px;padding:8px 12px;"><b style="color:#0d9488;">🏟️ SF &amp; Finals 23 Aug · VASA</b><br>Clinical: <b>Aruna Ramesh · Khang Gan · Kiran Hebbar</b><br>CRM: <b>Dinakar Pai · Durga Devi · Rana Chami</b></div>
+            </div>
+        </div>
         <!-- TABS -->
         <div class="tabs no-print">
             <button class="tab-btn active" data-tab="tabMaster">📊 Master Scoreboard</button>
@@ -974,7 +983,7 @@
                     </div>
                     <div class="setting-item">
                         <label for="judgeBls1">Room B (BLS) — Clinical Judge</label>
-                        <input type="text" id="judgeBls1" placeholder="Name" value="Dr Durga Devi" oninput="updateJudgeSheets()">
+                        <input type="text" id="judgeBls1" placeholder="Name" value="Dr Mohan" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
                         <label for="judgeBls2">Room B (BLS) — CRM Judge</label>
@@ -986,7 +995,7 @@
                     </div>
                     <div class="setting-item">
                         <label for="debrieferBls">Room B — Debriefer</label>
-                        <input type="text" id="debrieferBls" placeholder="Name" value="Dr Mohan" oninput="updateJudgeSheets()">
+                        <input type="text" id="debrieferBls" placeholder="Name" value="Dr Manju" oninput="updateJudgeSheets()">
                     </div>
                 </div>
             </div>
@@ -2412,11 +2421,8 @@
         // ================================================================
         function renderIntroScoringBlock(activeTeam, containerEl, accentColor) {
             if (!containerEl) return;
-            const teamsToShow = activeTeam ? [activeTeam] : getTeamList();
+            const teamsToShow = getTeamList();
             let html = '';
-            if (!activeTeam) {
-                html += `<p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">No active team selected — showing all teams. Use the Master Scoreboard to set the team on stage.</p>`;
-            }
             for (const team of teamsToShow) {
                 const name = getDisplayName(team);
                 html += `<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 0; border-bottom:1px solid var(--border);">
@@ -2777,6 +2783,9 @@
             const container = document.getElementById('judgeBlsSheetsContainer');
             if (!container) return;
             container.innerHTML = '';
+            // Render intro scoring block
+            const introEl = document.getElementById('introScoreBlsContainer');
+            renderIntroScoringBlock(activeTeamBls, introEl, '#006D8C');
             // Active case banner
             if (activeCaseBls) {
                 const teamBanner = activeTeamBls
