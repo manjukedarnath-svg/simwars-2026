@@ -931,7 +931,7 @@
                 </div>
                 <div id="judgeGateCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:14px;"></div>
                 <div style="text-align:center;margin-top:22px;">
-                    <button onclick="exitJudgeFocus()" style="background:transparent;color:#9fc6d1;border:1.5px solid #33697d;border-radius:22px;padding:9px 22px;font-size:0.84rem;font-weight:700;cursor:pointer;">I am the Chief / MC — show me everything</button>
+                    <button id="judgeGateChiefBtn" onclick="exitJudgeFocus()" style="background:transparent;color:#9fc6d1;border:1.5px solid #33697d;border-radius:22px;padding:9px 22px;font-size:0.84rem;font-weight:700;cursor:pointer;">I am the Chief / MC — show me everything</button>
                 </div>
             </div>
         </div>
@@ -4827,6 +4827,10 @@
             const sa = document.getElementById('sfShowAllBtn');
             if (sa) sa.style.display = 'none';
             document.querySelectorAll('.prelimShowAllBtn').forEach(b => { b.style.display = 'none'; });
+            // Same rule for the judge gate's Chief button: it calls sfSetMyRole('') and would
+            // otherwise hand a judge the full board from their own screen with no password.
+            const gb = document.getElementById('judgeGateChiefBtn');
+            if (gb) gb.style.display = 'none';
         }
 
         // ================================================================
