@@ -111,6 +111,9 @@
         .tab-content.active {
             display: block;
         }
+        .sf-taskstrip, .fn-taskstrip {
+            display: none;
+        }
         .card {
             background: var(--surface-0);
             border-radius: 12px;
@@ -856,9 +859,7 @@
         <div class="no-print" style="background:white;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 18px;margin-bottom:14px;">
             <div style="font-size:0.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">⚖️ Judging Panel &amp; Allocations</div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;font-size:0.82rem;line-height:1.7;">
-                <div style="background:#FBE4E7;border-radius:8px;padding:8px 12px;"><b style="color:#B3273B;">🔴 Prelims 22 Aug · Room A (PALS)</b><br>Clinical: <b>Dr Aaron Calhoun</b> · CRM: <b>Dr Ram K Nair</b><br>Debriefer: <b>Dr Mike Sheperd</b></div>
-                <div style="background:#E6F4F7;border-radius:8px;padding:8px 12px;"><b style="color:#0d6e8a;">🔵 Prelims 22 Aug · Room B (BLS)</b><br>Clinical: <b>Dr Mohan</b> · CRM: <b>Dr Khang Gan</b><br>Debriefer: <b>Dr Manju</b></div>
-                <div style="background:#f0fdfa;border-radius:8px;padding:8px 12px;"><b style="color:#0d9488;">🏟️ SF &amp; Finals 23 Aug · VASA</b><br>Clinical: <b>Aruna Ramesh · Khang Gan · Kiran Hebbar</b><br>CRM: <b>Dinakar Pai · Durga Devi · Rana Chami</b></div>
+                <div style="background:#f0fdfa;border-radius:8px;padding:8px 12px;"><b style="color:#0d9488;">🏟️ Semi-Finals &amp; Finals · VASA</b><br>Clinical: <b>Dr Aruna</b> · <b>Dr Kang</b><br>CRM: <b>Dr Dinkar</b> · <b>Dr Kiran</b> · <b>Dr Rana</b></div>
             </div>
         </div>
         <!-- TABS -->
@@ -876,7 +877,12 @@
         TAB 1: MASTER SCOREBOARD
         ============================================================ -->
         <div id="tabMaster" class="tab-content active">
-            <!-- NOW LIVE CONTROL — two simultaneous rooms -->
+            <!-- NOW LIVE CONTROL — prelim rooms; hidden once prelims close, restorable by the organiser -->
+            <div id="prelimLiveControls" style="display:none;">
+            <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:7px 13px;margin-bottom:12px;font-size:0.8rem;color:#9a3412;">
+                <strong>Prelim controls — reopened.</strong> These drive the Room A and Room B judge sheets. Setting a case here makes prelim sheets live again.
+                <button onclick="setPrelimControlsVisible(false)" style="background:none;border:1px solid #d9760b;color:#9a3412;border-radius:5px;padding:2px 9px;font-size:0.74rem;font-weight:700;cursor:pointer;margin-left:8px;">Hide again</button>
+            </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; flex-wrap:wrap;">
             <!-- PALS Room A -->
             <div class="card" style="border-left-color:#B3273B; background:#FBE4E7; margin-bottom:0;">
@@ -923,8 +929,42 @@
                 </div>
             </div>
             </div>
+            </div>
 
-            <!-- Investigations Console — organiser-only, projector control -->
+            <div id="prelimClosedNote" style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:8px 14px;margin-bottom:16px;font-size:0.82rem;color:#475569;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <span><strong>Preliminary round complete.</strong> Room A and Room B live controls are hidden — all prelim scores are retained.</span>
+                <button onclick="setPrelimControlsVisible(true)" style="background:none;border:1px solid #94a3b8;color:#475569;border-radius:5px;padding:3px 11px;font-size:0.76rem;font-weight:700;cursor:pointer;">Show prelim controls</button>
+            </div>
+
+            <!-- SF & FINALS LIVE CONTROL -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; flex-wrap:wrap; margin-top:16px;">
+            <div class="card" style="border-left-color:#0d9488; background:#f0fdfa; margin-bottom:0;">
+                <h2><span class="emoji">🥈</span> Semi-Final Live</h2>
+                <p style="color:#0f766e; margin-bottom:10px; font-size:0.85rem;">One scenario, five runs — best two to the Final.</p>
+                <select id="msActiveSFR1" onchange="setActiveSFTeam('R1',this.value)"
+                    style="width:100%; padding:9px 14px; border-radius:8px; border:2px solid #0d9488; font-size:0.9rem; font-weight:700; color:#134e4a; background:white; cursor:pointer;">
+                    <option value="">— Not set (show all runs) —</option>
+                    <option value="sf1">Run 1</option>
+                    <option value="sf2">Run 2</option>
+                    <option value="sf3">Run 3</option>
+                    <option value="sf4">Run 4</option>
+                    <option value="sf5">Run 5</option>
+                </select>
+                <div id="msSFR1Display" style="font-size:0.82rem; color:#0f766e; font-weight:600; margin-top:8px;"></div>
+            </div>
+            <div class="card" style="border-left-color:#d97706; background:#fffbeb; margin-bottom:0;">
+                <h2><span class="emoji">🏆</span> Final Live</h2>
+                <p style="color:#92400e; margin-bottom:10px; font-size:0.85rem;">Team currently on stage.</p>
+                <select id="msActiveFN" onchange="setActiveFNTeam(this.value)"
+                    style="width:100%; padding:9px 14px; border-radius:8px; border:2px solid #d97706; font-size:0.9rem; font-weight:700; color:#78350f; background:white; cursor:pointer;">
+                    <option value="">— Not set (show both) —</option>
+                    <option value="fin1">Finalist A</option>
+                    <option value="fin2">Finalist B</option>
+                </select>
+                <div id="msFNDisplay" style="font-size:0.82rem; color:#92400e; font-weight:600; margin-top:8px;"></div>
+            </div>
+            </div>
+
             <div class="card" style="border-left-color:#1e40af; background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);">
                 <h2><span class="emoji">📋</span> Investigations Console <span style="font-size:0.7rem;font-weight:700;color:#1d4ed8;background:white;border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;">ORGANISER ONLY</span></h2>
                 <p style="color:#1e40af; font-size:0.85rem; margin-bottom:14px;">
@@ -932,21 +972,8 @@
                 </p>
                 <select id="invConsoleCaseSelect" onchange="renderInvConsole(this.value)" style="width:100%; max-width:420px; padding:9px 14px; border-radius:8px; border:2px solid #1e40af; font-size:0.9rem; font-weight:700; color:#1e3a5f; background:white; cursor:pointer; margin-bottom:14px;">
                     <option value="">— Select a case —</option>
-                    <optgroup label="PALS Cases">
-                        <option value="P1">P1 · Cardiogenic Shock</option>
-                        <option value="P2">P2 · Septic Shock — Post-Cardiac Surgery</option>
-                        <option value="P3">P3 · Asthma + Tension Pneumothorax</option>
-                        <option value="P4">P4 · Refractory Septic Shock</option>
-                    </optgroup>
-                    <optgroup label="BLS Cases">
-                        <option value="B1">B1 · Near Drowning / VF Arrest — Hypothermia</option>
-                        <option value="B2">B2 · Torsades / Long QT Arrest</option>
-                        <option value="B3">B3 · Electrocution — VF + Hyperkalaemia</option>
-                        <option value="B4">B4 · Refractory Status Epilepticus</option>
-                    </optgroup>
-                    <optgroup label="Semi-Finals">
-                        <option value="R1">SF Round 1 · "The Quiet Head"</option>
-                        <option value="R2">SF Round 2 · "The Loud Wound"</option>
+                    <optgroup label="Semi-Final">
+                        <option value="R1">SF · "The Quiet Head"</option>
                     </optgroup>
                     <optgroup label="Finals">
                         <option value="F2">F2 · The Tense Abdomen</option>
@@ -987,7 +1014,7 @@
                     </div>
                     <div class="setting-item">
                         <label for="judgeBls2">Room B (BLS) — CRM Judge</label>
-                        <input type="text" id="judgeBls2" placeholder="Name" value="Dr Khang Gan" oninput="updateJudgeSheets()">
+                        <input type="text" id="judgeBls2" placeholder="Name" value="Dr Kang" oninput="updateJudgeSheets()">
                     </div>
                     <div class="setting-item">
                         <label for="debrieferPals">Room A — Debriefer</label>
@@ -1303,16 +1330,16 @@
             <div class="card" style="border-left-color:#0d9488; background:linear-gradient(135deg,#f0fdfa 0%,#ccfbf1 100%);">
                 <h2><span class="emoji">🏟️</span> Semi-Finals Scoring Pack</h2>
                 <p style="color:#0f766e; margin-bottom:12px; font-size:0.88rem;">
-                    Domain I: Clinical Judgement (40 pts) · Domain II: Crisis Resource Management (50 pts) · Domain III: Global Entrustment (10 pts) = <strong>100 pts total</strong>
+                    <strong>One scenario, run five times — best two advance to the Final.</strong> Domain I: Clinical Judgement (45 pts, less penalties) · Domain II: Crisis Resource Management (40 pts, five 0–8 anchors) · Domain III: Global Entrustment (15 pts) = <strong>100 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#0f766e;">
-                    ⚖️ <strong>Averaging rule:</strong> Three Clinical judges each score Domain I out of 40 independently — Domain I = the <strong>mean of all three</strong>. Three CRM judges score Domain II — Domain II = the <strong>mean of all three</strong>. Never sum. Never sum two sheets in a domain.
+                    ⚖️ <strong>Averaging rule:</strong> Two Clinical judges each score Domain I out of 45 independently — Domain I = the <strong>mean of both</strong>. Three CRM judges score Domain II — Domain II = the <strong>mean of all three</strong>. Never sum. Never sum two sheets in a domain.
                 </div>
                 <div style="background:#fff;border:1.5px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                     <span style="font-size:0.75rem;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.4px;">🔴 Live Scenario</span>
                     <select id="sfLiveRoundSelect" onchange="setActiveSFRound(this.value)" style="border:1.5px solid #99f6e4;border-radius:6px;padding:5px 10px;font-size:0.85rem;font-weight:700;">
-                        <option value="">— Not set (show both rounds) —</option>
-                        <option value="R1">Round 1 — "The Quiet Head"</option>
+                        <option value="">— Not set (show all runs) —</option>
+                        <option value="R1">"The Quiet Head" (the only scenario)</option>
                         <option value="R2">Round 2 — "The Loud Wound"</option>
                     </select>
                 </div>
@@ -1322,12 +1349,11 @@
                 <div id="sfMyRolePicker" style="background:#fffbeb;border:1.5px solid #fbbf24;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
                     <div style="font-size:0.8rem;font-weight:800;color:#92400e;margin-bottom:8px;">📱 Which judge are you on THIS device? (hides the other judges' sheets so no one sees each other's marks)</div>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                        <button onclick="sfSetMyRole('cj1')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ1 · Dr Aruna Ramesh</button>
-                        <button onclick="sfSetMyRole('cj2')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ2 · Dr Kang Gan</button>
-                        <button onclick="sfSetMyRole('cj3')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CJ3 · Dr Rana Chami</button>
-                        <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM1 · Dr Dinakar Pai</button>
-                        <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM2 · Dr Kiran Hebbar</button>
-                        <button onclick="sfSetMyRole('crm3')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM3 · Dr Durga Devi</button>
+                        <button onclick="sfSetMyRole('cj1')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical · Dr Aruna</button>
+                        <button onclick="sfSetMyRole('cj2')" style="background:#0d9488;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Clinical · Dr Kang</button>
+                        <button onclick="sfSetMyRole('crm1')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM · Dr Dinkar</button>
+                        <button onclick="sfSetMyRole('crm2')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM · Dr Kiran</button>
+                        <button onclick="sfSetMyRole('crm3')" style="background:#1d4ed8;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">CRM · Dr Rana</button>
                         <button id="sfShowAllBtn" onclick="sfSetMyRole('')" style="background:#6b7280;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">Show All (Chief/MC)</button>
                     </div>
                     <div id="sfMyRoleStatus" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
@@ -1336,72 +1362,67 @@
                 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px;">
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 1</div>
-                        <input id="sfJudgeCJ1" type="text" placeholder="Name" value="Dr Aruna Ramesh"
+                        <input id="sfJudgeCJ1" type="text" placeholder="Name" value="Dr Aruna"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 2</div>
-                        <input id="sfJudgeCJ2" type="text" placeholder="Name" value="Dr Khang Gan"
-                            style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
-                            oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
-                    </div>
-                    <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
-                        <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 3</div>
-                        <input id="sfJudgeCJ3" type="text" placeholder="Name" value="Dr Kiran Hebbar"
+                        <input id="sfJudgeCJ2" type="text" placeholder="Name" value="Dr Kang"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 1</div>
-                        <input id="sfJudgeCRM1" type="text" placeholder="Name" value="Dr Dinakar Pai"
+                        <input id="sfJudgeCRM1" type="text" placeholder="Name" value="Dr Dinkar"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 2</div>
-                        <input id="sfJudgeCRM2" type="text" placeholder="Name" value="Dr Durga Devi"
+                        <input id="sfJudgeCRM2" type="text" placeholder="Name" value="Dr Kiran"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                     <div style="background:white;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">CRM Judge 3</div>
-                        <input id="sfJudgeCRM3" type="text" placeholder="Name" value="Dr Rana Chami"
+                        <input id="sfJudgeCRM3" type="text" placeholder="Name" value="Dr Rana"
                             style="width:100%;border:none;font-size:0.9rem;font-weight:600;outline:none;background:transparent;"
                             oninput="saveToServer(this.id,this.value); sfSyncJudgeNames();">
                     </div>
                 </div>
-                <!-- Team names (4 semifinalists) -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <!-- Team names (5 semifinalists, one scenario) -->
+                <div style="display:grid;grid-template-columns:1fr;gap:12px;">
                     <div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:8px;padding:10px 14px;">
-                        <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Round 1 — "The Quiet Head"</div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">"The Quiet Head" — one scenario, five runs · best two to the Final</div>
+                        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
                             <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;">
-                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">TEAM A</div>
+                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">RUN 1</div>
                                 <input id="sfName_sf1" type="text" placeholder="Team name" value=""
                                     style="width:100%;border:none;font-size:0.88rem;font-weight:700;outline:none;background:transparent;"
                                     oninput="saveToServer(this.id,this.value); sfUpdateAllLabels();">
                             </div>
                             <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;">
-                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">TEAM B</div>
+                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">RUN 2</div>
                                 <input id="sfName_sf2" type="text" placeholder="Team name" value=""
                                     style="width:100%;border:none;font-size:0.88rem;font-weight:700;outline:none;background:transparent;"
                                     oninput="saveToServer(this.id,this.value); sfUpdateAllLabels();">
                             </div>
-                        </div>
-                    </div>
-                    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;">
-                        <div style="font-size:0.68rem;font-weight:700;color:#1d4ed8;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Round 2 — "The Loud Wound"</div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                             <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;">
-                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">TEAM C</div>
+                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">RUN 3</div>
                                 <input id="sfName_sf3" type="text" placeholder="Team name" value=""
                                     style="width:100%;border:none;font-size:0.88rem;font-weight:700;outline:none;background:transparent;"
                                     oninput="saveToServer(this.id,this.value); sfUpdateAllLabels();">
                             </div>
                             <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;">
-                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">TEAM D</div>
+                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">RUN 4</div>
                                 <input id="sfName_sf4" type="text" placeholder="Team name" value=""
+                                    style="width:100%;border:none;font-size:0.88rem;font-weight:700;outline:none;background:transparent;"
+                                    oninput="saveToServer(this.id,this.value); sfUpdateAllLabels();">
+                            </div>
+                            <div style="background:white;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;">
+                                <div style="font-size:0.65rem;font-weight:700;color:#374151;margin-bottom:3px;">RUN 5</div>
+                                <input id="sfName_sf5" type="text" placeholder="Team name" value=""
                                     style="width:100%;border:none;font-size:0.88rem;font-weight:700;outline:none;background:transparent;"
                                     oninput="saveToServer(this.id,this.value); sfUpdateAllLabels();">
                             </div>
@@ -1411,7 +1432,6 @@
             </div>
             <!-- Score cards built dynamically by buildSFScoreCards() -->
             <div id="sfR1Container"></div>
-            <div id="sfR2Container"></div>
         </div>
         <!-- ================================================================
         TAB 7: FINALS SCORING PACK
@@ -1424,7 +1444,7 @@
                     Single case (F2 &mdash; &ldquo;The Tense Abdomen&rdquo;), scored directly out of 200: Domain I — Clinical (90 pts) · Domain II — Human Factors (80 pts, five 0–16 anchors) · Domain III — Shared Reasoning with the Confederate (30 pts), minus penalties · single 20:00 clock <strong>200 pts total</strong>
                 </p>
                 <div style="background:#fff;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.82rem;color:#92400e;">
-                    ⚖️ <strong>Panel — the same six judges as the Semi-Finals</strong> (names are taken from the Semi-Finals panel). Three Clinical judges score Domain I independently — Domain I = the <strong>mean of the three</strong>, then penalties (recorded once by the Chief/MC). Three CRM judges score Domain II (five 0–16 anchors) — Domain II = the <strong>mean of the three</strong>. All six agree Domain III — Shared Reasoning (30) collectively after private notes. Never sum sheets within a domain.
+                    ⚖️ <strong>Panel — the same five judges as the Semi-Finals</strong> (names are taken from the Semi-Finals panel). Two Clinical judges score Domain I independently — Domain I = the <strong>mean of the three</strong>, then penalties (recorded once by the Chief/MC). Three CRM judges score Domain II (five 0–16 anchors) — Domain II = the <strong>mean of the three</strong>. All six agree Domain III — Shared Reasoning (30) collectively after private notes. Never sum sheets within a domain.
                 </div>
                 <!-- Team names -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -1600,185 +1620,6 @@
         // INVESTIGATIONS CONSOLE DATA
         // ================================================================
         const CASE_RESULTS = {
-            'B1': { results: [
-                { id:'bedside', icon:'🌡️', label:'Bedside — Core Temp / Glucose / Hb', type:'lab', rows:[
-                    ['Core temperature','33.0 °C (rising 0.2–0.3 °C/min once active rewarming under way)','36.5–37.5','crit'],
-                    ['Bedside glucose','98 mg/dL','70–110','norm'],['Point-of-care Hb','12.9 g/dL','11.5–15.5','norm']
-                ]},
-                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
-                    ['pH','7.05','7.35–7.45','crit'],['pCO₂','60 mmHg','35–45','crit'],
-                    ['HCO₃⁻','12 mEq/L','22–26','crit'],['BE','−16 mmol/L','−2 to +2','crit'],
-                    ['Lactate','9 mmol/L','< 2.2','crit'],['K⁺','4.5 mEq/L','3.5–5.0','norm']
-                ]},
-                { id:'vbg2', icon:'🔬', label:'VBG — Repeat Post-ROSC', type:'lab', rows:[
-                    ['pH','7.18','7.35–7.45','low'],['pCO₂','48 mmHg','35–45','high'],
-                    ['HCO₃⁻','16 mEq/L','22–26','low'],['BE','−10 mmol/L','−2 to +2','low'],
-                    ['Lactate','6 mmol/L','< 2.2','high'],['K⁺','4.1 mEq/L','3.5–5.0','norm']
-                ]},
-                { id:'fbc', icon:'🔬', label:'Full Blood Count', type:'lab', rows:[
-                    ['Hb','12.9 g/dL','11.5–15.5','norm'],['WCC','14.2 ×10⁹/L','4–11','high'],['Platelets','260 ×10⁹/L','150–400','norm']
-                ]},
-                { id:'lytes', icon:'🔬', label:'Electrolytes', type:'lab', rows:[
-                    ['Na⁺','138 mEq/L','135–145','norm'],['K⁺','4.5 mEq/L','3.5–5.0','norm'],
-                    ['Ionised Ca²⁺','1.15 mmol/L','1.1–1.3','norm'],['Mg²⁺','2 mg/dL','1.7–2.2','norm']
-                ]},
-                { id:'renal', icon:'🔬', label:'Renal Function', type:'lab', rows:[
-                    ['Urea','22 mg/dL','7–20','high'],['Creatinine','0.5 mg/dL','0.3–0.7','norm']
-                ]},
-                { id:'coag', icon:'🔬', label:'Coagulation Profile', type:'lab', rows:[
-                    ['PT','15.8 s','11–13.5','high'],['APTT','38 s','25–35','high'],['INR','1.3','0.8–1.1','high — mildly deranged (hypothermia)']
-                ]},
-                { id:'trop', icon:'🔬', label:'Qualitative Troponin', type:'lab', rows:[
-                    ['Troponin','Positive — from the arrest, not a primary cardiac event','Negative','high']
-                ]},
-                { id:'lft', icon:'🔬', label:'Liver Function', type:'lab', rows:[
-                    ['Bilirubin','1.4 mg%','0.3–1.2','high'],['SGPT','45 U/L','7–40','high'],['SGOT','56 U/L','8–40','high']
-                ]},
-                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
-                  findings:'<img src="static/images/b1-cxr.png" style="max-width:100%;border-radius:8px;margin-bottom:8px;display:block;" alt="Chest X-Ray"> Diffuse bilateral infiltrates, consistent with aspiration.',
-                  flag:'high', note:'CT head deferred until haemodynamically stable for transfer — Chief states it is not safe to move her for a scan right now.' },
-                { id:'ecg', icon:'📈', label:'Cardiac Monitor / 12-Lead', type:'rhythm',
-                  rhythm:'Fine VF → organised rhythm at ROSC (~5:30). Post-ROSC 12-lead: sinus with Osborn (J) waves — classic hypothermia', rate:'—',
-                  action:'⚡ SHOCKABLE — Defibrillate 2 J/kg FIRST (EMS already gave Adrenaline ×2). Not dead until warm and dead.', flag:'crit' }
-            ]},
-            'B2': { results: [
-                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
-                    ['pH','7.12','7.35–7.45','crit'],['K⁺','2.5 mEq/L','3.5–5.0','crit'],
-                    ['iCa','0.8 mmol/L','1.1–1.3','crit'],['Lactate','6 mmol/L','< 2.2','crit'],['Bedside glucose','92 mg/dL','70–110','norm']
-                ]},
-                { id:'vbg2', icon:'🔬', label:'VBG — Post Mg/K Correction', type:'lab', rows:[
-                    ['pH','7.28','7.35–7.45','low'],['K⁺','3.8 mEq/L','3.5–5.0','norm'],
-                    ['iCa','1.1 mmol/L','1.1–1.3','norm'],['Lactate','3 mmol/L','< 2.2','high']
-                ]},
-                { id:'labs', icon:'🔬', label:'Labs — Mg / FBC / Renal / Troponin', type:'lab', rows:[
-                    ['Magnesium','0.5 mmol/L — low, a contributing cause','0.7–1.0','crit'],['Full blood count','Unremarkable','—','norm'],
-                    ['Renal function','Normal','—','norm'],['Troponin','Mildly elevated post-arrest','—','high']
-                ]},
-                { id:'priorecg', icon:'📄', label:'Prior ECG (old records, on request)', type:'imaging',
-                  findings:'QTc 480 ms — known prolonged QT. Post-ROSC 12-lead: sinus rhythm, QTc still prolonged at 460 ms.',
-                  flag:'high', note:'Chest X-ray normal. CT head not indicated.' },
-                { id:'ecg', icon:'📈', label:'Cardiac Monitor', type:'rhythm',
-                  rhythm:'Torsades de Pointes — sinusoidal twisting polymorphic VT → organised sinus at ROSC', rate:'Polymorphic',
-                  action:'⚡ SHOCKABLE (unsynchronised 2 J/kg) + Magnesium 50 mg/kg IV — BOTH required. AVOID Amiodarone (prolongs QT).', flag:'crit' }
-            ]},
-            'B3': { results: [
-                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
-                    ['pH','7.02','7.35–7.45','crit'],['K⁺','7.5 mEq/L','3.5–5.0','crit'],
-                    ['HCO₃⁻','10 mEq/L','22–26','crit'],['Lactate','8 mmol/L','< 2.2','crit'],
-                    ['Bedside glucose','105 mg/dL','70–110','norm'],['POC Hb','13.5 g/dL','11.5–15.5','norm']
-                ]},
-                { id:'vbg2', icon:'🔬', label:'VBG — Post Ca/Bicarb', type:'lab', rows:[
-                    ['pH','7.15','7.35–7.45','crit'],['K⁺','5.8 mEq/L','3.5–5.0','high'],
-                    ['HCO₃⁻','14 mEq/L','22–26','low'],['Lactate','5 mmol/L','< 2.2','high']
-                ]},
-                { id:'labs', icon:'🔬', label:'Labs — CK / Renal / Coag / Troponin', type:'lab', rows:[
-                    ['Creatine kinase','~45,000 U/L — rhabdomyolysis','< 200','crit'],['Renal function','Creatinine rising','—','high'],
-                    ['Coagulation','Normal','—','norm'],['Troponin','Mildly elevated — electrical injury, not a primary cardiac event','—','high']
-                ]},
-                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
-                  findings:'Normal — no associated thoracic trauma.',
-                  flag:'norm', note:'CT head not indicated unless trauma signs present.' },
-                { id:'ecg', icon:'📈', label:'Cardiac Monitor / 12-Lead', type:'rhythm',
-                  rhythm:'Coarse VF → sinus at ROSC. 12-lead: peaked T waves pre-Calcium, resolving post-Calcium', rate:'—',
-                  action:'⚡ SHOCKABLE — Defibrillate 2 J/kg immediately + Calcium gluconate 50 mg/kg for K⁺ 7.5. No succinylcholine for RSI.', flag:'crit' }
-            ]},
-            'B4': { results: [
-                { id:'bedside', icon:'🌡️', label:'Bedside Glucose', type:'lab', rows:[
-                    ['Glucose','96 mg/dL — excludes hypoglycaemic seizure','70–110','norm']
-                ]},
-                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
-                    ['pH','7.18','7.35–7.45','low'],['pCO₂','58 mmHg (hypoventilation)','35–45','high'],
-                    ['HCO₃⁻','20 mEq/L','22–26','low'],['Lactate','4 mmol/L','< 2.2','high']
-                ]},
-                { id:'labs', icon:'🔬', label:'Labs — FBC / Electrolytes / Coag', type:'lab', rows:[
-                    ['Na⁺','138 mEq/L','135–145','norm'],['K⁺','4.0 mEq/L','3.5–5.0','norm'],
-                    ['Full blood count','Mild leukocytosis','—','high'],['Renal / liver / coagulation','Normal','—','norm']
-                ]},
-                { id:'ct', icon:'🖥️', label:'CT Head — If Requested', type:'imaging',
-                  findings:'Not yet performed — deferred until stabilised for transfer. Chief states it is unsafe to move her for a scan currently.',
-                  flag:'crit', note:'⚠️ Unequal pupils (R 5 mm > L 3 mm) + hypertension with relative bradycardia = raised ICP until proven otherwise. Osmotherapy + head up 30° + Ketamine RSI (never Propofol).' },
-                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
-                  rhythm:'Sinus rhythm throughout — rate changes reflect the Cushing response (bradycardia at the herniation event)', rate:'130 → 60 at herniation',
-                  action:'Chest X-ray normal. Herniation event at 5:30 is scripted — fires for every team.', flag:'high' }
-            ]},
-            'P1': { results: [
-                { id:'vbg', icon:'🔬', label:'VBG / Bedside', type:'lab', rows:[
-                    ['pH','7.22','7.35–7.45','low'],['Lactate','5 mmol/L','< 2.2','crit'],
-                    ['HCO₃⁻','16 mEq/L','22–26','low'],['Bedside glucose','88 mg/dL','70–110','norm']
-                ]},
-                { id:'cardiac', icon:'🔬', label:'Cardiac Biomarkers / Labs', type:'lab', rows:[
-                    ['Troponin','Markedly elevated','< 0.05','crit'],['BNP','Markedly elevated','< 100','crit'],
-                    ['FBC','Mild leukocytosis, viral picture','—','high'],['CRP','Mildly raised','< 5','high'],
-                    ['Renal function','Mildly impaired — poor perfusion','—','high'],['Coagulation','Normal','—','norm']
-                ]},
-                { id:'echo', icon:'🫀', label:'Point-of-Care Echo', type:'imaging',
-                  findings:'Severely impaired LV function, EF ~15%. No pericardial effusion.',
-                  flag:'crit', note:'⚡ Cardiogenic shock confirmed — Adrenaline inotrope 0.05–0.1 mcg/kg/min, NOT a fluid bolus.' },
-                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
-                  findings:'Cardiomegaly with pulmonary oedema.',
-                  flag:'high', note:'Do NOT give a fluid bolus — cardiogenic pulmonary oedema. CT not indicated.' },
-                { id:'ecg', icon:'📈', label:'12-Lead / Monitor', type:'rhythm',
-                  rhythm:'Initial: sinus tachycardia, low-voltage QRS, diffuse T-wave inversion. Later: wide-complex VT at 220 → pulseless at ~5:30 (scripted)', rate:'170 → 220',
-                  action:'⚡ Pulseless VT here is ORGANISED — SYNCHRONISED cardioversion 0.5 J/kg, NOT unsynchronised 2 J/kg.', flag:'crit' }
-            ]},
-            'P2': { results: [
-                { id:'bedside', icon:'🩸', label:'Bedside Glucose', type:'lab', rows:[
-                    ['Glucose — initial','28 mg/dL (CRITICAL)','70–110','crit'],['Glucose — repeat post-treatment','110 mg/dL','70–110','norm']
-                ]},
-                { id:'vbg', icon:'🔬', label:'VBG / Sodium', type:'lab', rows:[
-                    ['pH','7.24','7.35–7.45','low'],['Lactate','4.5 mmol/L','< 2.2','high'],
-                    ['HCO₃⁻','17 mEq/L','22–26','low'],['Na⁺','122 mmol/L','135–145','crit'],['K⁺','3.6 mEq/L','3.5–5.0','norm']
-                ]},
-                { id:'inflam', icon:'🔬', label:'Infection Workup', type:'lab', rows:[
-                    ['Full blood count','Leukocytosis with left shift','—','crit'],['CRP','Markedly elevated','< 5','crit'],
-                    ['Blood cultures','Sent, pending','—','high'],['Wound swab (if taken)','Pending','—','high'],['Renal function','Mildly impaired','—','high']
-                ]},
-                { id:'wound', icon:'🩹', label:'Surgical Site — On Examination', type:'imaging',
-                  findings:'Erythema and discharge consistent with wound infection. CXR: post-sternotomy changes, no acute infiltrate.',
-                  flag:'crit', note:'⚠️ Source identified — cultures THEN Meropenem + Vancomycin. CT not indicated acutely.' },
-                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
-                  rhythm:'Wide-QRS tachycardia — rate-related aberrancy on sinus tachycardia, narrowing as rate/electrolytes correct', rate:'165',
-                  action:'🚫 NOT VT — do NOT cardiovert. Treat glucose 28 and Na 122; the rhythm narrows as they correct.', flag:'crit' }
-            ]},
-            'P3': { results: [
-                { id:'vbg1', icon:'🔬', label:'VBG — Pre-Intubation', type:'lab', rows:[
-                    ['pH','7.22','7.35–7.45','low'],['pCO₂','68 mmHg — rising, ominous in asthma','35–45','crit'],
-                    ['HCO₃⁻','22 mEq/L','22–26','norm'],['Lactate','3 mmol/L','< 2.2','high'],['Bedside glucose','98 mg/dL','70–110','norm']
-                ]},
-                { id:'vbg2', icon:'🔬', label:'VBG — Post-Decompression', type:'lab', rows:[
-                    ['pH','7.30','7.35–7.45','low'],['pCO₂','52 mmHg','35–45','high']
-                ]},
-                { id:'labs', icon:'🔬', label:'Labs', type:'lab', rows:[
-                    ['Full blood count','Mild eosinophilia','—','high'],['Electrolytes','Normal','—','norm']
-                ]},
-                { id:'cxr', icon:'🩻', label:'Chest X-Ray — Post-Decompression', type:'imaging',
-                  findings:'Right chest drain in situ, lung re-expanded, bilateral hyperinflation consistent with asthma.',
-                  flag:'high', note:'⚠️ At the 5:30 event: decompress BEFORE imaging — needle 2nd ICS MCL right side, then drain. CT not indicated.' },
-                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
-                  rhythm:'Sinus tachycardia throughout, no arrhythmia. SpO₂ trend shows pre/post-decompression recovery', rate:'150',
-                  action:'Rising airway pressure + falling SpO₂ + silent right chest post-intubation = tension pneumothorax until proven otherwise.', flag:'crit' }
-            ]},
-            'P4': { results: [
-                { id:'vbg1', icon:'🔬', label:'VBG — On Arrival', type:'lab', rows:[
-                    ['pH','7.05','7.35–7.45','crit'],['HCO₃⁻','9 mEq/L','22–26','crit'],
-                    ['Lactate','9.2 mmol/L','< 2.2','crit'],['K⁺','4.8 mEq/L','3.5–5.0','norm'],['Bedside glucose','105 mg/dL','70–110','norm']
-                ]},
-                { id:'vbg2', icon:'🔬', label:'VBG — Repeat Post-Resuscitation', type:'lab', rows:[
-                    ['pH','7.15','7.35–7.45','crit'],['Lactate','6.5 mmol/L','< 2.2','crit']
-                ]},
-                { id:'labs', icon:'🔬', label:'Labs — Sepsis Panel', type:'lab', rows:[
-                    ['Full blood count','Leukocytosis or leukopenia with left shift; thrombocytopenia','—','crit'],
-                    ['CRP','Markedly elevated','< 5','crit'],['Coagulation','Deranged — early DIC picture','—','crit'],
-                    ['Blood cultures','Sent','—','high'],['Renal function','Impaired — AKI from shock','—','high'],['Liver function','Mildly deranged','—','high']
-                ]},
-                { id:'cxr', icon:'🩻', label:'Chest X-Ray', type:'imaging',
-                  findings:'Normal, or mild pulmonary oedema from fluid resuscitation.',
-                  flag:'norm', note:'CT not indicated acutely. The rash IS the diagnosis: non-blanching purpura = meningococcal septicaemia — Ceftriaxone after cultures.' },
-                { id:'ecg', icon:'📈', label:'Continuous Monitor', type:'rhythm',
-                  rhythm:'Sinus tachycardia throughout; brief hypotensive dip at induction (peri-intubation crash, scripted ~5:30)', rate:'175',
-                  action:'⚠️ Push-dose Epinephrine 10 mcg/kg at the bedside BEFORE induction — administer within 30 s of the crash.', flag:'crit' }
-            ]},
-            // ── SEMI-FINALS ─────────────────────────────────
             'R1': { results: [
                 { id:'ananya_bloods', icon:'🔬', label:'Ananya — Trauma Bloods', type:'lab', rows:[
                     ['Hb','11.8 g/dL','11.5–15.5','norm'],['Hct','34%','35–45','low'],
@@ -1796,39 +1637,6 @@
                     ['Platelets','210 ×10³/μL','150–400','norm'],['Glucose','82 mg/dL','70–110','norm'],
                     ['Na⁺','138 mEq/L','135–145','norm'],['Group','O Rh+','—','norm']
                 ]}
-            ]},
-            'R2': { results: [
-                { id:'meera_fast', icon:'🫀', label:'Meera — FAST Ultrasound', type:'imaging',
-                  findings:'POSITIVE — significant free fluid: Morrison\'s pouch (right perihepatic), splenorenal recess (left upper quadrant), pelvis. Spleen poorly visualised — grade IV laceration suspected. No pericardial effusion.',
-                  flag:'crit', note:'⚡ Haemodynamically UNSTABLE + Positive FAST = Theatre / IR — NOT CT. Do not send to scanner.' },
-                { id:'meera_bloods', icon:'🔬', label:'Meera — Trauma Bloods', type:'lab', rows:[
-                    ['Hb','10.1 → 8.2 g/dL','11.5–15.5','crit'],['Hct','30% → 24%','35–45','crit'],
-                    ['Platelets','185 ×10³/μL','150–400','norm'],['INR','1.1','0.9–1.2','norm'],
-                    ['Na⁺','136 mEq/L','135–145','norm'],['Group','O Rh−','—','norm']
-                ]},
-                { id:'mtp', icon:'🩸', label:'Massive Transfusion Protocol', type:'other',
-                  findings:'O-negative blood: 2 units available immediately in fridge. MTP cooler (1:1:1 — PRBC:FFP:Platelets) activated on request. TXA 15 mg/kg IV over 10 min.',
-                  flag:'high', note:'Activate MTP early. TXA within 3 hours of injury. No further crystalloid — blood products only.' },
-                { id:'diya_assess', icon:'🟢', label:'Diya — Clinical Assessment', type:'imaging',
-                  findings:'One vomit and brief drowsiness at 4:30, resolving — GCS 15 on reassessment. HR 130→116, BP 98/62, SpO2 99%. Moving all limbs. Scalp laceration with boggy subgaleal haematoma, stable in size — no skull fracture, no LOC. No abdominal mechanism — FAST not indicated. If imaging is obtained: normal.',
-                  flag:'norm', note:'Apply a paediatric head-injury decision rule ALOUD after the 4:30 vomit — reflex CT and unreasoned dismissal are both failure modes. Scalp wound: direct pressure then staples/tissue adhesive.' }
-            ]},
-            // ── FINALS ──────────────────────────────────────
-            'F1': { results: [
-                { id:'abg', icon:'🔬', label:'ABG (30 min old)', type:'lab', rows:[
-                    ['pH','7.28','7.35–7.45','low'],['PaCO₂','58 mmHg','35–45','high'],
-                    ['PaO₂','55 mmHg','80–100','crit'],['HCO₃⁻','25 mEq/L','22–26','norm'],
-                    ['OI (FiO2×MAP/PaO2)','32','< 4 = normal','crit'],['FiO2','0.85','—','crit']
-                ]},
-                { id:'vent', icon:'⚙️', label:'Ventilator Parameters', type:'imaging',
-                  findings:'Rate 24/min · Vt 110 mL (5.5 mL/kg) · PEEP 14 · PIP 34 · Pplat 34 cmH₂O · ΔP 20 cmH₂O · Ti 0.8s · MAP 21 · FiO2 0.85.',
-                  flag:'crit', note:'⚠️ INJURIOUS VENTILATION: Pplat 34 (target ≤28) · ΔP 20 (target ≤15) · MAP 21 → HIGH mean airway pressure driving RV failure. Do NOT escalate PEEP.' },
-                { id:'cvp', icon:'📈', label:'CVP Trend + Haemodynamics', type:'rhythm',
-                  rhythm:'CVP: 8 → 16 cmH₂O (RISING as BP FALLS)', rate:'HR 145 · BP 88/50 → 65/35 · SpO₂ 82–84%',
-                  action:'⚡ RV FAILURE: rising CVP + falling BP + high MAP = obstructive/RV-failure shock. NOT septic shock.', flag:'crit' },
-                { id:'pocus', icon:'🫀', label:'POCUS Clips (available on request)', type:'imaging',
-                  findings:'PSAX view: D-shaped interventricular septum (septal bowing → obstructive physiology). Apical 4-chamber: severely dilated RV (RV:LV ratio >1). M-mode TAPSE: 8 mm (severely impaired, normal >17 mm). IVC: dilated, non-collapsing. LV: small, underfilled.',
-                  flag:'crit', note:'⚡ Cor pulmonale confirmed. Unload the lung FIRST (reduce MAP/PEEP) → then iNO 20ppm → Epinephrine 0.05–0.1 mcg/kg/min. Milrinone NO BOLUS.' }
             ]},
             'F2': { results: [
                 { id:'iap', icon:'📊', label:'Intra-Abdominal Pressure (IAP)', type:'lab', rows:[
@@ -2108,12 +1916,27 @@
         // ================================================================
         // 3. HELPERS
         // ================================================================
-        function getDisplayName(teamId) {
+        function getTeamGroup(teamId) {
+            const n = parseInt(String(teamId).replace('T',''), 10);
+            if (!n) return '';
+            if (n <= 4) return 'RED';
+            if (n <= 8) return 'GREEN';
+            if (n <= 12) return 'BLUE';
+            if (n <= 16) return 'YELLOW';
+            return '';
+        }
+
+        function getTeamName(teamId) {
             const input = document.getElementById(`team_name_${teamId}`);
             if (input && input.value.trim() !== '') {
                 return input.value.trim();
             }
             return teamId;
+        }
+
+        function getDisplayName(teamId) {
+            const name = getTeamName(teamId);
+            return name === teamId ? teamId : `${teamId} · ${name}`;
         }
         // Domain weighting is now fixed per case type (see caseWeighting()) — no longer user-configurable.
         function getTeamList() {
@@ -3456,14 +3279,14 @@
             const el = document.getElementById('liveTeamsPalsDisplay');
             if (!el) return;
             if (!activeCasePals) { el.textContent = ''; return; }
-            const teams = caseTeams[activeCasePals] || [];
+            const teams = getTeamList();
             el.textContent = `Teams: ${teams.map(t => getDisplayName(t)).join(' · ')}`;
         }
         function updateLiveTeamsBlsDisplay() {
             const el = document.getElementById('liveTeamsBlsDisplay');
             if (!el) return;
             if (!activeCaseBls) { el.textContent = ''; return; }
-            const teams = caseTeams[activeCaseBls] || [];
+            const teams = getTeamList();
             el.textContent = `Teams: ${teams.map(t => getDisplayName(t)).join(' · ')}`;
         }
 
@@ -3473,12 +3296,13 @@
             if (!control || !select) return;
             if (!activeCasePals) { control.style.display = 'none'; return; }
             control.style.display = '';
-            const teams = caseTeams[activeCasePals] || [];
+            const teams = getTeamList();
             select.innerHTML = '<option value="">— Select performing team —</option>';
             teams.forEach(t => {
                 const opt = document.createElement('option');
                 opt.value = t;
-                opt.textContent = getDisplayName(t);
+                const g = getTeamGroup(t);
+                opt.textContent = getDisplayName(t) + (g ? ` (${g})` : '');
                 if (t === activeTeamPals) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -3490,12 +3314,13 @@
             if (!control || !select) return;
             if (!activeCaseBls) { control.style.display = 'none'; return; }
             control.style.display = '';
-            const teams = caseTeams[activeCaseBls] || [];
+            const teams = getTeamList();
             select.innerHTML = '<option value="">— Select performing team —</option>';
             teams.forEach(t => {
                 const opt = document.createElement('option');
                 opt.value = t;
-                opt.textContent = getDisplayName(t);
+                const g = getTeamGroup(t);
+                opt.textContent = getDisplayName(t) + (g ? ` (${g})` : '');
                 if (t === activeTeamBls) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -3652,16 +3477,13 @@
                     if (key === 'active_sf_team_r1') {
                         if (value !== activeSFTeamR1) {
                             activeSFTeamR1 = value;
+                            msSyncLiveSelectors();
                             buildSFRoundCard('R1');
                         }
                         continue;
                     }
-                    // Active SF Round 2 live team
+                    // Legacy Round-2 live-team key — single-scenario format, no longer used
                     if (key === 'active_sf_team_r2') {
-                        if (value !== activeSFTeamR2) {
-                            activeSFTeamR2 = value;
-                            buildSFRoundCard('R2');
-                        }
                         continue;
                     }
                     // Live SF scenario (round) — organiser controls which round shows
@@ -3671,7 +3493,7 @@
                     }
                     // Live Finals team
                     if (key === 'active_fn_team') {
-                        if (value !== activeFNTeam) { activeFNTeam = value; buildFNCaseCard('F2'); needsFNRecalc = true; }
+                        if (value !== activeFNTeam) { activeFNTeam = value; msSyncLiveSelectors(); buildFNCaseCard('F2'); needsFNRecalc = true; }
                         continue;
                     }
                     // SF submitted flags
@@ -3855,94 +3677,53 @@
         const SF_ROUNDS = {
             R1: {
                 label: 'Round 1 — "The Quiet Head"',
-                patients: 'Ananya Rao (7y, 24 kg) · Vihaana Rao (18m, 10 kg)',
+                patients: 'Ananya Rao (7y, 24 kg) · Vihaan Rao (18m, 10 kg)',
                 summary: 'Two siblings arrive after a road traffic accident — one initially appears calm, the other is visibly distressed but stable. The team must manage both simultaneously and correctly prioritise as the picture evolves.',
+                penalties: [
+                    { k:'sp1', label:'Stage 5 (rescue endgame) entered', pts:-10 },
+                    { k:'sp2', label:'Failure to maintain C-spine precautions in Ananya', pts:-4 },
+                    { k:'sp3', label:'Transferring Ananya to CT without securing the airway or an explicit stability plan', pts:-5 }
+                ],
                 tiebreaker: 'You have one CT scanner and one theatre. Justify the order in which you would use them for these two children, and state what would change that order.',
                 clinical: {
-                    A: { title: 'A. Initial dual-patient assessment and prioritisation', max: 8,
+                    A: { title: 'A. Initial dual-patient assessment & prioritisation', max: 9,
                          note: 'Scored on recognition of handover and mechanism cues — not Stage 1 examination findings, which are deliberately reassuring.',
                          items: [
                             { k:'a1', label:'Rapidly assesses both children during the Golden Minute', max:2 },
                             { k:'a2', label:'Organised ABCDE on both children', max:2 },
                             { k:'a3', label:'Maintains cervical-spine protection for Ananya', max:2 },
-                            { k:'a4', label:"Recognises Ananya's high-risk handover history (LOC, vomiting, increasing sleepiness) while continuing Vihaana's care", max:2 }
+                            { k:'a4', label:"Recognises mechanism-based red flags for Ananya from the handover (LOC, vomiting, increasing sleepiness) while continuing Vihaan's care", max:2 },
+                            { k:'a5', label:'Verbalises an explicit triage decision with a stated reason', max:1 }
                          ]
                     },
-                    B: { title: 'B. Ananya — evolving traumatic brain injury', max: 16,
+                    B: { title: 'B. Ananya — evolving traumatic brain injury', max: 18,
                          note: 'Outside CT (90 min post-injury) is genuinely normal — an early EDH may not yet be visible. Tested behaviour: refusing to anchor on the normal report and acting on the clinical trend.',
                          items: [
                             { k:'b1', label:'Baseline GCS and pupils documented', max:2 },
-                            { k:'b2', label:'Repeats neurological examination; identifies the GCS trend', max:2 },
-                            { k:'b3', label:"Does not anchor on the genuinely normal early outside CT — recognises that an extradural haematoma imaged very early may not yet be visible, and acts on the evolving GCS and pupil trend", max:2 },
+                            { k:'b2', label:'Repeats neurological examination and identifies the GCS trend', max:3 },
+                            { k:'b3', label:"Recognises the lucid interval / expanding intracranial lesion and is not deflected by the outside CT report", max:3 },
                             { k:'b4', label:'Recognises pupillary asymmetry (unequal and fixed) or other raised-ICP signs', max:2 },
                             { k:'b5', label:'Neuroprotection bundle: oxygenation, normotension, head up ~30° neutral neck, normocapnia, 3% hypertonic saline 3–5 mL/kg', max:4 },
                             { k:'b6', label:'Timely airway management with C-spine protection', max:2 },
                             { k:'b7', label:'Activates neurosurgery; arranges urgent imaging with explicit safe-transfer plan', max:2 }
                          ]
                     },
-                    C: { title: 'C. Vihaana — polytrauma, proportionate response', max: 8,
-                         note: 'Vihaana is not in progressive haemorrhagic shock. His tachycardia is multifactorial (pain, fracture, mild hypovolaemia). Score calibration, never restraint.',
+                    C: { title: 'C. Vihaan — the distractor patient', max: 9,
+                         note: 'Vihaan is not in progressive haemorrhagic shock. His tachycardia is multifactorial (pain, fracture, mild hypovolaemia). Score calibration, never restraint.',
                          items: [
                             { k:'c1', label:'Trauma survey: abdomen, chest and limb examination', max:2 },
                             { k:'c2', label:'Analgesia, splintage and monitoring', max:2 },
-                            { k:'c3', label:'Calibrated response to trace FAST — surgical consultation obtained, serial examination planned', max:2 },
+                            { k:'c3', label:'Calibrated response to the trace FAST finding: surgical consultation and serial examination, neither dismissed nor escalated to MTP', max:3 },
                             { k:'c4', label:'Appropriate paediatric surgery / orthopaedic referral and observation plan', max:2 }
                          ]
                     },
-                    D: { title: 'D. Seizure, reassessment and disposition', max: 8,
+                    D: { title: 'D. Acute event, reassessment & disposition', max: 9,
                          note: 'Score what the team did from where they were. A team in Stage 3B who recognises it and stabilises correctly earns the section marks.',
                          items: [
-                            { k:'d1', label:'Manages seizure: airway, O₂, suction, benzodiazepine, AED loading dose', max:2 },
+                            { k:'d1', label:'Manages the scripted seizure: airway, oxygen, suction, benzodiazepine, AED (scripted — not preventable)', max:3 },
                             { k:'d2', label:'Reassesses Ananya after the event; modifies management', max:2 },
-                            { k:'d3', label:'Maintains ongoing reassessment of Vihaanaa', max:2 },
-                            { k:'d4', label:'Clear final disposition and SBAR handover for both children', max:2 }
-                         ]
-                    }
-                }
-            },
-            R2: {
-                label: 'Round 2 — "The Loud Wound"',
-                patients: 'Meera Iyer (8y, 26 kg) · Diya Iyer (3y, 14 kg)',
-                summary: 'Two siblings arrive after trauma — one has a dramatic but low-acuity visible injury, the other appears quiet but is deteriorating. The team must avoid being drawn to the more visually striking presentation.',
-                tiebreaker: 'You had a positive FAST in a child with a falling pulse pressure. Defend going to theatre rather than CT — and state what finding would have made CT the right call.',
-                clinical: {
-                    A: { title: 'A. Initial dual-patient assessment and prioritisation', max: 8,
-                         note: 'Scored on recognition of handover and mechanism cues — not Stage 1 vitals alone.',
-                         items: [
-                            { k:'a1', label:'Rapidly assesses both children during the Golden Minute', max:2 },
-                            { k:'a2', label:'Organised ABCDE on both children', max:2 },
-                            { k:'a3', label:'Maintains cervical-spine protection for Diya', max:2 },
-                            { k:'a4', label:"Recognises Meera's mechanism-based red flags (seatbelt sign, quiet demeanour, thigh injury) despite reassuring pre-hospital impression", max:2 }
-                         ]
-                    },
-                    B: { title: 'B. Meera — evolving haemorrhagic shock', max: 16,
-                         note: 'Permissive hypotension is credited if explicitly justified but never required. Do not mark down a team targeting normal perfusion.',
-                         items: [
-                            { k:'b1', label:'Baseline vitals and perfusion documented — pulse pressure, capillary refill, mental status', max:2 },
-                            { k:'b2', label:'Repeats assessment; identifies the shock trend — rising HR, narrowing pulse pressure', max:2 },
-                            { k:'b3', label:'Recognises occult intra-abdominal haemorrhage; positive FAST in unstable child = source control, not CT', max:2 },
-                            { k:'b4', label:'Recognises subtle early decompensation — drowsiness, reduced pain reporting, mottling', max:2 },
-                            { k:'b5', label:'Haemorrhage-control bundle: active warming, TXA, blood-first resuscitation, avoids crystalloid-only strategy', max:4 },
-                            { k:'b6', label:'Timely airway management as shock progresses', max:2 },
-                            { k:'b7', label:'Activates MTP and surgical / IR review; plans urgent definitive care', max:2 }
-                         ]
-                    },
-                    C: { title: 'C. Diya — visible but stable distractor', max: 8,
-                         note: 'At 4:30 Diya vomits once and is briefly drowsy, then settles. Two failure modes: reflex CT that takes the team with her, or dismissing the episode without applying any rule. FAST is not indicated (no abdominal mechanism).',
-                         items: [
-                            { k:'c1', label:'Trauma survey: full exposure, scalp and neurological examination', max:2 },
-                            { k:'c2', label:'Analgesia, wound pressure dressing and monitoring — without diverting the team from Meera', max:2 },
-                            { k:'c3', label:'At the 4:30 vomit and brief drowsiness: explicitly applies a paediatric head-injury decision rule and states the conclusion — neither reflex CT nor unreasoned dismissal', max:2 },
-                            { k:'c4', label:'Appropriate wound closure and disposition plan with safety-net advice', max:2 }
-                         ]
-                    },
-                    D: { title: 'D. Acute event, reassessment and disposition', max: 8,
-                         note: 'Score what the team did from where they were.',
-                         items: [
-                            { k:'d1', label:'Manages haematemesis with falling BP; escalates access and blood products', max:2 },
-                            { k:'d2', label:'Reassesses Meera after the event; modifies management', max:2 },
-                            { k:'d3', label:'Maintains ongoing reassessment of Diya', max:2 },
-                            { k:'d4', label:'Clear final disposition and SBAR handover for both children', max:2 }
+                            { k:'d3', label:'Maintains ongoing reassessment of Vihaan while Ananya is stabilised', max:2 },
+                            { k:'d4', label:'Clear final disposition and structured SBAR handover for both children', max:2 }
                          ]
                     }
                 }
@@ -3988,20 +3769,20 @@
         ];
 
         const SF_GLOBAL_ANCHORS = [
-            {v:0,  lbl:'Unsafe',      desc:'Major threats missed; team places one or both patients at risk'},
-            {v:2,  lbl:'Poor',        desc:'Fragmented assessment, delayed priorities, substantial prompting required'},
-            {v:4,  lbl:'Borderline',  desc:'Basic care delivered but inconsistent leadership, reassessment or anticipation'},
-            {v:6,  lbl:'Competent',   desc:'Safe and generally organised management with some delays or omissions'},
-            {v:8,  lbl:'Very good',   desc:'Timely priorities, strong teamwork and effective reassessment with minor limitations'},
-            {v:10, lbl:'Outstanding', desc:'Seamless dual-patient leadership, anticipatory decisions and consistently safe care'}
+            {v:0,  lbl:'Unsafe',      desc:'Major threats missed; one or both patients placed at risk'},
+            {v:3,  lbl:'Poor',        desc:'Fragmented assessment, delayed priorities, substantial prompting'},
+            {v:6,  lbl:'Borderline',  desc:'Basic care delivered; inconsistent leadership, reassessment or anticipation'},
+            {v:9,  lbl:'Competent',   desc:'Safe, generally organised, with some delays or omissions'},
+            {v:12, lbl:'Very good',   desc:'Timely priorities, strong teamwork, effective reassessment, minor limitations'},
+            {v:15, lbl:'Outstanding', desc:'Seamless dual-patient leadership, anticipatory decisions, consistently safe care'}
         ];
 
         function sfGetName(t) {
             return document.getElementById('sfName_' + t)?.value?.trim() || t.toUpperCase();
         }
         function sfGetJudge(j) {
-            const map = {cj1:'sfJudgeCJ1', cj2:'sfJudgeCJ2', cj3:'sfJudgeCJ3', crm1:'sfJudgeCRM1', crm2:'sfJudgeCRM2', crm3:'sfJudgeCRM3'};
-            const fallback = {cj1:'Clinical J1', cj2:'Clinical J2', cj3:'Clinical J3', crm1:'CRM J1', crm2:'CRM J2', crm3:'CRM J3'};
+            const map = {cj1:'sfJudgeCJ1', cj2:'sfJudgeCJ2', crm1:'sfJudgeCRM1', crm2:'sfJudgeCRM2', crm3:'sfJudgeCRM3'};
+            const fallback = {cj1:'Clinical J1', cj2:'Clinical J2', crm1:'CRM J1', crm2:'CRM J2', crm3:'CRM J3'};
             return document.getElementById(map[j])?.value?.trim() || fallback[j];
         }
 
@@ -4013,17 +3794,16 @@
         }
         function applySFRoundVisibility() {
             const r1 = document.getElementById('sfR1Container');
-            const r2 = document.getElementById('sfR2Container');
-            if (r1) r1.style.display = (!activeSFRound || activeSFRound === 'R1') ? '' : 'none';
-            if (r2) r2.style.display = (!activeSFRound || activeSFRound === 'R2') ? '' : 'none';
+            if (r1) r1.style.display = '';
             const sel = document.getElementById('sfLiveRoundSelect');
             if (sel && sel.value !== activeSFRound) sel.value = activeSFRound;
         }
 
         // ── SF Live Team control (mirrors prelims active-case/active-team) ──
         function setActiveSFTeam(r, teamId) {
-            if (r === 'R1') { activeSFTeamR1 = teamId; } else { activeSFTeamR2 = teamId; }
+            activeSFTeamR1 = teamId;
             saveToServer('active_sf_team_' + r.toLowerCase(), teamId);
+            msSyncLiveSelectors();
             buildSFRoundCard(r);
         }
 
@@ -4043,14 +3823,14 @@
         }
 
         function sfRestoreSubmittedForRound(r) {
-            const teams = r === 'R1' ? ['sf1', 'sf2'] : ['sf3', 'sf4'];
+            const teams = SF_ROUND_TEAMS[r] || [];
             teams.forEach(t => {
                 if (serverCache[`sfSubmitted_${r}_${t}`] === 'true') sfApplySubmittedState(r, t);
             });
         }
 
         function sfSubmitTeam(r, t) {
-            const activeTeam = r === 'R1' ? activeSFTeamR1 : activeSFTeamR2;
+            const activeTeam = activeSFTeamR1;
             if (activeTeam && activeTeam !== t) {
                 alert(`Cannot submit: "${sfGetName(t)}" is not currently performing.\n\nThe operator has set "${sfGetName(activeTeam)}" as the live team.`);
                 return;
@@ -4080,14 +3860,8 @@
         }
 
         function sfUpdateCRMSubTotal(r, t, j, sdId) {
-            let sub = 0;
-            for (let i = 0; i < 5; i++) {
-                const el = document.getElementById('sf_' + r + '_' + t + '_' + j + '_crm_' + sdId + '_' + i);
-                sub += Math.min(2, Math.max(0, parseFloat(el?.value) || 0));
-            }
-            const subEl = document.getElementById('sf_' + r + '_' + t + '_' + j + '_crm_' + sdId + '_sub');
-            if (subEl) subEl.textContent = sub;
-            return sub;
+            const el = document.getElementById('sf_' + r + '_' + t + '_' + j + '_crm_' + sdId + '_score');
+            return Math.min(8, Math.max(0, parseFloat(el?.value) || 0));
         }
 
         function sfUpdateCRMTotal(r, t, j) {
@@ -4098,21 +3872,43 @@
             sfUpdateChiefTally(r, t);
         }
 
+        function sfPenaltyTotal(r, t) {
+            const pens = (SF_ROUNDS[r] && SF_ROUNDS[r].penalties) || [];
+            let pen = 0;
+            pens.forEach(p => { if (document.getElementById('sf_' + r + '_' + t + '_' + p.k)?.checked) pen += p.pts; });
+            return pen;
+        }
+
+        function sfBuildPenaltySheet(r, t) {
+            const pens = (SF_ROUNDS[r] && SF_ROUNDS[r].penalties) || [];
+            if (!pens.length) return '';
+            let h = '<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 14px;margin-bottom:16px;">';
+            h += '<div style="font-size:0.78rem;font-weight:700;color:#991b1b;margin-bottom:6px;">⚠️ Penalties — scripted, objective events. The Chief records them ONCE; they are subtracted from the Domain I mean. Domain I cannot fall below 0.</div>';
+            pens.forEach(p => {
+                const id = 'sf_' + r + '_' + t + '_' + p.k;
+                h += '<label style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:0.78rem;cursor:pointer;"><input type="checkbox" id="' + id + '" onchange="saveToServer(this.id,this.checked?\'true\':\'false\');sfUpdateChiefTally(\'' + r + '\',\'' + t + '\');"> <span>' + p.label + ' <strong style="color:#991b1b;">' + p.pts + '</strong></span></label>';
+            });
+            h += '<div style="font-size:0.75rem;font-weight:700;color:#991b1b;margin-top:6px;">Penalty total: <span id="sf_' + r + '_' + t + '_penTotal">0</span></div>';
+            h += '</div>';
+            return h;
+        }
+
         function sfUpdateChiefTally(r, t) {
             const cj1 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj1_clinTotal')?.textContent) || 0;
             const cj2 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj2_clinTotal')?.textContent) || 0;
-            const cj3 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_cj3_clinTotal')?.textContent) || 0;
             const crm1 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm1_crmTotal')?.textContent) || 0;
             const crm2 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm2_crmTotal')?.textContent) || 0;
             const crm3 = parseFloat(document.getElementById('sf_' + r + '_' + t + '_crm3_crmTotal')?.textContent) || 0;
             const globalV = parseFloat(document.getElementById('sf_' + r + '_' + t + '_global')?.value) || 0;
-            const d1 = (cj1 + cj2 + cj3) / 3;
+            const pen = sfPenaltyTotal(r, t);
+            const d1 = Math.max(0, (cj1 + cj2) / 2 + pen);
             const d2 = (crm1 + crm2 + crm3) / 3;
             const d3 = globalV;
             const total = d1 + d2 + d3;
-            const spread1 = Math.max(cj1, cj2, cj3) - Math.min(cj1, cj2, cj3);
+            const spread1 = Math.abs(cj1 - cj2);
             const spread2 = Math.max(crm1, crm2, crm3) - Math.min(crm1, crm2, crm3);
             function se(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+            se('sf_' + r + '_' + t + '_penTotal', pen);
             se('sf_' + r + '_' + t + '_tally_d1', d1.toFixed(1));
             se('sf_' + r + '_' + t + '_tally_d2', d2.toFixed(1));
             se('sf_' + r + '_' + t + '_tally_d3', d3.toFixed(0));
@@ -4124,14 +3920,15 @@
         }
 
         function sfUpdateAllLabels() {
-            ['sf1','sf2','sf3','sf4'].forEach(t => {
+            msSyncLiveSelectors();
+            ['sf1','sf2','sf3','sf4','sf5'].forEach(t => {
                 const name = sfGetName(t);
                 document.querySelectorAll('.sfLabel_' + t).forEach(el => el.textContent = name);
             });
         }
 
         function sfSyncJudgeNames() {
-            ['cj1','cj2','cj3','crm1','crm2','crm3'].forEach(j => {
+            ['cj1','cj2','crm1','crm2','crm3'].forEach(j => {
                 const name = sfGetJudge(j);
                 document.querySelectorAll('.sfJName_' + j).forEach(el => el.textContent = name);
             });
@@ -4141,9 +3938,9 @@
             const rd = SF_ROUNDS[r];
             const c = '#0d9488';
             let h = '<div style="background:white;border:1.5px solid ' + c + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + c + ';margin-bottom:8px;">📋 DOMAIN I — CLINICAL JUDGEMENT &nbsp;·&nbsp; <span id="sf_' + r + '_' + t + '_' + j + '_clinTotal">0</span> / 40</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + c + ';margin-bottom:8px;">📋 DOMAIN I — CLINICAL JUDGEMENT &nbsp;·&nbsp; <span id="sf_' + r + '_' + t + '_' + j + '_clinTotal">0</span> / 45</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#0f766e;margin-bottom:2px;" class="sfJName_' + j + '">' + sfGetJudge(j) + '</div>';
-            h += '<div style="font-size:0.72rem;color:#6b7280;background:#f0fdfa;border-radius:5px;padding:5px 8px;margin-bottom:10px;">0 = absent/unsafe · 1 = partial/delayed · 2 = timely and complete. Four-mark items use same anchor ×2.</div>';
+            h += '<div style="font-size:0.72rem;color:#6b7280;background:#f0fdfa;border-radius:5px;padding:5px 8px;margin-bottom:10px;"><strong>0</strong> = absent or unsafe · <strong>1</strong> = partial, delayed or inconsistent · <strong>2</strong> = timely, complete and effective. Items worth more than 2 use the same anchor applied proportionally.</div>';
             Object.entries(rd.clinical).forEach(([sec, sd]) => {
                 h += '<div style="margin-bottom:10px;">';
                 h += '<div style="font-weight:700;font-size:0.8rem;color:#374151;margin-bottom:3px;display:flex;justify-content:space-between;"><span>' + sd.title + '</span><span style="color:' + c + ';font-size:0.72rem;">/' + sd.max + '</span></div>';
@@ -4164,21 +3961,21 @@
         function sfBuildCRMSheet(r, t, j) {
             const c = '#1d4ed8';
             let h = '<div style="background:white;border:1.5px solid ' + c + '40;border-radius:10px;padding:14px;margin-bottom:10px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + c + ';margin-bottom:8px;">🧠 DOMAIN II — CRISIS RESOURCE MANAGEMENT &nbsp;·&nbsp; <span id="sf_' + r + '_' + t + '_' + j + '_crmTotal">0</span> / 50</div>';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + c + ';margin-bottom:8px;">🧠 DOMAIN II — CRISIS RESOURCE MANAGEMENT &nbsp;·&nbsp; <span id="sf_' + r + '_' + t + '_' + j + '_crmTotal">0</span> / 40</div>';
             h += '<div style="font-size:0.72rem;font-weight:600;color:#1e40af;margin-bottom:2px;" class="sfJName_' + j + '">' + sfGetJudge(j) + '</div>';
-            h += '<div style="font-size:0.72rem;color:#6b7280;background:#eff6ff;border-radius:5px;padding:5px 8px;margin-bottom:10px;">All items 0–2. ◆ marks rows where re-scoring Domain I clinical recognition is tempting — score the <strong>behaviour/process</strong>, not the diagnosis.</div>';
-            SF_CRM_SUBDOMAINS.forEach(sd => {
-                h += '<div style="margin-bottom:10px;">';
-                h += '<div style="font-weight:700;font-size:0.8rem;color:#374151;margin-bottom:3px;display:flex;justify-content:space-between;"><span>' + sd.title + '</span><span style="color:' + c + ';font-size:0.72rem;">Sub: <span id="sf_' + r + '_' + t + '_' + j + '_crm_' + sd.id + '_sub">0</span>/10</span></div>';
-                h += '<table style="width:100%;border-collapse:collapse;">';
-                sd.items.forEach((item, i) => {
-                    const id = 'sf_' + r + '_' + t + '_' + j + '_crm_' + sd.id + '_' + i;
-                    const isMarked = item.startsWith('◆');
-                    h += '<tr style="border-bottom:1px solid #f3f4f6;' + (isMarked ? 'background:#fefce8;' : '') + '"><td style="padding:4px 5px;font-size:0.78rem;color:#374151;">' + item + '</td>';
-                    h += '<td style="width:34px;text-align:center;font-size:0.68rem;color:#9ca3af;">/2</td>';
-                    h += '<td style="width:58px;text-align:center;padding:3px;"><input type="number" id="' + id + '" min="0" max="2" value="0" style="width:50px;border:1.5px solid ' + c + '40;border-radius:4px;padding:3px;text-align:center;font-size:0.88rem;font-weight:700;" oninput="this.value=Math.min(2,Math.max(0,+this.value||0));saveToServer(this.id,this.value);sfUpdateCRMTotal(\'' + r + '\',\'' + t + '\',\'' + j + '\');"></td></tr>';
-                });
-                h += '</table></div>';
+            h += '<div style="font-size:0.72rem;color:#6b7280;background:#eff6ff;border-radius:5px;padding:5px 8px;margin-bottom:10px;">Each subdomain is <strong>one anchored judgement 0–8</strong> — the bullets are descriptors that inform the rating, not separately scored items. <strong>0–1</strong> absent/unsafe · <strong>2–3</strong> fragmented, substantial prompting · <strong>4–5</strong> adequate but inconsistent · <strong>6–7</strong> consistently effective, minor lapses · <strong>8</strong> seamless and anticipatory. ◆ marks descriptors where re-scoring Domain I recognition is tempting — rate the <strong>process</strong>, not the diagnosis.</div>';
+            SF_CRM_SUBDOMAINS.forEach((sd, sdi) => {
+                const subId = 'sf_' + r + '_' + t + '_' + j + '_crm_' + sd.id + '_score';
+                h += '<div style="margin-bottom:12px;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;">';
+                h += '<div style="font-weight:700;font-size:0.82rem;color:#374151;margin-bottom:4px;">' + (sdi + 1) + '. ' + sd.title + '</div>';
+                h += '<ul style="margin:0 0 7px 16px;padding:0;font-size:0.76rem;color:#4b5563;line-height:1.5;">';
+                sd.items.forEach(item => { h += '<li' + (item.startsWith('◆') ? ' style="background:#fefce8;"' : '') + '>' + item + '</li>'; });
+                h += '</ul>';
+                h += '<div style="display:flex;align-items:center;gap:7px;">';
+                h += '<span style="font-size:0.75rem;font-weight:700;color:' + c + ';">Score</span>';
+                h += '<input type="number" id="' + subId + '" min="0" max="8" value="0" style="width:58px;border:1.5px solid ' + c + ';border-radius:5px;padding:4px;text-align:center;font-size:0.95rem;font-weight:800;" oninput="this.value=Math.min(8,Math.max(0,+this.value||0));saveToServer(this.id,this.value);sfUpdateCRMTotal(\'' + r + '\',\'' + t + '\',\'' + j + '\');">';
+                h += '<span style="font-size:0.75rem;color:#9ca3af;">/ 8</span>';
+                h += '</div></div>';
             });
             h += '</div>';
             return h;
@@ -4187,32 +3984,48 @@
         function sfBuildTeamCard(r, t) {
             const teal = '#0d9488', blue = '#1d4ed8', purple = '#7c3aed';
             const name = sfGetName(t);
+            const runIdx = (SF_ROUND_TEAMS[r] || []).indexOf(t) + 1;
+            const runTotal = (SF_ROUND_TEAMS[r] || []).length;
             let h = '<div id="sfCard_' + r + '_' + t + '" style="border:2px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:20px;">';
             h += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px;">';
+            h += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+            if (runIdx > 0) h += '<span style="background:#0d9488;color:#fff;font-size:0.68rem;font-weight:800;letter-spacing:.06em;padding:3px 10px;border-radius:20px;white-space:nowrap;">RUN ' + runIdx + ' OF ' + runTotal + '</span>';
             h += '<div style="font-size:1.05rem;font-weight:800;color:#111827;" class="sfLabel_' + t + '">' + name + '</div>';
+            h += '</div>';
             h += '<button id="sfSubmitBtn_' + r + '_' + t + '" onclick="sfSubmitTeam(\'' + r + '\',\'' + t + '\')" style="background:' + teal + ';color:white;border:none;padding:6px 18px;border-radius:20px;font-weight:700;font-size:0.82rem;cursor:pointer;">✓ Submit</button>';
             h += '</div>';
 
-            // Domain I (two clinical judge sheets)
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + teal + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical Judgement (three judges, score averaged)</div>';
+            // Role task strip — tells a locked judge exactly what is theirs to do
+            [['cj1', teal, 'Domain I — Clinical Judgement', '45'], ['cj2', teal, 'Domain I — Clinical Judgement', '45'],
+             ['crm1', blue, 'Domain II — Crisis Resource Management', '40'], ['crm2', blue, 'Domain II — Crisis Resource Management', '40'], ['crm3', blue, 'Domain II — Crisis Resource Management', '40']].forEach(([j, col, dom, mx]) => {
+                h += '<div class="sf-taskstrip sf-judgeblock-' + j + '" style="background:' + col + '0d;border:1.5px solid ' + col + '40;border-left:4px solid ' + col + ';border-radius:0 9px 9px 0;padding:10px 14px;margin-bottom:14px;">';
+                h += '<div style="font-size:0.68rem;font-weight:800;letter-spacing:.07em;color:' + col + ';text-transform:uppercase;margin-bottom:3px;">YOUR SHEET · ' + (j.startsWith('cj') ? 'CLINICAL' : 'CRM') + ' — <span class="sfJName_' + j + '">' + sfGetJudge(j) + '</span></div>';
+                h += '<div style="font-size:0.86rem;color:#374151;line-height:1.5;">Score <strong class="sfLabel_' + t + '">' + name + '</strong> on <strong>' + dom + '</strong>, out of <strong>' + mx + '</strong>. Fill every line, then press <strong>Submit</strong>. You will not see the other domains, the penalties or the running total — those are the Chief\'s.</div>';
+                h += '</div>';
+            });
+
+            // Domain I — clinical judges only
+            h += '<div class="sf-domain1">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + teal + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical Judgement <span class="sf-chiefnote">(two Clinical judges, score averaged)</span></div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
             h += '<div class="sf-judgeblock-cj1">' + sfBuildClinicalSheet(r, t, 'cj1') + '</div>';
             h += '<div class="sf-judgeblock-cj2">' + sfBuildClinicalSheet(r, t, 'cj2') + '</div>';
-            h += '<div class="sf-judgeblock-cj3">' + sfBuildClinicalSheet(r, t, 'cj3') + '</div>';
-            h += '</div>';
+            h += '</div></div>';
+            h += '<div class="sf-penalties">' + sfBuildPenaltySheet(r, t) + '</div>';
 
-            // Domain II (two CRM judge sheets)
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Crisis Resource Management (three judges, score averaged)</div>';
+            // Domain II — CRM judges only
+            h += '<div class="sf-domain2">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Crisis Resource Management <span class="sf-chiefnote">(three CRM judges, score averaged)</span></div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
             h += '<div class="sf-judgeblock-crm1">' + sfBuildCRMSheet(r, t, 'crm1') + '</div>';
             h += '<div class="sf-judgeblock-crm2">' + sfBuildCRMSheet(r, t, 'crm2') + '</div>';
             h += '<div class="sf-judgeblock-crm3">' + sfBuildCRMSheet(r, t, 'crm3') + '</div>';
-            h += '</div>';
+            h += '</div></div>';
 
-            // Domain III — Global
-            h += '<div style="background:white;border:1.5px solid ' + purple + '40;border-radius:10px;padding:14px;margin-bottom:12px;">';
-            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🌐 DOMAIN III — GLOBAL ENTRUSTMENT &nbsp;·&nbsp; Collective / 10</div>';
-            h += '<p style="font-size:0.8rem;color:#374151;margin-bottom:10px;font-style:italic;">Would you confidently entrust this team to receive and manage these two injured children in your Paediatric Emergency Department? All four judges agree collectively on this mark.</p>';
+            // Domain III — Global (collective; chief/organiser records it)
+            h += '<div class="sf-domain3" style="background:white;border:1.5px solid ' + purple + '40;border-radius:10px;padding:14px;margin-bottom:12px;">';
+            h += '<div style="font-weight:800;font-size:0.85rem;color:' + purple + ';margin-bottom:8px;">🌐 DOMAIN III — GLOBAL ENTRUSTMENT &nbsp;·&nbsp; Collective / 15</div>';
+            h += '<p style="font-size:0.8rem;color:#374151;margin-bottom:10px;font-style:italic;">Would you confidently entrust this team to receive and manage these two injured children in your Paediatric Emergency Department? The panel agrees this mark collectively; the Chief records it.</p>';
             h += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">';
             SF_GLOBAL_ANCHORS.forEach(a => {
                 h += '<label style="display:flex;align-items:center;gap:5px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:7px;padding:5px 10px;cursor:pointer;font-size:0.8rem;">';
@@ -4226,12 +4039,12 @@
             h += '</div></div>';
 
             // Chief's Tally
-            h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
+            h += '<div class="sf-tally" style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="sfLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical Judgement (mean of three judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + teal + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d1">0.0</span> / 40</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Crisis Resource Management (mean of three judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d2">0.0</span> / 50</td></tr>';
-            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Global Entrustment (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d3">0</span> / 10</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical Judgement (mean of two Clinical judges, after penalties)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + teal + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d1">0.0</span> / 45</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Crisis Resource Management (mean of three judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d2">0.0</span> / 40</td></tr>';
+            h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Global Entrustment (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_d3">0</span> / 15</td></tr>';
             h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="sf_' + r + '_' + t + '_tally_total">0.0</span> / 100</td></tr>';
             h += '</table>';
             h += '<div style="margin-top:8px;font-size:0.73rem;color:#78350f;">D1 spread: <strong><span id="sf_' + r + '_' + t + '_spread1">0</span></strong> marks (conference if &gt;6) &nbsp;·&nbsp; D2 spread: <strong><span id="sf_' + r + '_' + t + '_spread2">0</span></strong> marks (conference if &gt;8)</div>';
@@ -4246,8 +4059,8 @@
             if (!container) return;
             const rd = SF_ROUNDS[r];
             // R1 → sf1 + sf2, R2 → sf3 + sf4
-            const allTeams = r === 'R1' ? ['sf1', 'sf2'] : ['sf3', 'sf4'];
-            const activeTeam = r === 'R1' ? activeSFTeamR1 : activeSFTeamR2;
+            const allTeams = SF_ROUND_TEAMS[r] || [];
+            const activeTeam = activeSFTeamR1;
             const teams = activeTeam ? allTeams.filter(t => t === activeTeam) : allTeams;
             let h = '<div class="card" style="border-left-color:#0d9488;">';
             h += '<h2><span class="emoji">🏟️</span> ' + rd.label + '</h2>';
@@ -4270,25 +4083,33 @@
             sfRestoreSubmittedForRound(r);
         }
 
-        const SF_JUDGE_LABELS = { cj1: 'Clinical Judge 1', cj2: 'Clinical Judge 2', cj3: 'Clinical Judge 3', crm1: 'CRM Judge 1', crm2: 'CRM Judge 2', crm3: 'CRM Judge 3' };
+        const SF_JUDGE_LABELS = { cj1: 'Clinical — Dr Aruna', cj2: 'Clinical — Dr Kang', crm1: 'CRM — Dr Dinkar', crm2: 'CRM — Dr Kiran', crm3: 'CRM — Dr Rana' };
 
         function sfApplyMyRoleHiding(j) {
             const existing = document.getElementById('sfMyRoleStyle');
             if (existing) existing.remove();
-            const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'crm3'];
+            const allJudges = ['cj1', 'cj2', 'crm1', 'crm2', 'crm3'];
             if (j) {
                 const style = document.createElement('style');
                 style.id = 'sfMyRoleStyle';
-                style.textContent = allJudges
+                let css = allJudges
                     .filter(x => x !== j)
                     .map(x => '.sf-judgeblock-' + x + '{display:none !important;}\n.fn-judgeblock-' + x + '{display:none !important;}')
                     .join('\n');
+                // A judge sees only their own domain. Penalties, Domain III and the
+                // Chief's Tally are the Chief's to record — hidden from every judge.
+                const isClin = j.startsWith('cj');
+                css += '\n' + (isClin ? '.sf-domain2,.fn-domain2' : '.sf-domain1,.fn-domain1') + '{display:none !important;}';
+                css += '\n.sf-domain3,.fn-domain3,.sf-tally,.fn-tally,.sf-penalties,.fn-penalties{display:none !important;}';
+                css += '\n.sf-chiefnote,.fn-chiefnote{display:none !important;}';
+                css += '\n.sf-taskstrip.sf-judgeblock-' + j + ',.fn-taskstrip.fn-judgeblock-' + j + '{display:block !important;}';
+                style.textContent = css;
                 document.head.appendChild(style);
             }
             const statusEl = document.getElementById('sfMyRoleStatus');
             if (statusEl) {
                 statusEl.textContent = j
-                    ? `🔒 Locked to ${SF_JUDGE_LABELS[j]} on this device — only this sheet is shown. Tap "Show All" to undo.`
+                    ? `🔒 Locked to ${SF_JUDGE_LABELS[j]} on this device — you see only your own ${j.startsWith('cj') ? 'Domain I' : 'Domain II'} sheet. Tap "Show All" to undo.`
                     : '';
             }
         }
@@ -4355,12 +4176,11 @@
 
         function buildSFScoreCards() {
             buildSFRoundCard('R1');
-            buildSFRoundCard('R2');
             sfUpdateAllLabels();
             sfSyncJudgeNames();
         }
 
-        const SF_ROUND_TEAMS = { R1: ['sf1','sf2'], R2: ['sf3','sf4'] };
+        const SF_ROUND_TEAMS = { R1: ['sf1','sf2','sf3','sf4','sf5'] };
 
         function sfRecalcAll() {
             sfUpdateAllLabels();
@@ -4369,8 +4189,7 @@
                 teams.forEach(t => {
                     sfUpdateClinicalTotal(r, t, 'cj1');
                     sfUpdateClinicalTotal(r, t, 'cj2');
-                    sfUpdateClinicalTotal(r, t, 'cj3');
-                    sfUpdateCRMTotal(r, t, 'crm1');
+                            sfUpdateCRMTotal(r, t, 'crm1');
                     sfUpdateCRMTotal(r, t, 'crm2');
                     sfUpdateCRMTotal(r, t, 'crm3');
                     sfUpdateChiefTally(r, t);
@@ -4494,10 +4313,10 @@
 
         function fnUpdateGrandTotal(caseId, t) {
             const g = id => parseFloat(document.getElementById(id)?.textContent) || 0;
-            const cjs = ['cj1','cj2','cj3'].map(j => g('fn_' + caseId + '_' + t + '_' + j + '_clinTotal'));
+            const cjs = ['cj1','cj2'].map(j => g('fn_' + caseId + '_' + t + '_' + j + '_clinTotal'));
             const crms = ['crm1','crm2','crm3'].map(j => g('fn_' + caseId + '_' + t + '_' + j + '_twTotal'));
             const pen = fnPenaltyTotal(caseId, t);
-            const d1 = Math.max(0, (cjs[0] + cjs[1] + cjs[2]) / 3 + pen);
+            const d1 = Math.max(0, (cjs[0] + cjs[1]) / 2 + pen);
             const d2 = (crms[0] + crms[1] + crms[2]) / 3;
             const shared = parseFloat(document.getElementById('fn_' + caseId + '_' + t + '_shared')?.value) || 0;
             const se = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -4517,6 +4336,7 @@
         }
 
         function fnUpdateAllLabels() {
+            msSyncLiveSelectors();
             ['fin1','fin2'].forEach(t => {
                 const name = fnGetName(t);
                 document.querySelectorAll('.fnLabel_' + t).forEach(el => el.textContent = name);
@@ -4604,21 +4424,32 @@
             const name = fnGetName(t);
             let h = '<div style="border:2px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:20px;">';
             h += '<div style="font-size:1.05rem;font-weight:800;color:#111827;margin-bottom:14px;" class="fnLabel_' + t + '">' + name + '</div>';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical (three Clinical judges, score averaged)</div>';
+            [['cj1', amber, 'Domain I — Clinical'], ['cj2', amber, 'Domain I — Clinical'],
+             ['crm1', blue, 'Domain II — Human Factors'], ['crm2', blue, 'Domain II — Human Factors'], ['crm3', blue, 'Domain II — Human Factors']].forEach(([j, col, dom]) => {
+                h += '<div class="fn-taskstrip fn-judgeblock-' + j + '" style="background:' + col + '0d;border:1.5px solid ' + col + '40;border-left:4px solid ' + col + ';border-radius:0 9px 9px 0;padding:10px 14px;margin-bottom:14px;">';
+                h += '<div style="font-size:0.68rem;font-weight:800;letter-spacing:.07em;color:' + col + ';text-transform:uppercase;margin-bottom:3px;">YOUR SHEET · ' + (j.startsWith('cj') ? 'CLINICAL' : 'CRM') + ' — <span class="sfJName_' + j + '">' + sfGetJudge(j) + '</span> · THE FINAL</div>';
+                h += '<div style="font-size:0.86rem;color:#374151;line-height:1.5;">Score <strong class="fnLabel_' + t + '">' + fnGetName(t) + '</strong> on <strong>' + dom + '</strong>. Fill every line, then press <strong>Submit</strong>. Penalties, Domain III and the running total are the Chief\'s.</div>';
+                h += '</div>';
+            });
+            h += '<div class="fn-domain1">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + amber + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain I — Clinical <span class="fn-chiefnote">(two Clinical judges, score averaged)</span></div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:10px;">';
-            ['cj1','cj2','cj3'].forEach(j => { h += '<div class="fn-judgeblock-' + j + '">' + fnBuildClinSheet(caseId, t, j) + '</div>'; });
-            h += '</div>';
-            h += fnBuildPenaltySheet(caseId, t);
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Human Factors (three CRM judges, score averaged)</div>';
+            ['cj1','cj2'].forEach(j => { h += '<div class="fn-judgeblock-' + j + '">' + fnBuildClinSheet(caseId, t, j) + '</div>'; });
+            h += '</div></div>';
+            h += '<div class="fn-penalties">' + fnBuildPenaltySheet(caseId, t) + '</div>';
+            h += '<div class="fn-domain2">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + blue + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain II — Human Factors <span class="fn-chiefnote">(three CRM judges, score averaged)</span></div>';
             h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:16px;">';
             ['crm1','crm2','crm3'].forEach(j => { h += '<div class="fn-judgeblock-' + j + '">' + fnBuildTWSheet(caseId, t, j) + '</div>'; });
-            h += '</div>';
-            h += '<div style="font-size:0.72rem;font-weight:700;color:' + purple + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain III — Shared Reasoning with Confederate (all six judges, collectively)</div>';
+            h += '</div></div>';
+            h += '<div class="fn-domain3">';
+            h += '<div style="font-size:0.72rem;font-weight:700;color:' + purple + ';text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Domain III — Shared Reasoning with Confederate (panel, collectively)</div>';
             h += fnBuildSharedSheet(caseId, t);
-            h += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
+            h += '</div>';
+            h += '<div class="fn-tally" style="background:#fef3c7;border:2px solid #f59e0b;border-radius:10px;padding:14px;">';
             h += '<div style="font-weight:800;font-size:0.9rem;color:#92400e;margin-bottom:10px;">📊 Chief\'s Tally — <span class="fnLabel_' + t + '">' + name + '</span></div>';
             h += '<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">';
-            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical (mean of three Clinical judges, after penalties)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0.0</span> / 90</td></tr>';
+            h += '<tr><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain I — Clinical (mean of two Clinical judges, after penalties)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + amber + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_clinTotal_disp">0.0</span> / 90</td></tr>';
             h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain II — Human Factors (mean of three CRM judges)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + blue + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_twTotal_disp">0.0</span> / 80</td></tr>';
             h += '<tr style="border-top:1px solid #fde68a;"><td style="padding:5px 8px;font-weight:600;color:#374151;">Domain III — Shared Reasoning with Confederate (collective)</td><td style="text-align:right;padding:5px 8px;font-weight:800;color:' + purple + ';font-size:1rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_sharedDisp">0</span> / 30</td></tr>';
             h += '<tr style="border-top:2px solid #f59e0b;background:#fffbeb;"><td style="padding:8px;font-weight:800;font-size:0.9rem;">FINAL TOTAL</td><td style="text-align:right;padding:8px;font-weight:800;font-size:1.3rem;white-space:nowrap;"><span id="fn_' + caseId + '_' + t + '_grandTotal">0.0</span> / 200</td></tr>';
@@ -4629,10 +4460,32 @@
             return h;
         }
 
+        // Keep the Master Scoreboard SF/Finals live selectors in step with team names and state
+        function msSyncLiveSelectors() {
+            if (typeof activeFNTeam === 'undefined') return;
+            const sets = [
+                ['msActiveSFR1', ['sf1','sf2','sf3','sf4','sf5'], activeSFTeamR1, sfGetName, 'msSFR1Display'],
+                ['msActiveFN',   ['fin1','fin2'], activeFNTeam, fnGetName, 'msFNDisplay']
+            ];
+            sets.forEach(([selId, ids, active, getName, dispId]) => {
+                const sel = document.getElementById(selId);
+                if (sel) {
+                    ids.forEach((id, i) => {
+                        const opt = sel.querySelector('option[value="' + id + '"]');
+                        if (opt) opt.textContent = getName(id) || (id.startsWith('sf') ? ('Run ' + (i + 1)) : ('Finalist ' + String.fromCharCode(65 + i)));
+                    });
+                    if (sel.value !== (active || '')) sel.value = active || '';
+                }
+                const disp = document.getElementById(dispId);
+                if (disp) disp.textContent = active ? 'On stage: ' + getName(active) : 'Both teams visible to judges.';
+            });
+        }
+
         let activeFNTeam = '';
         function setActiveFNTeam(v) {
             activeFNTeam = v;
             saveToServer('active_fn_team', v);
+            msSyncLiveSelectors();
             buildFNCaseCard('F2');
             fnRecalcAll();
         }
@@ -4673,7 +4526,7 @@
             fnUpdateAllLabels();
             ['F2'].forEach(caseId => {
                 ['fin1','fin2'].forEach(t => {
-                    ['cj1','cj2','cj3'].forEach(j => fnUpdateClinTotal(caseId, t, j));
+                    ['cj1','cj2'].forEach(j => fnUpdateClinTotal(caseId, t, j));
                     ['crm1','crm2','crm3'].forEach(j => fnUpdateTWTotal(caseId, t, j));
                     fnUpdateGrandTotal(caseId, t);
                 });
@@ -4688,20 +4541,13 @@
         // 17. SHARE LINKS
         // ================================================================
         const viewMeta = {
-            pals:      { label: '🫀 PALS Judges',    tab: 'tabJudgePals', color: '#B3273B', bg: '#FBE4E7', hint: 'Room A scoring sheet' },
-            bls:       { label: '❤️ BLS Judges',     tab: 'tabJudgeBls',  color: '#006D8C', bg: '#E6F4F7', hint: 'Room B scoring sheet' },
-            'pals-cj':  { label: '🫀 PALS — Clinical judge',  tab: 'tabJudgePals', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I only', domOnly: 'pals-cj' },
-            'pals-crm': { label: '🫀 PALS — CRM judge',       tab: 'tabJudgePals', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II only', domOnly: 'pals-crm' },
-            'bls-cj':   { label: '❤️ BLS — Clinical judge',   tab: 'tabJudgeBls',  color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I only', domOnly: 'bls-cj' },
-            'bls-crm':  { label: '❤️ BLS — CRM judge',        tab: 'tabJudgeBls',  color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II only', domOnly: 'bls-crm' },
-            debriefer: { label: '🎓 Debriefer',       tab: 'tabDebriefer', color: '#065f46', bg: '#f0fdf4', hint: 'Secret scoring & reveal' },
-            prizes:    { label: '🏅 Special Prizes',  tab: 'tabPrizes',    color: '#92400e', bg: '#fffbeb', hint: 'Prize leaderboard' },
-            'sf-cj1':  { label: '🏟️ Semi-Finals — Clinical Judge 1', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj1' },
-            'sf-cj2':  { label: '🏟️ Semi-Finals — Clinical Judge 2', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj2' },
-            'sf-cj3':  { label: '🏟️ Semi-Finals — Clinical Judge 3', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheet only', sfOnly: 'cj3' },
-            'sf-crm1': { label: '🏟️ Semi-Finals — CRM Judge 1',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheet only', sfOnly: 'crm1' },
-            'sf-crm2': { label: '🏟️ Semi-Finals & Finals — CRM Judge 2',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only (SF + Finals)', sfOnly: 'crm2' },
-            'sf-crm3': { label: '🏟️ Semi-Finals & Finals — CRM Judge 3', tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only (SF + Finals)', sfOnly: 'crm3' },
+            'sf-cj1':  { label: '🏟️ Semi-Finals & Finals — Clinical · Dr Aruna', tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheets only', sfOnly: 'cj1' },
+            'sf-cj2':  { label: '🏟️ Semi-Finals & Finals — Clinical · Dr Kang',  tab: 'tabSemiF', color: '#0d9488', bg: '#f0fdfa', hint: 'Domain I sheets only', sfOnly: 'cj2' },
+            'sf-crm1': { label: '🏟️ Semi-Finals & Finals — CRM · Dr Dinkar',     tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only', sfOnly: 'crm1' },
+            'sf-crm2': { label: '🏟️ Semi-Finals & Finals — CRM · Dr Kiran',      tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only', sfOnly: 'crm2' },
+            'sf-crm3': { label: '🏟️ Semi-Finals & Finals — CRM · Dr Rana',       tab: 'tabSemiF', color: '#1d4ed8', bg: '#eff6ff', hint: 'Domain II sheets only', sfOnly: 'crm3' },
+            debriefer: { label: '🎓 Debriefer',      tab: 'tabDebriefer', color: '#065f46', bg: '#f0fdf4', hint: 'Sees all sheets' },
+            prizes:    { label: '🏅 Special Prizes', tab: 'tabPrizes',    color: '#92400e', bg: '#fffbeb', hint: 'Prize leaderboard' }
         };
 
         function buildShareLinks() {
@@ -4758,14 +4604,14 @@
             // entry blocks so no judge can see (or accidentally edit) a colleague's
             // marks — each judge only ever sees their own Domain I or Domain II sheet.
             if (meta.sfOnly) {
-                const allJudges = ['cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'crm3'];
+                const allJudges = ['cj1', 'cj2', 'crm1', 'crm2', 'crm3'];
                 const style = document.createElement('style');
                 style.textContent = allJudges
                     .filter(j => j !== meta.sfOnly)
                     .map(j => '.sf-judgeblock-' + j + '{display:none !important;}\n.fn-judgeblock-' + j + '{display:none !important;}')
                     .join('\n');
                 document.head.appendChild(style);
-                // The same six judges score the Finals — locked views get a stage switcher.
+                // The same five judges score the Finals — locked views get a stage switcher.
                 const sw = document.createElement('div');
                 sw.style.cssText = 'padding:8px 20px;display:flex;gap:8px;background:' + meta.bg + ';border-bottom:1px solid ' + meta.color + '40;';
                 sw.innerHTML = '<button onclick="document.querySelector(&quot;[data-tab=tabSemiF]&quot;).click()" style="background:#0d9488;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">🏟️ Semi-Finals</button><button onclick="document.querySelector(&quot;[data-tab=tabFinals]&quot;).click()" style="background:#d97706;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;">🏆 Finals</button>';
@@ -4782,6 +4628,42 @@
             const slotMap = { pals: 'pals', bls: 'bls', debriefer: 'debriefer' };
             const viewSlot = meta.sfOnly || meta.domOnly || slotMap[view] || '';
             if (viewSlot) claimSlot(viewSlot);
+        }
+
+        // Prelim live controls: hidden by default now prelims are closed. Organiser can reopen
+        // from the Master Scoreboard, or with ?prelims=1 on the URL. Judges never see this tab.
+        function setPrelimControlsVisible(show) {
+            const isOrganiser = window.SIMWARS_ROLE !== 'judge';
+            if (show && !isOrganiser) return;
+            const box = document.getElementById('prelimLiveControls');
+            const note = document.getElementById('prelimClosedNote');
+            if (box) box.style.display = show ? '' : 'none';
+            if (note) note.style.display = show ? 'none' : '';
+            document.querySelectorAll('.tab-btn[data-tab="tabJudgePals"], .tab-btn[data-tab="tabJudgeBls"]')
+                .forEach(b => { b.style.display = show ? '' : 'none'; });
+            try { localStorage.setItem('simwars_prelims_visible', show ? '1' : '0'); } catch (e) {}
+        }
+
+        function initPrelimControlsVisibility() {
+            const isOrganiser = window.SIMWARS_ROLE !== 'judge';
+            let show = false;
+            if (isOrganiser) {
+                const flag = new URLSearchParams(window.location.search).get('prelims');
+                if (flag === '1') show = true;
+                else { try { show = localStorage.getItem('simwars_prelims_visible') === '1'; } catch (e) {} }
+            }
+            setPrelimControlsVisible(show);
+            // a judge on a prelim PIN link still needs their own sheet
+            if (!isOrganiser) {
+                const slot = window.SIMWARS_JUDGE_SLOT || '';
+                const viewParam = new URLSearchParams(window.location.search).get('view') || '';
+                const isPrelimJudge = ['pals', 'bls', 'pals-cj', 'pals-crm', 'bls-cj', 'bls-crm']
+                    .some(s => slot === s || viewParam === s);
+                if (isPrelimJudge) {
+                    document.querySelectorAll('.tab-btn[data-tab="tabJudgePals"], .tab-btn[data-tab="tabJudgeBls"]')
+                        .forEach(b => { b.style.display = ''; });
+                }
+            }
         }
 
         function applyJudgeRoleLock() {
@@ -4813,7 +4695,7 @@
             buildSFScoreCards();
             buildFNScoreCards();
             try {
-                const serverSlot = ['cj1','cj2','cj3','crm1','crm2','crm3'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
+                const serverSlot = ['cj1','cj2','crm1','crm2','crm3'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
                 const savedSFRole = localStorage.getItem('simwars_sf_my_role') || serverSlot;
                 if (savedSFRole) sfApplyMyRoleHiding(savedSFRole);
                 const serverPrelim = ['pals-cj','pals-crm','bls-cj','bls-crm'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
@@ -4847,6 +4729,7 @@
             // Apply Judge Mode role lock if ?role=judge param present
             const roleParam = new URLSearchParams(window.location.search).get('role');
             if (roleParam === 'judge' || window.SIMWARS_ROLE === 'judge') applyJudgeRoleLock();
+            initPrelimControlsVisibility();
 
             // Load saved scores from server on first load
             pollScores();
