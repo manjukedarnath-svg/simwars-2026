@@ -114,6 +114,65 @@
         .sf-taskstrip, .fn-taskstrip {
             display: none;
         }
+        /* ---- Judge focus mode: one judge, one rubric, nothing else ---- */
+        #judgeGate {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            background: linear-gradient(160deg, #0f2d3d 0%, #124559 60%, #0d3a4a 100%);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        #judgeGate.open {
+            display: flex;
+        }
+        #judgeGate > div {
+            margin: auto;
+        }
+        .jg-card {
+            background: #fff;
+            border: none;
+            border-radius: 14px;
+            padding: 20px 22px;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,.22);
+            transition: transform .12s ease, box-shadow .12s ease;
+            min-height: 108px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .jg-card:hover, .jg-card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(0,0,0,.3);
+        }
+        body.judge-focus .tabs,
+        body.judge-focus #sfMyRolePicker,
+        body.judge-focus .jf-hide {
+            display: none !important;
+        }
+        body.judge-focus #judgeFocusBar {
+            display: flex !important;
+        }
+        #judgeFocusBar {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 8000;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: #124559;
+            color: #fff;
+            border-radius: 12px;
+            padding: 11px 16px;
+            margin-bottom: 14px;
+        }
         .card {
             background: var(--surface-0);
             border-radius: 12px;
@@ -850,18 +909,43 @@
         <div class="header">
             <a href="/register" style="display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;color:#94a3b8;text-decoration:none;margin-bottom:10px;">&larr; Back to SimWars Home</a>
             <h1>🏆 SimWars <span>Scoring System</span></h1>
-            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div class="jf-hide" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                 <div class="badge">17 Teams · 8 Cases · Top 4 + 6 Special Prizes</div>
                 <div id="syncIndicator" style="font-size:0.85rem; font-weight:700; color:#02C39A; background:rgba(2,195,154,0.12); padding:5px 14px; border-radius:20px; border:1px solid rgba(2,195,154,0.3);">⬤ Live</div>
             </div>
         </div>
         <!-- JUDGE ALLOCATIONS — visible to every login -->
-        <div class="no-print" style="background:white;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 18px;margin-bottom:14px;">
+        <div class="no-print jf-hide" style="background:white;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 18px;margin-bottom:14px;">
             <div style="font-size:0.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:8px;">⚖️ Judging Panel &amp; Allocations</div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;font-size:0.82rem;line-height:1.7;">
                 <div style="background:#f0fdfa;border-radius:8px;padding:8px 12px;"><b style="color:#0d9488;">🏟️ Semi-Finals &amp; Finals · VASA</b><br>Clinical: <b>Dr Aruna</b> · <b>Dr Kang</b><br>CRM: <b>Dr Dinkar</b> · <b>Dr Kiran</b> · <b>Dr Rana</b></div>
             </div>
         </div>
+        <!-- JUDGE GATE — tap your name, get your rubric full screen. No PIN. -->
+        <div id="judgeGate" class="no-print">
+            <div style="width:100%;max-width:940px;">
+                <div style="text-align:center;margin-bottom:26px;">
+                    <div style="font-size:0.72rem;font-weight:800;letter-spacing:.2em;color:#7fd4c1;text-transform:uppercase;">SimWars 2026 · Semi-Finals &amp; Final</div>
+                    <h2 style="color:#fff;font-size:1.9rem;margin:.4rem 0 .3rem;letter-spacing:-.01em;">Tap your name to open your score sheet</h2>
+                    <div style="color:#cfe8ef;font-size:0.95rem;line-height:1.5;max-width:60ch;margin:0 auto;">You will see only your own domain. No PIN needed — nobody else can see your marks, and you cannot see theirs.</div>
+                </div>
+                <div id="judgeGateCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:14px;"></div>
+                <div style="text-align:center;margin-top:22px;">
+                    <button onclick="exitJudgeFocus()" style="background:transparent;color:#9fc6d1;border:1.5px solid #33697d;border-radius:22px;padding:9px 22px;font-size:0.84rem;font-weight:700;cursor:pointer;">I am the Chief / MC — show me everything</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Focus-mode bar: who you are, and the way out -->
+        <div id="judgeFocusBar" class="no-print">
+            <div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap;">
+                <span style="font-size:0.62rem;font-weight:800;letter-spacing:.13em;background:rgba(255,255,255,.16);padding:3px 10px;border-radius:14px;">YOUR SHEET</span>
+                <span id="jfWho" style="font-size:1rem;font-weight:800;"></span>
+                <span id="jfDomain" style="font-size:0.82rem;color:#a8d5e2;"></span>
+            </div>
+            <button onclick="openJudgeGate()" style="background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:6px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;">Not you? Switch</button>
+        </div>
+
         <!-- TABS -->
         <div class="tabs no-print">
             <button class="tab-btn active" data-tab="tabMaster">📊 Master Scoreboard</button>
@@ -1359,7 +1443,7 @@
                     <div id="sfMyRoleStatus" style="font-size:0.78rem;color:#92400e;margin-top:8px;font-weight:700;"></div>
                 </div>
                 <!-- Judge names -->
-                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px;">
+                <div class="jf-hide" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:16px;">
                     <div style="background:white;border:1px solid #99f6e4;border-radius:8px;padding:10px 12px;">
                         <div style="font-size:0.68rem;font-weight:700;color:#0d9488;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Clinical Judge 1</div>
                         <input id="sfJudgeCJ1" type="text" placeholder="Name" value="Dr Aruna"
@@ -1629,10 +1713,10 @@
                 { id:'ananya_ct', icon:'🖥️', label:'Ananya — Outside CT Head Report', type:'imaging',
                   findings:'Reported NORMAL — no extra-axial collection, no midline shift, no fracture identified. Timed 90 minutes post-injury. Right temporal scalp haematoma noted clinically.',
                   flag:'crit', note:'⚠️ The report is genuinely normal — an EDH imaged this early may not yet be visible. Do not let the "normal scan" anchor the team: the GCS and pupil TREND is the diagnosis. Reveal in debrief.' },
-                { id:'vihaan_fast', icon:'🫀', label:'Vihaana — FAST Ultrasound', type:'imaging',
+                { id:'vihaan_fast', icon:'🫀', label:'Vihaan — FAST Ultrasound', type:'imaging',
                   findings:'Trace free fluid in right perihepatic (Morrison\'s pouch). No pericardial effusion. No left upper quadrant fluid. No pelvic fluid. Haemodynamically stable (HR 168, BP 96/60 consistent with pain/distress, not shock).',
                   flag:'high', note:'Calibrated response required — NOT theatre. Surgical consult + serial exam + repeat FAST in 30 min.' },
-                { id:'vihaan_bloods', icon:'🔬', label:'Vihaana — Trauma Bloods', type:'lab', rows:[
+                { id:'vihaan_bloods', icon:'🔬', label:'Vihaan — Trauma Bloods', type:'lab', rows:[
                     ['Hb','10.2 g/dL','10.5–14.5','low'],['Hct','29%','33–43','low'],
                     ['Platelets','210 ×10³/μL','150–400','norm'],['Glucose','82 mg/dL','70–110','norm'],
                     ['Na⁺','138 mEq/L','135–145','norm'],['Group','O Rh+','—','norm']
@@ -4067,7 +4151,7 @@
             h += '<div style="font-size:0.85rem;color:#0f766e;background:#f0fdfa;border-radius:8px;padding:8px 14px;margin-bottom:12px;">👥 ' + rd.patients + ' &nbsp;·&nbsp; ⏱ 15:00 hard stop</div>';
             if (rd.summary) h += '<div style="font-size:0.85rem;color:var(--text-secondary);background:var(--surface-1);border-radius:8px;padding:8px 12px;margin-bottom:12px;line-height:1.5;">📋 <strong>Scenario Summary:</strong> ' + rd.summary + '</div>';
             // Live team control
-            h += '<div style="background:#fff;border:1.5px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+            h += '<div class="jf-hide" style="background:#fff;border:1.5px solid #99f6e4;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
             h += '<span style="font-size:0.75rem;font-weight:700;color:#0d9488;text-transform:uppercase;letter-spacing:.4px;">🔴 Live Team</span>';
             h += '<select onchange="setActiveSFTeam(\'' + r + '\',this.value)" style="border:1.5px solid #99f6e4;border-radius:6px;padding:5px 10px;font-size:0.85rem;font-weight:700;">';
             h += '<option value="">— Not set (show both) —</option>';
@@ -4075,9 +4159,9 @@
             h += '</select>';
             if (activeTeam) h += '<span style="font-size:0.82rem;color:#0f766e;font-weight:600;">On stage: ' + sfGetName(activeTeam) + '</span>';
             h += '</div>';
-            h += buildInvViewer(r);
+            h += '<div class="jf-hide">' + buildInvViewer(r) + '</div>';
             teams.forEach(t => { h += sfBuildTeamCard(r, t); });
-            h += '<div style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (if required):</strong> ' + rd.tiebreaker + '</div>';
+            h += '<div class="jf-hide" style="background:#fef2f2;border-left:4px solid #ef4444;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:0.82rem;color:#991b1b;">⚡ <strong>Tiebreaker (if required):</strong> ' + rd.tiebreaker + '</div>';
             h += '</div>';
             container.innerHTML = h;
             sfRestoreSubmittedForRound(r);
@@ -4114,27 +4198,13 @@
             }
         }
 
-        // Claim a judge slot server-side. Judges authenticate the claim with their
-        // per-judge PIN (handed out by the MC); organiser sessions never need one.
+        // Claim a judge slot server-side. The judge password already gated the
+        // session, so picking a name is enough — no per-slot PIN.
         function claimSlot(slot) {
-            let pin = '';
-            if (window.SIMWARS_ROLE === 'judge' && slot) {
-                pin = localStorage.getItem('simwars_slot_pin_' + slot)
-                    || prompt('Enter the 4-digit PIN for this judge role (ask the MC):') || '';
-                if (!pin) return;
-            }
             try {
-                fetch('/api/judge-identity', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slot: slot || '', pin: pin }) })
+                fetch('/api/judge-identity', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slot: slot || '' }) })
                     .then(r => r.json())
-                    .then(res => {
-                        if (res && res.ok) {
-                            if (pin && slot) localStorage.setItem('simwars_slot_pin_' + slot, pin);
-                            pollScores();
-                        } else if (window.SIMWARS_ROLE === 'judge' && slot) {
-                            localStorage.removeItem('simwars_slot_pin_' + slot);
-                            alert('Wrong PIN — role not claimed. Ask the MC for your PIN.');
-                        }
-                    });
+                    .then(res => { if (res && res.ok) pollScores(); });
             } catch (e) {}
         }
 
@@ -4143,6 +4213,78 @@
             else { localStorage.removeItem('simwars_sf_my_role'); }
             sfApplyMyRoleHiding(j);
             claimSlot(j);
+        }
+
+        // ---- Judge gate: tap your name → your rubric, full screen, no PIN ----
+        function judgeGateRoles() {
+            return [
+                { j: 'cj1', dom: 'Domain I \u2014 Clinical Judgement', max: 45, col: '#0d9488' },
+                { j: 'cj2', dom: 'Domain I \u2014 Clinical Judgement', max: 45, col: '#0d9488' },
+                { j: 'crm1', dom: 'Domain II \u2014 Crisis Resource Management', max: 40, col: '#1d4ed8' },
+                { j: 'crm2', dom: 'Domain II \u2014 Crisis Resource Management', max: 40, col: '#1d4ed8' },
+                { j: 'crm3', dom: 'Domain II \u2014 Crisis Resource Management', max: 40, col: '#1d4ed8' }
+            ];
+        }
+
+        function renderJudgeGateCards() {
+            const wrap = document.getElementById('judgeGateCards');
+            if (!wrap) return;
+            wrap.innerHTML = judgeGateRoles().map(r => {
+                const name = (typeof sfGetJudge === 'function' && sfGetJudge(r.j)) || r.j.toUpperCase();
+                const role = r.j.startsWith('cj') ? 'Clinical Judge' : 'CRM Judge';
+                return '<button class="jg-card" onclick="enterJudgeFocus(\'' + r.j + '\')" style="border-left:6px solid ' + r.col + ';">'
+                    + '<div style="font-size:0.6rem;font-weight:800;letter-spacing:.13em;color:' + r.col + ';text-transform:uppercase;margin-bottom:5px;">' + role + '</div>'
+                    + '<div style="font-size:1.28rem;font-weight:800;color:#0f172a;line-height:1.2;">' + name + '</div>'
+                    + '<div style="font-size:0.78rem;color:#5b6675;margin-top:5px;line-height:1.4;">' + r.dom + ' \u00b7 out of ' + r.max + '</div>'
+                    + '</button>';
+            }).join('');
+        }
+
+        function openJudgeGate() {
+            renderJudgeGateCards();
+            const g = document.getElementById('judgeGate');
+            if (g) g.classList.add('open');
+        }
+
+        function closeJudgeGate() {
+            const g = document.getElementById('judgeGate');
+            if (g) g.classList.remove('open');
+        }
+
+        function exitJudgeFocus() {
+            closeJudgeGate();
+            document.body.classList.remove('judge-focus');
+            try { localStorage.removeItem('simwars_judge_focus'); } catch (e) {}
+            sfSetMyRole('');
+        }
+
+        function enterJudgeFocus(j) {
+            closeJudgeGate();
+            sfSetMyRole(j);
+            document.body.classList.add('judge-focus');
+            try { localStorage.setItem('simwars_judge_focus', '1'); } catch (e) {}
+            const meta = judgeGateRoles().find(r => r.j === j);
+            const who = document.getElementById('jfWho');
+            const dom = document.getElementById('jfDomain');
+            if (who) who.textContent = (typeof sfGetJudge === 'function' && sfGetJudge(j)) || j.toUpperCase();
+            if (dom && meta) dom.textContent = meta.dom + ' \u00b7 out of ' + meta.max;
+            // Land them on the tab that is actually live
+            const target = (typeof activeFNTeam !== 'undefined' && activeFNTeam) ? 'tabFinals' : 'tabSemiF';
+            const btn = document.querySelector('.tab-btn[data-tab="' + target + '"]');
+            if (btn) btn.click();
+            window.scrollTo(0, 0);
+        }
+
+        // On load: a judge session with no role yet gets the gate; a judge who
+        // already chose lands straight back in their own sheet.
+        function initJudgeGate() {
+            let saved = '', wasFocus = '';
+            try {
+                saved = localStorage.getItem('simwars_sf_my_role') || '';
+                wasFocus = localStorage.getItem('simwars_judge_focus') || '';
+            } catch (e) {}
+            if (saved && wasFocus) { enterJudgeFocus(saved); return; }
+            if (window.SIMWARS_ROLE === 'judge' && !saved) openJudgeGate();
         }
 
         function prelimApplyMyRoleHiding(slot) {
@@ -4701,6 +4843,7 @@
                 const serverPrelim = ['pals-cj','pals-crm','bls-cj','bls-crm'].includes(window.SIMWARS_JUDGE_SLOT) ? window.SIMWARS_JUDGE_SLOT : '';
                 const savedPrelimRole = localStorage.getItem('simwars_prelim_my_role') || serverPrelim;
                 if (savedPrelimRole) prelimApplyMyRoleHiding(savedPrelimRole);
+                initJudgeGate();
             } catch (e) {}
             renderScoreInputs();
             renderPalsJudgeSheets();

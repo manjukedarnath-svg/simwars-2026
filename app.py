@@ -1306,8 +1306,9 @@ def get_scores():
         data = {k: v for k, v in data.items() if _key_visible_to_judge(k, my_slot, deb_revealed)}
     return jsonify(data)
 
-# One PIN per judge slot — the MC hands each judge their PIN on paper on event day.
-# Change these before the event if they have been shared beyond the panel.
+# Per-slot judge PINs — no longer required to claim a judge slot (the judge
+# password gates the session and judges simply pick their name). Kept only so a
+# PIN can be reinstated quickly if a slot needs locking mid-event.
 JUDGE_PINS = {
     'cj1': '7311', 'cj2': '7322', 'cj3': '7333', 'crm1': '7411', 'crm2': '7422',
     'crm3': '7433',
@@ -1325,10 +1326,7 @@ def set_judge_identity():
     if slot not in ('cj1', 'cj2', 'cj3', 'crm1', 'crm2', 'crm3', 'pals', 'pals-cj', 'pals-crm',
                     'bls', 'bls-cj', 'bls-crm', 'debriefer', ''):
         return jsonify({'ok': False, 'error': 'unknown slot'}), 400
-    # Judges must present the slot's PIN; organiser sessions (the MC) never need one.
-    if slot and session.get('role') == 'judge':
-        if str(data.get('pin', '')) != JUDGE_PINS.get(slot):
-            return jsonify({'ok': False, 'error': 'bad pin'}), 403
+    # Judges pick their own slot; the judge password already gated the session.
     session['judge_slot'] = slot
     return jsonify({'ok': True, 'slot': slot})
 
@@ -2499,6 +2497,10 @@ def questionnaire():
     _resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     return _resp
 
+@app.route('/simwars-2026-post-event-questionnaire.html')
+def post_event_questionnaire():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-post-event-questionnaire.html'))
+
 @app.route('/stay')
 @app.route('/simwars-2026-stay-brochure.html')
 def stay_brochure():
@@ -2527,6 +2529,9 @@ def spectator_flyer():
 def _ensure_questionnaire_table(conn):
     conn.execute('CREATE TABLE IF NOT EXISTS questionnaire (id INTEGER PRIMARY KEY AUTOINCREMENT, team TEXT, payload TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
 
+def _ensure_post_questionnaire_table(conn):
+    conn.execute('CREATE TABLE IF NOT EXISTS questionnaire_post (id INTEGER PRIMARY KEY AUTOINCREMENT, team TEXT, payload TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
+
 @app.route('/api/questionnaire', methods=['POST'])
 def submit_questionnaire():
     data = request.get_json(silent=True) or {}
@@ -2535,6 +2540,18 @@ def submit_questionnaire():
     with get_db() as conn:
         _ensure_questionnaire_table(conn)
         conn.execute('INSERT INTO questionnaire (team, payload) VALUES (?, ?)',
+                     (str(data.get('teamNumber', 'unknown')), _json.dumps(data)))
+        conn.commit()
+    return jsonify({'ok': True})
+
+@app.route('/api/questionnaire-post', methods=['POST'])
+def submit_post_questionnaire():
+    data = request.get_json(silent=True) or {}
+    if not data:
+        return jsonify({'ok': False, 'error': 'empty submission'}), 400
+    with get_db() as conn:
+        _ensure_post_questionnaire_table(conn)
+        conn.execute('INSERT INTO questionnaire_post (team, payload) VALUES (?, ?)',
                      (str(data.get('teamNumber', 'unknown')), _json.dumps(data)))
         conn.commit()
     return jsonify({'ok': True})
@@ -2559,6 +2576,29 @@ def questionnaire_responses():
             'h1{font-size:22px;}a{color:#d81b7a;font-weight:700;}</style></head><body>'
             '<h1>Pre-Event Questionnaire — %d response(s)</h1>'
             '<p><a href="/questionnaire-responses?format=json">Download all as JSON</a></p>'
+            '<table><tr><th>Team</th><th>Submitted</th><th>Responses</th></tr>%s</table></body></html>'
+            % (len(rows), items))
+
+@app.route('/questionnaire-post-responses')
+def questionnaire_post_responses():
+    locked = require_organiser()
+    if locked: return locked
+    with get_db() as conn:
+        _ensure_post_questionnaire_table(conn)
+        rows = conn.execute('SELECT team, payload, created_at FROM questionnaire_post ORDER BY created_at').fetchall()
+    if request.args.get('format') == 'json':
+        return jsonify([{'team': r['team'], 'created_at': str(r['created_at']), 'payload': _json.loads(r['payload'])} for r in rows])
+    items = ''.join(
+        '<tr><td>%s</td><td>%s</td><td><details><summary>view</summary><pre>%s</pre></details></td></tr>'
+        % (r['team'], r['created_at'], _json.dumps(_json.loads(r['payload']), indent=1).replace('<', '&lt;'))
+        for r in rows)
+    return ('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Post-Event Questionnaire Responses</title>'
+            '<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;padding:24px;color:#1b2430;}'
+            'table{border-collapse:collapse;width:100%%;}td,th{border:1px solid #e3e7ee;padding:8px 12px;font-size:14px;text-align:left;vertical-align:top;}'
+            'pre{white-space:pre-wrap;font-size:12px;max-height:300px;overflow:auto;background:#f7f8fb;padding:8px;border-radius:6px;}'
+            'h1{font-size:22px;}a{color:#d81b7a;font-weight:700;}</style></head><body>'
+            '<h1>Post-Event Questionnaire — %d response(s)</h1>'
+            '<p><a href="/questionnaire-post-responses?format=json">Download all as JSON</a></p>'
             '<table><tr><th>Team</th><th>Submitted</th><th>Responses</th></tr>%s</table></body></html>'
             % (len(rows), items))
 
