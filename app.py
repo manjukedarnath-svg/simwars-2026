@@ -2501,6 +2501,16 @@ def questionnaire():
 def post_event_questionnaire():
     return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-post-event-questionnaire.html'))
 
+@app.route('/post-event-prelims')
+@app.route('/simwars-2026-post-event-prelims.html')
+def post_event_prelims():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-post-event-prelims.html'))
+
+@app.route('/post-event-finals')
+@app.route('/simwars-2026-post-event-semis-finals.html')
+def post_event_semis_finals():
+    return send_file(os.path.join(os.path.dirname(__file__), 'simwars-2026-post-event-semis-finals.html'))
+
 @app.route('/stay')
 @app.route('/simwars-2026-stay-brochure.html')
 def stay_brochure():

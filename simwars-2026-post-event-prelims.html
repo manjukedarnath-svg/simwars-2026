@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SIM WARS 2026 · Post‑Event Feedback — Preliminary Round</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+    --purple-900:#2a0a44; --purple-800:#3a0f5c; --purple-700:#4a1a5c; --purple-600:#6a1362; --purple-950:#1c0733;
+    --magenta:#d81b7a; --magenta-soft:#fdf1f6; --teal:#0d9488; --teal-soft:#f0fbf9;
+    --blue:#2f8fd1; --blue-soft:#eef6fc; --gold:#f5a623; --gold-soft:#fef8ec;
+    --bg-light:#f4f1f7; --bg-white:#ffffff; --text-dark:#2a0a44; --text-muted:#6a5a72; --border-soft:#eee0ea;
+}
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg-light); color:var(--text-dark); line-height:1.6; padding:0 0 2rem; }
+.topbar { background:var(--purple-950); color:rgba(255,255,255,0.85); text-align:center; font-size:0.8rem; padding:0.55rem 1rem; }
+.topbar .loc-dhee { color:var(--gold); font-weight:700; }
+.topbar .loc-vasa { color:var(--magenta); font-weight:700; }
+.brandbar { background:var(--purple-900); color:#fff; padding:0.9rem 1.5rem; display:flex; align-items:center; justify-content:center; gap:0.6rem; flex-wrap:wrap; text-align:center; }
+.brandbar .brand-name { font-family:'Poppins',sans-serif; font-weight:800; letter-spacing:0.02em; }
+.brandbar .brand-sub { color:rgba(255,255,255,0.65); font-size:0.85rem; }
+.page-wrap { max-width:1024px; margin:2rem auto 0; padding:0 1rem; }
+.container { max-width:1024px; width:100%; margin:0 auto; background:var(--bg-white); border-radius:1.5rem; box-shadow:0 8px 40px rgba(42,10,68,0.10); padding:2.5rem 2.8rem; position:relative; }
+@media (max-width:700px) { .container { padding:1.5rem 1.2rem; } .page-wrap { padding:0 0.6rem; } }
+.questionnaire-header { border-bottom:2px solid var(--border-soft); padding-bottom:1.8rem; margin-bottom:2.2rem; }
+.questionnaire-header .eyebrow { font-size:0.75rem; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:var(--magenta); margin-bottom:0.3rem; }
+.questionnaire-header h1 { font-family:'Poppins',sans-serif; font-size:2rem; font-weight:800; color:var(--text-dark); margin-bottom:0.3rem; }
+.questionnaire-header .sub { color:var(--text-muted); font-size:0.95rem; }
+.questionnaire-header .badge { display:inline-block; background:var(--magenta-soft); color:var(--magenta); font-weight:700; font-size:0.78rem; padding:0.3rem 0.9rem; border-radius:30px; margin-top:0.5rem; margin-right:0.4rem; }
+.section { margin-top:2rem; }
+.section:first-child { margin-top:0; }
+.section-title { font-family:'Poppins',sans-serif; font-size:1.3rem; font-weight:800; color:var(--text-dark); margin-bottom:0.2rem; display:flex; align-items:center; gap:0.5rem; }
+.section-title .num { display:inline-flex; align-items:center; justify-content:center; background:var(--purple-900); color:#fff; font-size:0.82rem; font-weight:800; width:30px; height:30px; border-radius:50%; flex-shrink:0; }
+.section-desc { color:var(--text-muted); font-size:0.9rem; margin-bottom:1.2rem; margin-left:2.5rem; }
+.q { background:var(--bg-light); border-radius:0.9rem; padding:1.1rem 1.4rem; margin-bottom:1rem; border-left:4px solid var(--border-soft); transition:border-color 0.2s; }
+.q:hover { border-left-color:var(--magenta); }
+.q .q-label { font-weight:700; font-size:0.92rem; color:var(--text-dark); margin-bottom:0.35rem; }
+.q .q-label .required { color:var(--magenta); margin-left:0.15rem; }
+.q .q-hint { font-size:0.8rem; color:var(--text-muted); margin-bottom:0.6rem; }
+.q input[type="text"], .q input[type="email"], .q select, .q textarea { width:100%; padding:0.6rem 0.9rem; border:1.5px solid var(--border-soft); border-radius:0.6rem; font-family:'Inter',sans-serif; font-size:0.9rem; background:#fff; transition:border-color 0.2s; }
+.q input:focus, .q select:focus, .q textarea:focus { outline:none; border-color:var(--magenta); box-shadow:0 0 0 3px rgba(216,27,122,0.10); }
+.q textarea { resize:vertical; min-height:70px; }
+.q .options { display:flex; flex-wrap:wrap; gap:0.5rem 1.2rem; margin-top:0.3rem; }
+.q .options label { display:flex; align-items:center; gap:0.4rem; font-size:0.88rem; cursor:pointer; }
+.q .options input[type="checkbox"], .q .options input[type="radio"] { width:18px; height:18px; accent-color:var(--magenta); cursor:pointer; flex-shrink:0; }
+.linear-scale { display:flex; flex-wrap:wrap; align-items:center; gap:0.8rem 1.8rem; margin-top:0.4rem; }
+.linear-scale .scale-item { display:flex; align-items:center; gap:0.3rem; font-size:0.85rem; }
+.linear-scale .scale-item input[type="radio"] { width:18px; height:18px; accent-color:var(--magenta); cursor:pointer; }
+.scale-anchor-box { background:var(--bg-light); border-radius:0.8rem; padding:0.8rem 1.2rem; margin-bottom:1.2rem; font-size:0.85rem; }
+.scale-anchor-box .anchor-grid { display:grid; grid-template-columns:auto 1fr; gap:0.2rem 1rem; align-items:center; }
+.scale-anchor-box .anchor-grid .n { font-weight:800; color:var(--text-dark); }
+.questionnaire-footer { margin-top:2.8rem; padding-top:1.8rem; border-top:2px solid var(--border-soft); text-align:center; color:var(--text-muted); font-size:0.9rem; }
+.questionnaire-footer strong { color:var(--text-dark); }
+.text-muted { color:var(--text-muted); font-size:0.85rem; }
+#teamGate { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(42,10,68,0.92); display:flex; align-items:center; justify-content:center; z-index:9999; backdrop-filter:blur(4px); transition:opacity 0.4s ease; }
+#teamGate.hidden { opacity:0; pointer-events:none; }
+.gate-card { background:#fff; max-width:440px; width:90%; padding:2.5rem 2rem; border-radius:2rem; box-shadow:0 20px 60px rgba(0,0,0,0.4); text-align:center; }
+.gate-card h2 { font-family:'Poppins',sans-serif; font-size:1.6rem; color:var(--text-dark); margin-bottom:0.3rem; border:none; padding:0; }
+.gate-card p { color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem; }
+.gate-card input { width:100%; padding:0.8rem 1rem; font-size:1.2rem; text-align:center; border:2px solid var(--border-soft); border-radius:0.8rem; font-family:'Inter',sans-serif; transition:border-color 0.2s; }
+.gate-card input:focus { outline:none; border-color:var(--magenta); box-shadow:0 0 0 3px rgba(216,27,122,0.15); }
+.gate-card .gate-error { color:#d81b7a; font-size:0.85rem; margin-top:0.5rem; min-height:1.5rem; }
+.gate-card .gate-btn { margin-top:1.2rem; background:var(--magenta); color:#fff; border:none; font-family:'Poppins',sans-serif; font-weight:700; font-size:1rem; padding:0.8rem 2.5rem; border-radius:60px; cursor:pointer; transition:background 0.2s; width:100%; }
+.gate-card .gate-btn:hover { background:#b81669; }
+.action-bar { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:2.5rem; padding-top:1.5rem; border-top:2px solid var(--border-soft); }
+.action-bar .btn { padding:0.8rem 2rem; border:none; border-radius:60px; font-family:'Poppins',sans-serif; font-weight:700; font-size:1rem; cursor:pointer; transition:background 0.2s, transform 0.1s; display:inline-flex; align-items:center; gap:0.6rem; }
+.action-bar .btn-primary { background:var(--magenta); color:#fff; box-shadow:0 4px 12px rgba(216,27,122,0.3); }
+.action-bar .btn-primary:hover { background:#b81669; transform:scale(1.02); }
+.action-bar .btn-secondary { background:var(--teal-soft); color:var(--teal); }
+.action-bar .btn-secondary:hover { background:#d4f5f1; transform:scale(1.02); }
+.success-msg { background:var(--teal-soft); border-left:4px solid var(--teal); padding:1rem 1.5rem; border-radius:0.8rem; margin-top:1.5rem; display:none; }
+.success-msg.show { display:block; }
+#questionnaireWrap { display:none; }
+#questionnaireWrap.visible { display:block; }
+@media (max-width:700px) { .section-title { font-size:1.1rem; } .section-desc { margin-left:0; } }
+</style>
+</head>
+<body>
+<a href="/register#prebrief" style="position:fixed;top:12px;left:12px;z-index:9999;display:inline-flex;align-items:center;gap:6px;background:#2a0a44;color:#fff;font-family:Inter,-apple-system,sans-serif;font-size:13px;font-weight:700;padding:8px 14px;border-radius:60px;text-decoration:none;box-shadow:0 4px 14px rgba(42,10,68,.35);" onmouseover="this.style.background='#6a1362'" onmouseout="this.style.background='#2a0a44'">&#8592; SimWars 2026 Home</a>
+<!-- ===== TEAM GATE ===== -->
+<div id="teamGate">
+    <div class="gate-card">
+        <h2><i class="fas fa-users" style="color:var(--magenta);margin-right:0.5rem;"></i>Team Verification</h2>
+        <p>Enter your <strong>Team Number</strong> (1&ndash;17) to open the Preliminary Round feedback form.</p>
+        <input type="text" id="teamInput" placeholder="e.g. 8" maxlength="3" autofocus />
+        <div class="gate-error" id="gateError"></div>
+        <button class="gate-btn" id="gateBtn"><i class="fas fa-arrow-right"></i> &nbsp; Continue</button>
+        <p style="margin-top:1.1rem;margin-bottom:0;"><a href="/register#prebrief" style="color:var(--text-muted);font-size:0.85rem;text-decoration:none;">&larr; Back to SimWars 2026</a></p>
+    </div>
+</div>
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">Day 1 (Prelims) at <span class="loc-dhee">DHEE Hospitals, Kanakapura Road</span> · Day 2 (Semi‑Finals &amp; Finals) at <span class="loc-vasa">VASA, Bengaluru</span></div>
+<div class="brandbar">
+    <span class="brand-name">SIM WARS 2026</span>
+    <span class="brand-sub">Part of SIMULUS 11 · PediSTARS India · 22–23 Aug 2026, Bengaluru</span>
+    <a href="/register" style="color:#f5a623;font-weight:700;font-size:0.85rem;text-decoration:none;white-space:nowrap;">← Back to SIM WARS site</a>
+</div>
+<!-- ===== MAIN FORM ===== -->
+<div id="questionnaireWrap">
+<div class="page-wrap">
+<div class="container">
+<form id="questionnaire" novalidate>
+    <div class="questionnaire-header">
+        <div class="eyebrow"><i class="fas fa-comment-dots"></i> &nbsp; Day 1 &middot; DHEE Hospitals, Kanakapura Road</div>
+        <h1>Post&#8209;Event Feedback &mdash; Preliminary Round</h1>
+        <p class="sub">Seventeen teams, two cases each, one bedside room. This form is only about the preliminary round &mdash; the semi&#8209;finals and finals have their own form. Say the honest thing; it is what changes next year's design.</p>
+        <span class="badge"><i class="far fa-clock"></i> &nbsp; ~6 minutes</span>
+        <span class="badge" style="background:var(--teal-soft);color:var(--teal);"><i class="fas fa-lock"></i> &nbsp; Confidential &ndash; organising team only, never shown to judges</span>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><span class="num">1</span> Who is answering</div>
+        <div class="section-desc">So we can read the feedback against the right cases and group.</div>
+        <div class="q">
+            <div class="q-label">Team name<span class="required">*</span></div>
+            <input type="text" name="teamName" required placeholder="As it appeared on the draw sheet" />
+        </div>
+        <div class="q">
+            <div class="q-label">Your draw group<span class="required">*</span></div>
+            <div class="options">
+                <label><input type="radio" name="drawGroup" value="Blue" required> Blue</label>
+                <label><input type="radio" name="drawGroup" value="Green" required> Green</label>
+                <label><input type="radio" name="drawGroup" value="Yellow" required> Yellow</label>
+                <label><input type="radio" name="drawGroup" value="Red" required> Red</label>
+                <label><input type="radio" name="drawGroup" value="Not sure" required> Not sure</label>
+            </div>
+        </div>
+        <div class="q">
+            <div class="q-label">Your role in the two prelim cases<span class="required">*</span></div>
+            <div class="q-hint">Tick every role you took across both runs.</div>
+            <div class="options">
+                <label><input type="checkbox" name="roles" value="Team leader"> Team leader</label>
+                <label><input type="checkbox" name="roles" value="Airway"> Airway</label>
+                <label><input type="checkbox" name="roles" value="Compressions / CPR"> Compressions / CPR</label>
+                <label><input type="checkbox" name="roles" value="Drugs / access"> Drugs / access</label>
+                <label><input type="checkbox" name="roles" value="Family communication"> Family communication</label>
+                <label><input type="checkbox" name="roles" value="Documentation / timekeeping"> Documentation / timekeeping</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><span class="num">2</span> Overall experience</div>
+        <div class="section-desc">The big-picture read on competing in the prelims.</div>
+        <div class="q">
+            <div class="q-label">Overall, how was your preliminary round?<span class="required">*</span></div>
+            <div class="q-hint">1 = Poor &middot; 10 = Outstanding</div>
+            <div class="linear-scale" id="scale-overall"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">How well did the pre-event material prepare you for what actually happened?<span class="required">*</span></div>
+            <div class="q-hint">1 = Not at all &middot; 5 = Completely &mdash; no surprises</div>
+            <div class="linear-scale" id="scale-preparedness"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">How clear was the on-the-day briefing before you walked in?<span class="required">*</span></div>
+            <div class="q-hint">1 = Confusing &middot; 5 = Completely clear</div>
+            <div class="linear-scale" id="scale-briefing"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><span class="num">3</span> The two cases</div>
+        <div class="section-desc">Every team ran one BLS and one PALS case. Rate each separately &mdash; they were not the same experience.</div>
+        <div class="q">
+            <div class="q-label">Difficulty of your <strong>BLS</strong> case<span class="required">*</span></div>
+            <div class="q-hint">1 = Far too easy &middot; 5 = Far too hard</div>
+            <div class="linear-scale" id="scale-blsDifficulty"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">Difficulty of your <strong>PALS</strong> case<span class="required">*</span></div>
+            <div class="q-hint">1 = Far too easy &middot; 5 = Far too hard</div>
+            <div class="linear-scale" id="scale-palsDifficulty"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">Did the two cases feel equally hard compared with what other teams got?<span class="required">*</span></div>
+            <div class="options">
+                <label><input type="radio" name="parity" value="Yes, fair across teams" required> Yes, fair across teams</label>
+                <label><input type="radio" name="parity" value="Mine felt harder" required> Mine felt harder</label>
+                <label><input type="radio" name="parity" value="Mine felt easier" required> Mine felt easier</label>
+                <label><input type="radio" name="parity" value="No way to tell" required> No way to tell</label>
+            </div>
+        </div>
+        <div class="q">
+            <div class="q-label">How realistic were the manikin, monitor and moulage?<span class="required">*</span></div>
+            <div class="q-hint">1 = Broke immersion constantly &middot; 5 = Felt like a real resus</div>
+            <div class="linear-scale" id="scale-realism"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">How were the investigation results and props handed to you?<span class="required">*</span></div>
+            <div class="q-hint">1 = Slow / unclear &middot; 5 = Fast and unambiguous</div>
+            <div class="linear-scale" id="scale-props"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">The 10&#8209;minute cap &mdash; how did it sit?<span class="required">*</span></div>
+            <div class="q-hint">1 = Too relaxed &middot; 3 = About right &middot; 5 = Too rushed</div>
+            <div class="linear-scale" id="scale-timepressure"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">Anything in either case that you think was unfair, ambiguous, or clinically wrong?</div>
+            <textarea name="caseConcerns" rows="3" placeholder="Optional &mdash; name the case and the moment."></textarea>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><span class="num">4</span> Judging, scoring &amp; debrief</div>
+        <div class="section-desc">One clinical judge and one CRM judge scored each prelim run.</div>
+        <div class="q">
+            <div class="q-label">How fair did the judging feel?<span class="required">*</span></div>
+            <div class="q-hint">1 = Very unfair &middot; 5 = Completely fair</div>
+            <div class="linear-scale" id="scale-judgingFair"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">Did you understand <em>how</em> you were being scored before you competed?<span class="required">*</span></div>
+            <div class="q-hint">1 = No idea &middot; 5 = Knew the rubric well</div>
+            <div class="linear-scale" id="scale-rubricClarity"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">How useful was your debrief?<span class="required">*</span></div>
+            <div class="q-hint">1 = Not useful &middot; 5 = Worth the whole trip</div>
+            <div class="linear-scale" id="scale-debrief"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">Was the debrief long enough?<span class="required">*</span></div>
+            <div class="options">
+                <label><input type="radio" name="debriefLength" value="Too short" required> Too short</label>
+                <label><input type="radio" name="debriefLength" value="About right" required> About right</label>
+                <label><input type="radio" name="debriefLength" value="Too long" required> Too long</label>
+            </div>
+        </div>
+        <div class="q">
+            <div class="q-label">Anything you would want the judges to know?</div>
+            <textarea name="judgeComments" rows="3" placeholder="Optional &mdash; praise, confusion, disagreement."></textarea>
+        </div>
+        <div class="q">
+            <div class="q-label">On results transparency: we published every prelim mark, and disclosed that some sheets had to be reconstructed. How did that land?<span class="required">*</span></div>
+            <div class="options">
+                <label><input type="radio" name="transparency" value="Right call, well handled" required> Right call, well handled</label>
+                <label><input type="radio" name="transparency" value="Right call, but explain earlier" required> Right call, but explain earlier</label>
+                <label><input type="radio" name="transparency" value="Left me with doubts about my score" required> Left me with doubts about my score</label>
+                <label><input type="radio" name="transparency" value="Did not follow it" required> Did not follow it</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><span class="num">5</span> Venue &amp; running of Day 1</div>
+        <div class="section-desc">DHEE Hospitals, Kanakapura Road &mdash; schedule, waiting, signage, food, communication.</div>
+        <div class="q">
+            <div class="q-label">How smoothly did Day 1 run?<span class="required">*</span></div>
+            <div class="q-hint">1 = Chaotic &middot; 5 = Very smooth</div>
+            <div class="linear-scale" id="scale-logistics"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">The venue itself &mdash; rooms, waiting area, hospitality<span class="required">*</span></div>
+            <div class="q-hint">1 = Poor &middot; 5 = Excellent</div>
+            <div class="linear-scale" id="scale-venue"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">How long did you wait between arriving and running your first case?<span class="required">*</span></div>
+            <div class="options">
+                <label><input type="radio" name="waitTime" value="Under 30 min" required> Under 30 min</label>
+                <label><input type="radio" name="waitTime" value="30–60 min" required> 30&ndash;60 min</label>
+                <label><input type="radio" name="waitTime" value="1–2 hours" required> 1&ndash;2 hours</label>
+                <label><input type="radio" name="waitTime" value="Over 2 hours" required> Over 2 hours</label>
+            </div>
+        </div>
+        <div class="q">
+            <div class="q-label">Did you at any point see or overhear a case before running it?<span class="required">*</span></div>
+            <div class="q-hint">Answer honestly &mdash; this protects future teams, not a trap.</div>
+            <div class="options">
+                <label><input type="radio" name="caseLeak" value="No" required> No</label>
+                <label><input type="radio" name="caseLeak" value="Partly — overheard something" required> Partly &mdash; overheard something</label>
+                <label><input type="radio" name="caseLeak" value="Yes — knew the case in advance" required> Yes &mdash; knew the case in advance</label>
+            </div>
+        </div>
+        <div class="q">
+            <div class="q-label">One thing we should fix about Day 1 logistics</div>
+            <textarea name="fixLogistics" rows="3" placeholder="Timing, signage, waiting areas, AV, food, briefing &mdash; be specific."></textarea>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><span class="num">6</span> What you take away</div>
+        <div class="q">
+            <div class="q-label">The single biggest thing you learned in the prelims<span class="required">*</span></div>
+            <textarea name="biggestLearning" rows="3" required placeholder="One clinical, team, or communication takeaway."></textarea>
+        </div>
+        <div class="q">
+            <div class="q-label">Has this changed your confidence in a real paediatric emergency?<span class="required">*</span></div>
+            <div class="q-hint">1 = No change &middot; 5 = Significantly more confident</div>
+            <div class="linear-scale" id="scale-confidence"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">How likely are you to recommend SimWars to a colleague?<span class="required">*</span></div>
+            <div class="q-hint">0 = Not at all likely &middot; 10 = Extremely likely</div>
+            <div class="linear-scale" id="scale-nps"></div>
+        </div>
+        <div class="q">
+            <div class="q-label">Anything else for the organising team?</div>
+            <textarea name="finalThoughts" rows="4" placeholder="Optional &mdash; your open floor."></textarea>
+        </div>
+    </div>
+    <div class="action-bar">
+        <button type="button" class="btn btn-secondary" id="downloadJsonBtn"><i class="fas fa-download"></i> Download JSON</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Prelims Feedback</button>
+    </div>
+    <div id="successMsg" class="success-msg">
+        <i class="fas fa-check-circle" style="color:var(--teal);margin-right:0.6rem;"></i>
+        <strong>Thank you!</strong> Your feedback has been recorded. <span id="submissionDetail"></span>
+    </div>
+</form>
+<div class="questionnaire-footer">
+    <strong>SIM WARS 2026</strong> · Part of SIMULUS 11 – PediSTARS India · Post‑Event Feedback · Preliminary Round
+</div>
+</div>
+</div>
+</div>
+
+<script>
+(function() {
+    const allowedTeams = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+    const DRAFT_KEY = 'sw26_post_prelims_draft';
+
+    function buildScale(id, min, max, req) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        let html = '';
+        for (let i = min; i <= max; i++) {
+            html += '<label class="scale-item"><input type="radio" name="' + id + '" value="' + i + '"' + (req === false ? '' : ' required') + '> ' + i + '</label>';
+        }
+        el.innerHTML = html;
+    }
+    ["scale-overall"].forEach(id => buildScale(id, 1, 10));
+    ["scale-preparedness","scale-briefing","scale-blsDifficulty","scale-palsDifficulty","scale-realism","scale-props","scale-timepressure","scale-judgingFair","scale-rubricClarity","scale-debrief","scale-logistics","scale-venue","scale-confidence"].forEach(id => buildScale(id, 1, 5));
+    [].forEach(id => buildScale(id, 1, 5, false));
+    buildScale('scale-nps', 0, 10);
+
+    // ---- TEAM GATE ----
+    const gate = document.getElementById('teamGate');
+    const teamInput = document.getElementById('teamInput');
+    const gateError = document.getElementById('gateError');
+    const gateBtn = document.getElementById('gateBtn');
+    const questionnaireWrap = document.getElementById('questionnaireWrap');
+    let teamNumber = null;
+
+    function validateTeam() {
+        const val = parseInt(teamInput.value.trim(), 10);
+        if (!val || allowedTeams.indexOf(val) === -1) {
+            gateError.textContent = 'Please enter a valid team number (1–17).';
+            return;
+        }
+        teamNumber = String(val);
+        gate.classList.add('hidden');
+        questionnaireWrap.classList.add('visible');
+        restoreDraft();
+        const firstInput = questionnaireWrap.querySelector('input, textarea');
+        if (firstInput) firstInput.focus();
+    }
+    gateBtn.addEventListener('click', validateTeam);
+    teamInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') validateTeam(); });
+
+    // ---- DRAFT SAVE/RESTORE ----
+    const form = document.getElementById('questionnaire');
+    function saveDraft() {
+        try {
+            const fd = new FormData(form);
+            const obj = {};
+            for (const [k, v] of fd.entries()) obj[k] = v;
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(obj));
+        } catch (e) {}
+    }
+    function restoreDraft() {
+        try {
+            const raw = localStorage.getItem(DRAFT_KEY);
+            if (!raw) return;
+            const obj = JSON.parse(raw);
+            Object.keys(obj).forEach(k => {
+                const els = form.querySelectorAll('[name="' + k + '"]');
+                els.forEach(el => {
+                    if (el.type === 'radio') { if (el.value === obj[k]) el.checked = true; }
+                    else { el.value = obj[k]; }
+                });
+            });
+        } catch (e) {}
+    }
+    form.addEventListener('input', saveDraft);
+
+    // ---- SUBMIT ----
+    const successMsg = document.getElementById('successMsg');
+    const submissionDetail = document.getElementById('submissionDetail');
+    let lastPayload = null;
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        const fd = new FormData(form);
+        const dataObject = {};
+        for (const [k, v] of fd.entries()) dataObject[k] = v;
+        dataObject.teamNumber = teamNumber || 'unknown';
+        dataObject.stage = 'prelims';
+        dataObject.submittedAt = new Date().toISOString();
+        lastPayload = dataObject;
+        successMsg.classList.add('show');
+        submissionDetail.textContent = 'Saving…';
+        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitted ✓';
+        fetch('/api/questionnaire-post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataObject)
+        }).then(r => r.json()).then(res => {
+            submissionDetail.textContent = res && res.ok
+                ? 'Your feedback is saved with the organisers. You can also download a JSON copy below.'
+                : 'Saving to the server failed — please download the JSON copy below and email it to the coordinators.';
+            if (res && res.ok) { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+        }).catch(function() {
+            submissionDetail.textContent = 'Saving to the server failed — please download the JSON copy below and email it to the coordinators.';
+        });
+    });
+
+    document.getElementById('downloadJsonBtn').addEventListener('click', function() {
+        const data = lastPayload || (function() {
+            const fd = new FormData(form);
+            const obj = {};
+            for (const [k, v] of fd.entries()) obj[k] = v;
+            obj.teamNumber = teamNumber || 'unknown';
+            return obj;
+        })();
+        try {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'simwars-2026-post-prelims-team-' + (teamNumber || 'unknown') + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (e) { alert('No data found. Please fill the form first.'); }
+    });
+})();
+</script>
+</body>
+</html>
