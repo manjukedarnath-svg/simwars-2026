@@ -2596,11 +2596,19 @@ def questionnaire_post_responses():
     with get_db() as conn:
         _ensure_post_questionnaire_table(conn)
         rows = conn.execute('SELECT team, payload, created_at FROM questionnaire_post ORDER BY created_at').fetchall()
+    def _stage(r):
+        try:
+            return _json.loads(r['payload']).get('stage', 'unknown')
+        except Exception:
+            return 'unknown'
+    stage_filter = request.args.get('stage')
+    if stage_filter:
+        rows = [r for r in rows if _stage(r) == stage_filter]
     if request.args.get('format') == 'json':
-        return jsonify([{'team': r['team'], 'created_at': str(r['created_at']), 'payload': _json.loads(r['payload'])} for r in rows])
+        return jsonify([{'team': r['team'], 'stage': _stage(r), 'created_at': str(r['created_at']), 'payload': _json.loads(r['payload'])} for r in rows])
     items = ''.join(
-        '<tr><td>%s</td><td>%s</td><td><details><summary>view</summary><pre>%s</pre></details></td></tr>'
-        % (r['team'], r['created_at'], _json.dumps(_json.loads(r['payload']), indent=1).replace('<', '&lt;'))
+        '<tr><td>%s</td><td>%s</td><td>%s</td><td><details><summary>view</summary><pre>%s</pre></details></td></tr>'
+        % (r['team'], _stage(r), r['created_at'], _json.dumps(_json.loads(r['payload']), indent=1).replace('<', '&lt;'))
         for r in rows)
     return ('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Post-Event Questionnaire Responses</title>'
             '<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;padding:24px;color:#1b2430;}'
@@ -2608,8 +2616,10 @@ def questionnaire_post_responses():
             'pre{white-space:pre-wrap;font-size:12px;max-height:300px;overflow:auto;background:#f7f8fb;padding:8px;border-radius:6px;}'
             'h1{font-size:22px;}a{color:#d81b7a;font-weight:700;}</style></head><body>'
             '<h1>Post-Event Questionnaire — %d response(s)</h1>'
-            '<p><a href="/questionnaire-post-responses?format=json">Download all as JSON</a></p>'
-            '<table><tr><th>Team</th><th>Submitted</th><th>Responses</th></tr>%s</table></body></html>'
+            '<p><a href="/questionnaire-post-responses?format=json">Download all as JSON</a> &middot; '
+            '<a href="/questionnaire-post-responses?stage=prelims">Prelims only</a> &middot; '
+            '<a href="/questionnaire-post-responses?stage=semis-finals">Semis &amp; Finals only</a></p>'
+            '<table><tr><th>Team</th><th>Stage</th><th>Submitted</th><th>Responses</th></tr>%s</table></body></html>'
             % (len(rows), items))
 
 
